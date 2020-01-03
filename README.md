@@ -1,0 +1,8 @@
+CoreNode
+========
+
+WIP
+
+## LICENSE
+
+MIT
