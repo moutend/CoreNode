@@ -4,6 +4,8 @@
 #include <mutex>
 #include <sstream>
 
+#include <strsafe.h>
+
 #include "uiahandler.h"
 #include "util.h"
 
@@ -235,8 +237,19 @@ HRESULT AutomationEventHandler::QueryInterface(REFIID riid,
 HRESULT
 AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
                                               EVENTID eventId) {
-  Log->Info(L"Automation change event received", GetCurrentThreadId(),
-            __LONGFILE__);
+  HRESULT hr{};
+  wchar_t *buffer = new wchar_t[256]{};
+
+  hr = StringCbPrintfW(buffer, 255, L"Automation event (%d) received", eventId);
+
+  if (FAILED(hr)) {
+    return hr;
+  }
+
+  Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
+
+  delete[] buffer;
+  buffer = nullptr;
 
   if (isEmptyIUIAutomationElement(pSender)) {
     return S_OK;
