@@ -139,7 +139,7 @@ HRESULT logIUIAutomationElement(IUIAutomationElement *pElement,
   wss << L",NativeWindow=";
   wss << nativeWindow;
 
-  Log->Info(wss.str(), GetCurrentThreadId(), __LONGFILE__);
+  Log->Info(wss.str(), GetCurrentThreadId(), longfile);
 
   if (controlName != nullptr) {
     SysFreeString(controlName);
