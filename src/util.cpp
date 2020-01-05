@@ -57,7 +57,7 @@ bool isEmptyIUIAutomationElement(IUIAutomationElement *pElement) {
   return false;
 }
 
-HRESULT logIUIAutomationElement(IUIAutomationElement *pElement,
+HRESULT logIUIAutomationElement(int eventId, IUIAutomationElement *pElement,
                                 const wchar_t *longfile) {
   if (pElement == nullptr) {
     Log->Info(L"<nullptr>", GetCurrentThreadId(), longfile);
@@ -102,7 +102,9 @@ HRESULT logIUIAutomationElement(IUIAutomationElement *pElement,
 
   std::wstringstream wss;
 
-  wss << L"ControlTypeId=";
+  wss << L"EventId=";
+  wss << eventId;
+  wss << L",ControlTypeId=";
   wss << controlTypeId;
   wss << L",ControlName=";
 
