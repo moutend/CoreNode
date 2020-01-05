@@ -73,7 +73,7 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
   HRESULT hr{};
   Element *pElement{nullptr};
 
-  hr = logIUIAutomationElement(0, pSender, __LONGFILE__);
+  hr = logIUIAutomationElement(999, pSender, __LONGFILE__);
 
   if (FAILED(hr)) {
     return hr;
