@@ -7,6 +7,7 @@
 #include "context.h"
 #include "element.h"
 #include "logloop.h"
+#include "requestloop.h"
 #include "util.h"
 
 using namespace web;
@@ -113,7 +114,7 @@ DWORD WINAPI requestLoop(LPVOID context) {
       }
       try {
         notifyWindowChange(pElement).wait();
-        Log->Info(pElement->mName, GetCurrentThread(), __LONGFILE__);
+        Log->Info(pElement->mName, GetCurrentThreadId(), __LONGFILE__);
       } catch (...) {
         Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
                   __LONGFILE__);
