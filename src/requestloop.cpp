@@ -111,9 +111,9 @@ DWORD WINAPI requestLoop(LPVOID context) {
                   __LONGFILE__);
         continue;
       }
-
       try {
         notifyWindowChange(pElement).wait();
+        Log->Info(pElement->mName, GetCurrentThread(), __LONGFILE__);
       } catch (...) {
         Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
                   __LONGFILE__);
