@@ -255,7 +255,6 @@ AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
     return S_OK;
   }
 
-  HRESULT hr{};
   Element *pElement{nullptr};
 
   hr = logIUIAutomationElement(pSender, __LONGFILE__);
