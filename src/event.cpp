@@ -45,39 +45,40 @@ Event *EventQueue::Get() {
   std::lock_guard<std::mutex> lock(mMutex);
 
   return mEvents[mReadIndex];
+}
 
-  void EventQueue::Next() {
-    std::lock_guard<std::mutex> lock(mMutex);
+void EventQueue::Next() {
+  std::lock_guard<std::mutex> lock(mMutex);
 
-    mReadIndex = (mReadIndex > mMaxEvents - 1) ? 0 : mReadIndex + 1;
+  mReadIndex = (mReadIndex > mMaxEvents - 1) ? 0 : mReadIndex + 1;
+}
+
+EventFilter::EventFilter() {}
+
+EventFilter::~EventFilter() {}
+
+bool EventFilter::IsDup(Event *pEvent) {
+  if (pEvent == nulptr) {
+    return true;
   }
 
-  EventFilter::EventFilter() {}
+  bool cond{true};
 
-  EventFilter::~EventFilter() {}
+  cond &= mEventId == pEvent->GetEventId();
 
-  bool EventFilter::IsDup(Event * pEvent) {
-    if (pEvent == nulptr) {
-      return true;
-    }
-
-    bool cond{true};
-
-    cond &= mEventId == pEvent->GetEventId();
-
-    if (pEvent->GetElement() != nullptr) {
-      cond &= mControlTypeId == pEvent->GetElement()->GetControlTypeId();
-      cond &= mRole == pEvent->GetElement()->GetRole();
-      cond &= mLeft == pEvent->GetElement()->GetLeft();
-      cond &= mTop == pEvent->GetElement()->GetTop();
-      cond &= mWidth == pEvent->GetElement()->GetWidth();
-      cond &= mHeight == pEvent->GetElement()->GetHeight();
-    }
-    mEventId = pEvent->EventId();
-    mLeft = pEvent->Element()->Left();
-    mTop = pEvent->Element()->Top();
-    mWidth = pEvent->Element()->Width();
-    mHeight = pEvent->Element()->Height();
-
-    return cond;
+  if (pEvent->GetElement() != nullptr) {
+    cond &= mControlTypeId == pEvent->GetElement()->GetControlTypeId();
+    cond &= mRole == pEvent->GetElement()->GetRole();
+    cond &= mLeft == pEvent->GetElement()->GetLeft();
+    cond &= mTop == pEvent->GetElement()->GetTop();
+    cond &= mWidth == pEvent->GetElement()->GetWidth();
+    cond &= mHeight == pEvent->GetElement()->GetHeight();
   }
+  mEventId = pEvent->EventId();
+  mLeft = pEvent->Element()->Left();
+  mTop = pEvent->Element()->Top();
+  mWidth = pEvent->Element()->Width();
+  mHeight = pEvent->Element()->Height();
+
+  return cond;
+}
