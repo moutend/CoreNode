@@ -6,6 +6,7 @@
 
 #include "context.h"
 #include "element.h"
+#include "event.h"
 #include "logloop.h"
 #include "requestloop.h"
 #include "util.h"
@@ -69,6 +70,7 @@ DWORD WINAPI requestLoop(LPVOID context) {
   HRESULT hr{};
   Event *pEvent{};
   bool isActive{true};
+  EventFilter *eventFilter = new EventFilter();
 
   while (isActive) {
     HANDLE waitArray[2] = {ctx->QuitEvent, ctx->NotifyEvent};
@@ -84,10 +86,10 @@ DWORD WINAPI requestLoop(LPVOID context) {
     if (eventFilter.IsDup(pEvent)) {
       goto NEXT;
     }
-    switch (pEvent->EventId()) {
-    case UIA:
+    switch (pEvent->GetEventId()) {
+    case UIA_AutomationFocusChangedEventId:
       try {
-        notifySync(pEvent->Element).wait();
+        notifySync(pEvent->GetElement()).wait();
       } catch (...) {
         Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
                   __LONGFILE__);
@@ -95,7 +97,7 @@ DWORD WINAPI requestLoop(LPVOID context) {
       break;
     default:
       try {
-        notifyAsync(pEvent->Element()).wait();
+        notifyAsync(pEvent->GetElement()).wait();
       } catch (...) {
         Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
                   __LONGFILE__);

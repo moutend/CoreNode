@@ -1,6 +1,6 @@
 #pragma once
 
-#include <UIAutomation.h>
+#include <UIAutomationClient.h>
 #include <cstdint>
 #include <oleauto.h>
 #include <windows.h>
