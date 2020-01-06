@@ -16,11 +16,11 @@ using namespace web::http::client;
 
 extern Logger::Logger *Log;
 
-pplx::task<http_response> notifyTargetChange(Element *pElement) {
+pplx::task<http_response> notifyAsync(Element *pElement) {
   json::value c;
 
   c[U("type")] = json::value(3);
-  c[U("value")] = json::value(pElement->mName);
+  c[U("value")] = json::value(pElement->GetName());
 
   json::value postData;
 
@@ -35,14 +35,14 @@ pplx::task<http_response> notifyTargetChange(Element *pElement) {
                         U("application/json"));
 }
 
-pplx::task<http_response> notifyWindowChange(Element *pElement) {
+pplx::task<http_response> notifySync(Element *pElement) {
   json::value c0;
   c0[U("type")] = json::value(1);
   c0[U("value")] = json::value(5);
 
   json::value c1;
   c1[U("type")] = json::value(3);
-  c1[U("value")] = json::value(pElement->mName);
+  c1[U("value")] = json::value(pElement->GetName());
 
   json::value postData;
 
