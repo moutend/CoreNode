@@ -83,7 +83,7 @@ DWORD WINAPI requestLoop(LPVOID context) {
 
     pEvent = ctx->EventQueue->Get();
 
-    if (eventFilter.IsDup(pEvent)) {
+    if (eventFilter->IsDup(pEvent)) {
       goto NEXT;
     }
     switch (pEvent->GetEventId()) {

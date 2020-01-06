@@ -40,26 +40,6 @@ HRESULT FocusChangeEventHandler::QueryInterface(REFIID riid,
   return S_OK;
 }
 
-bool FocusChangeEventHandler::isSameElement(Element *pElement) {
-  bool isSame{false};
-
-  isSame = mLeft == pElement->mLeft;
-  isSame &= mTop == pElement->mTop;
-  isSame &= mWidth == pElement->mWidth;
-  isSame &= mHeight == pElement->mHeight;
-
-  if (isSame) {
-    return true;
-  }
-
-  mLeft = pElement->mLeft;
-  mTop = pElement->mTop;
-  mWidth = pElement->mWidth;
-  mHeight = pElement->mHeight;
-
-  return false;
-}
-
 HRESULT
 FocusChangeEventHandler::HandleFocusChangedEvent(
     IUIAutomationElement *pSender) {
