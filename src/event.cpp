@@ -58,27 +58,27 @@ EventFilter::EventFilter() {}
 EventFilter::~EventFilter() {}
 
 bool EventFilter::IsDup(Event *pEvent) {
-  if (pEvent == nullptr) {
+  if (pEvent == nullptr || pEvent->GetElement() == nullptr) {
     return true;
   }
 
   bool cond{true};
 
   cond &= mEventId == pEvent->GetEventId();
+  cond &= mControlTypeId == pEvent->GetElement()->GetControlTypeId();
+  cond &= mRole == pEvent->GetElement()->GetRole();
+  cond &= mLeft == pEvent->GetElement()->GetLeft();
+  cond &= mTop == pEvent->GetElement()->GetTop();
+  cond &= mWidth == pEvent->GetElement()->GetWidth();
+  cond &= mHeight == pEvent->GetElement()->GetHeight();
 
-  if (pEvent->GetElement() != nullptr) {
-    cond &= mControlTypeId == pEvent->GetElement()->GetControlTypeId();
-    cond &= mRole == pEvent->GetElement()->GetRole();
-    cond &= mLeft == pEvent->GetElement()->GetLeft();
-    cond &= mTop == pEvent->GetElement()->GetTop();
-    cond &= mWidth == pEvent->GetElement()->GetWidth();
-    cond &= mHeight == pEvent->GetElement()->GetHeight();
-  }
-  mEventId = pEvent->EventId();
-  mLeft = pEvent->Element()->Left();
-  mTop = pEvent->Element()->Top();
-  mWidth = pEvent->Element()->Width();
-  mHeight = pEvent->Element()->Height();
+  mEventId = pEvent->getEventId();
+  mControlTypeId = pEvent->GetElement()->GetControlTypeId();
+  mRole = pEvent->GetElement()->GetRole();
+  mLeft = pEvent->GetElement()->GetLeft();
+  mTop = pEvent->GetElement()->GetTop();
+  mWidth = pEvent->GetElement()->GetWidth();
+  mHeight = pEvent->GetElement()->GetHeight();
 
   return cond;
 }
