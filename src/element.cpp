@@ -61,7 +61,7 @@ Element::Element(IUIAutomationElement *pElement) {
   RECT boundingRectangle{0, 0, 0, 0};
 
   if (FAILED(pElement->get_CurrentBoundingRectangle(&boundingRectangle))) {
-    return E_FAIL;
+    return;
   }
 
   mLeft = boundingRectangle.left;
@@ -76,7 +76,7 @@ Element::Element(IUIAutomationElement *pElement) {
     mHeight = 0;
   }
 
-  return S_OK;
+  return;
 }
 
 Element::~Element() {
