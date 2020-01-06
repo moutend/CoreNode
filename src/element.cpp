@@ -12,34 +12,28 @@ extern Logger::Logger *Log;
 
 Element::Element() {}
 
-Element::~Element() {
-  delete[] mName;
-  mName = nullptr;
-}
-
-HRESULT
-Element::CopyFromElement(Element *pElement) {
+Element::Element(Element *pElement) {
   if (pElement == nullptr) {
-    return E_FAIL;
+    return;
   }
 
-  mLeft = pElement->mLeft;
-  mTop = pElement->mTop;
-  mWidth = pElement->mWidth;
-  mHeight = pElement->mHeight;
+  mControlTypeId = pElement->GetControlTypeId();
+  mRole = pElement->GetRole();
+  mLeft = pElement->GetLeft();
+  mTop = pElement->GetTop();
+  mWidth = pElement->GetWidth();
+  mHeight = pElement->GetHeight();
 
-  if (pElement->mName != nullptr) {
-    size_t nameLength = std::wcslen(pElement->mName);
+  if (pElement->GetName() != nullptr) {
+    size_t nameLength = std::wcslen(pElement->GetName());
     mName = new wchar_t[nameLength + 1]{};
-    std::wmemcpy(mName, pElement->mName, nameLength);
+    std::wmemcpy(mName, pElement->GetName(), nameLength);
   }
-
-  return S_OK;
 }
 
-HRESULT Element::CopyFromIUIAutomationElement(IUIAutomationElement *pElement) {
+Element::Element(IUIAutomationElement *pElement) {
   if (pElement == nullptr) {
-    return E_FAIL;
+    return;
   }
 
   CONTROLTYPEID controlTypeId{};
@@ -85,81 +79,15 @@ HRESULT Element::CopyFromIUIAutomationElement(IUIAutomationElement *pElement) {
   return S_OK;
 }
 
-ElementSingleton::ElementSingleton() { mElement = new Element(); }
-
-ElementSingleton::~ElementSingleton() {
-  delete[] mElement;
-  mElement = nullptr;
+Element::~Element() {
+  delete[] mName;
+  mName = nullptr;
 }
 
-HRESULT ElementSingleton::Get(Element *pElement) {
-  std::lock_guard<std::mutex> lock(mMutex);
-
-  if (pElement == nullptr) {
-    return E_FAIL;
-  }
-
-  return pElement->CopyFromElement(mElement);
-}
-
-void ElementSingleton::Sent() {
-  std::lock_guard<std::mutex> lock(mMutex);
-
-  mSent = true;
-
-  return;
-}
-
-bool ElementSingleton::IsSent() {
-  std::lock_guard<std::mutex> lock(mMutex);
-
-  return mSent;
-}
-
-HRESULT ElementSingleton::Set(Element *pElement) {
-  std::lock_guard<std::mutex> lock(mMutex);
-
-  if (pElement == nullptr) {
-    return E_FAIL;
-  }
-
-  wchar_t *name{};
-  size_t length = std::wcslen(pElement->mName);
-
-  if (length > 63) {
-    length = 63;
-  }
-
-  name = new wchar_t[length + 1]{};
-  std::wmemcpy(name, pElement->mName, length);
-
-  wchar_t *buffer = new wchar_t[256]{};
-  bool isSame{false};
-
-  if (mLastElementName != nullptr) {
-    isSame = std::wcscmp(mLastElementName, name) == 0;
-  }
-
-  HRESULT hr = StringCbPrintfW(buffer, 255, L"@@@ %s == %s = %s",
-                               mLastElementName == nullptr ? L"nullptr"
-                                                           : mLastElementName,
-                               name, isSame ? L"true" : L"false");
-
-  if (!FAILED(hr)) {
-    Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
-  }
-
-  delete[] buffer;
-
-  if (isSame) {
-    return S_OK;
-  }
-
-  delete[] mLastElementName;
-  mLastElementName = new wchar_t[length + 1]{};
-  std::wmemcpy(mLastElementName, name, length);
-
-  mSent = false;
-
-  return mElement->CopyFromElement(pElement);
-}
+wchar_t *Element::GetName() { return mName; }
+int32_t Element::GetControlTypeId() { return mControlTypeId; }
+int32_t Element::GetRole() { return mRole; }
+int32_t Element::GetLeft() { return mLeft; }
+int32_t Element::GetTop() { return mTop; }
+int32_t Element::GetWidth() { return mWidth; }
+int32_t Element::GetHeight() { return mHeight; }

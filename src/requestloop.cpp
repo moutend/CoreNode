@@ -78,6 +78,34 @@ DWORD WINAPI requestLoop(LPVOID context) {
       isActive = false;
       continue;
     }
+
+    ctx->EventQueue->Get(pEvent);
+
+    if (eventFilter.IsDup(pEvent)) {
+      goto NEXT;
+    }
+    switch (pEvent->EventId()) {
+    case UIA:
+      try {
+        notifySync(pEvent->Element).wait();
+      } catch (...) {
+        Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
+                  __LONGFILE__);
+      }
+      break;
+    default:
+      try {
+        notifyAsync(pEvent->Element()).wait();
+      } catch (...) {
+        Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
+                  __LONGFILE__);
+      }
+      break;
+    }
+
+  NEXT:
+
+    ctx->EventQueue->Next();
   }
 
   Log->Info(L"End request loop", GetCurrentThreadId(), __LONGFILE__);
