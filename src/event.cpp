@@ -1,11 +1,13 @@
+#include <mutex>
+
 #include "event.h"
 
 Event::Event(int32_t eventId, Element *pElement)
     : mEventId(eventId), mElement(pElement) {}
 
 Event::~Event() {
-  delete pElement;
-  pElement = nullptr;
+  delete mElement;
+  mElement = nullptr;
 }
 
 int32_t Event::GetEventId() { return mEventId; }
