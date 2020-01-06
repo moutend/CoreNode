@@ -72,7 +72,7 @@ bool EventFilter::IsDup(Event *pEvent) {
   cond &= mWidth == pEvent->GetElement()->GetWidth();
   cond &= mHeight == pEvent->GetElement()->GetHeight();
 
-  mEventId = pEvent->getEventId();
+  mEventId = pEvent->GetEventId();
   mControlTypeId = pEvent->GetElement()->GetControlTypeId();
   mRole = pEvent->GetElement()->GetRole();
   mLeft = pEvent->GetElement()->GetLeft();
