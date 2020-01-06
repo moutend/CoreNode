@@ -1,17 +1,16 @@
 #include <UIAutomationClient.h>
 #include <UIAutomationCore.h>
 #include <cpplogger/cpplogger.h>
-#include <mutex>
-#include <sstream>
 
-#include <strsafe.h>
-
+#include "element.h"
 #include "uiahandler.h"
 #include "util.h"
 
 extern Logger::Logger *Log;
 
-FocusChangeEventHandler::FocusChangeEventHandler() {}
+FocusChangeEventHandler::FocusChangeEventHandler(EventQueue *eventQueue,
+                                                 HANDLE notifyEvent)
+    : mEventQueue(eventQueue), mNotifyEvent(notifyEvent) {}
 
 ULONG FocusChangeEventHandler::AddRef() {
   ULONG ret = InterlockedIncrement(&mRefCount);
@@ -70,63 +69,33 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     return S_OK;
   }
 
-  HRESULT hr{};
-  Element *pElement{nullptr};
+  Element *pElement = new Element();
 
-  hr = logIUIAutomationElement(999, pSender, __LONGFILE__);
-
-  if (FAILED(hr)) {
-    return hr;
-  }
-
-  CONTROLTYPEID controlTypeId{};
-
-  hr = pSender->get_CachedControlType(&controlTypeId);
+  HRESULT hr = pElement->CopyFromIUIAutomationElement(pSender);
 
   if (FAILED(hr)) {
-    return hr;
-  }
-
-  pElement = new Element();
-
-  hr = pElement->CopyFromIUIAutomationElement(pSender);
-
-  if (FAILED(hr)) {
-    goto CLEANUP;
-  }
-  switch (controlTypeId) {
-  case UIA_WindowControlTypeId:
-    hr = mWindowElement->Set(pElement);
-
-    if (FAILED(hr)) {
-      goto CLEANUP;
-    }
-    if (!SetEvent(mWindowEvent)) {
-      Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
-    }
-    break;
-  default:
-    hr = mTargetElement->Set(pElement);
-
-    if (FAILED(hr)) {
-      goto CLEANUP;
-    }
-    if (!SetEvent(mTargetEvent)) {
-      Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
-    }
-  }
-
-CLEANUP:
-
-  if (pElement != nullptr) {
     delete pElement;
     pElement = nullptr;
+
+    return E_FAIL;
   }
 
-  return hr;
+  Event *pEvent = new Event(UIA_AutomationFocusChangedEventId, pElement);
+
+  mEventQueue->Set(pEvent);
+
+  if (!SetEvent(mNotifyEvent)) {
+    Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
+
+    return E_FAIL;
+  }
+
+  return S_OK;
 }
 
-PropertyChangeEventHandler::PropertyChangeEventHandler() {}
+PropertyChangeEventHandler::PropertyChangeEventHandler(EventQueue *eventQueue,
+                                                       HANDLE notifyEvent)
+    : mEventQueue(eventQueue), mNotifyEvent(notifyEvent) {}
 
 ULONG PropertyChangeEventHandler::AddRef() {
   ULONG ret = InterlockedIncrement(&mRefCount);
@@ -168,43 +137,33 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
     return S_OK;
   }
 
-  HRESULT hr{};
-  Element *pElement{nullptr};
+  Element *pElement = new Element();
 
-  hr = logIUIAutomationElement(0, pSender, __LONGFILE__);
-
-  if (FAILED(hr)) {
-    return hr;
-  }
-
-  pElement = new Element();
-
-  hr = pElement->CopyFromIUIAutomationElement(pSender);
+  HRESULT hr = pElement->CopyFromIUIAutomationElement(pSender);
 
   if (FAILED(hr)) {
-    goto CLEANUP;
-  }
-
-  hr = mTargetElement->Set(pElement);
-
-  if (FAILED(hr)) {
-    goto CLEANUP;
-  }
-  if (!SetEvent(mTargetEvent)) {
-    Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
-  }
-
-CLEANUP:
-
-  if (pElement != nullptr) {
     delete pElement;
     pElement = nullptr;
+
+    return E_FAIL;
   }
 
-  return hr;
+  Event *pEvent = new Event(UIA_AutomationPropertyChangedEventId, pElement);
+
+  mEventQueue->Set(pEvent);
+
+  if (!SetEvent(mNotifyEvent)) {
+    Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
+
+    return E_FAIL;
+  }
+
+  return S_OK;
 }
 
-AutomationEventHandler::AutomationEventHandler() {}
+AutomationEventHandler::AutomationEventHandler(EventQueue *eventQueue,
+                                               HANDLE notifyEvent)
+    : mEventQueue(eventQueue), mNotifyEvent(notifyEvent) {}
 
 ULONG AutomationEventHandler::AddRef() {
   ULONG ret = InterlockedIncrement(&mRefCount);
@@ -237,55 +196,30 @@ HRESULT AutomationEventHandler::QueryInterface(REFIID riid,
 HRESULT
 AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
                                               EVENTID eventId) {
-  HRESULT hr{};
-  wchar_t *buffer = new wchar_t[256]{};
-
-  hr = StringCbPrintfW(buffer, 255, L"Automation event (%d) received", eventId);
-
-  if (FAILED(hr)) {
-    return hr;
-  }
-
-  Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
-
-  delete[] buffer;
-  buffer = nullptr;
+  Log->Info(L"Automation event received", GetCurrentThreadId(), __LONGFILE__);
 
   if (isEmptyIUIAutomationElement(pSender)) {
     return S_OK;
   }
 
-  Element *pElement{nullptr};
+  Element *pElement = new Element();
 
-  hr = logIUIAutomationElement(eventId, pSender, __LONGFILE__);
-
-  if (FAILED(hr)) {
-    return hr;
-  }
-
-  pElement = new Element();
-
-  hr = pElement->CopyFromIUIAutomationElement(pSender);
+  HRESULT hr = pElement->CopyFromIUIAutomationElement(pSender);
 
   if (FAILED(hr)) {
-    goto CLEANUP;
-  }
-
-  hr = mTargetElement->Set(pElement);
-
-  if (FAILED(hr)) {
-    goto CLEANUP;
-  }
-  if (!SetEvent(mTargetEvent)) {
-    Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
-  }
-
-CLEANUP:
-
-  if (pElement != nullptr) {
     delete pElement;
     pElement = nullptr;
+
+    return E_FAIL;
   }
 
-  return hr;
+  Event *pEvent = new Event(eventId, pElement);
+
+  if (!SetEvent(mNotifyEvent)) {
+    Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
+
+    return E_FAIL;
+  }
+
+  return S_OK;
 }

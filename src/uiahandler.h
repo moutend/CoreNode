@@ -5,11 +5,11 @@
 #include <oleauto.h>
 #include <windows.h>
 
-#include "element.h"
+#include "event.h"
 
 class FocusChangeEventHandler : public IUIAutomationFocusChangedEventHandler {
 public:
-  FocusChangeEventHandler();
+  FocusChangeEventHandler(EventQueue *eventQueue, HANDLE notifyEvent);
 
   // IUnknown methods
   ULONG STDMETHODCALLTYPE AddRef();
@@ -19,25 +19,17 @@ public:
   // IUIAutomationFocusChangedEventHandler methods
   HRESULT STDMETHODCALLTYPE
   HandleFocusChangedEvent(IUIAutomationElement *pSender);
-  bool isSameElement(Element *pElement);
-
-  ElementSingleton *mTargetElement = nullptr;
-  ElementSingleton *mWindowElement = nullptr;
-  HANDLE mTargetEvent = nullptr;
-  HANDLE mWindowEvent = nullptr;
 
 private:
   LONG mRefCount;
-  int32_t mLeft = 0;
-  int32_t mTop = 0;
-  int32_t mWidth = 0;
-  int32_t mHeight = 0;
+  EventQueue *mEventQueue = nullptr;
+  HANDLE mNotifyEvent = nullptr;
 };
 
 class PropertyChangeEventHandler
     : public IUIAutomationPropertyChangedEventHandler {
 public:
-  PropertyChangeEventHandler();
+  PropertyChangeEventHandler(EventQueue *eventQueue, HANDLE notifyEvent);
 
   // IUnknown methods
   ULONG STDMETHODCALLTYPE AddRef();
@@ -48,16 +40,15 @@ public:
   HRESULT STDMETHODCALLTYPE HandlePropertyChangedEvent(
       IUIAutomationElement *sender, PROPERTYID propertyId, VARIANT newValue);
 
-  ElementSingleton *mTargetElement = nullptr;
-  HANDLE mTargetEvent = nullptr;
-
 private:
   LONG mRefCount;
+  EventQueue *mEventQueue = nullptr;
+  HANDLE mNotifyEvent = nullptr;
 };
 
 class AutomationEventHandler : public IUIAutomationEventHandler {
 public:
-  AutomationEventHandler();
+  AutomationEventHandler(EventQueue *eventQueue, HANDLE notifyEvent);
 
   // IUnknown methods
   ULONG STDMETHODCALLTYPE AddRef();
@@ -68,9 +59,8 @@ public:
   HRESULT STDMETHODCALLTYPE HandleAutomationEvent(IUIAutomationElement *sender,
                                                   EVENTID eventId);
 
-  ElementSingleton *mTargetElement = nullptr;
-  HANDLE mTargetEvent = nullptr;
-
 private:
   LONG mRefCount;
+  EventQueue *mEventQueue = nullptr;
+  HANDLE mNotifyEvent = nullptr;
 };

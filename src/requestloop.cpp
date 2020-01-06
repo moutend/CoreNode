@@ -71,57 +71,12 @@ DWORD WINAPI requestLoop(LPVOID context) {
   bool isActive{true};
 
   while (isActive) {
-    HANDLE waitArray[3] = {ctx->QuitEvent, ctx->TargetEvent, ctx->WindowEvent};
-    DWORD waitResult = WaitForMultipleObjects(3, waitArray, FALSE, INFINITE);
+    HANDLE waitArray[2] = {ctx->QuitEvent, ctx->NotifyEvent};
+    DWORD waitResult = WaitForMultipleObjects(2, waitArray, FALSE, INFINITE);
 
     if (waitResult == WAIT_OBJECT_0 + 0) {
       isActive = false;
       continue;
-    }
-    switch (waitResult) {
-    case WAIT_OBJECT_0 + 1: // ctx->TargetEvent
-      if (ctx->TargetElement->IsSent()) {
-        Log->Info(L"Already sent target element", GetCurrentThreadId(),
-                  __LONGFILE__);
-        continue;
-      }
-
-      hr = ctx->TargetElement->Get(pElement);
-
-      if (FAILED(hr)) {
-        Log->Warn(L"Failed to get target element", GetCurrentThreadId(),
-                  __LONGFILE__);
-        continue;
-      }
-      try {
-        notifyTargetChange(pElement).wait();
-      } catch (...) {
-        Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
-                  __LONGFILE__);
-        continue;
-      }
-
-      ctx->TargetElement->Sent();
-
-      break;
-    case WAIT_OBJECT_0 + 2: // ctx->WindowEvent
-      hr = ctx->WindowElement->Get(pElement);
-
-      if (FAILED(hr)) {
-        Log->Warn(L"Failed to get window element", GetCurrentThreadId(),
-                  __LONGFILE__);
-        continue;
-      }
-      try {
-        notifyWindowChange(pElement).wait();
-        Log->Info(pElement->mName, GetCurrentThreadId(), __LONGFILE__);
-      } catch (...) {
-        Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
-                  __LONGFILE__);
-        continue;
-      }
-
-      break;
     }
   }
 

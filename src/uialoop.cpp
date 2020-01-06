@@ -189,7 +189,7 @@ DWORD WINAPI uiaLoop(LPVOID context) {
   }
 
   FocusChangeEventHandler *pFocusChangeEventHandler =
-      new FocusChangeEventHandler();
+      new FocusChangeEventHandler(ctx->EventQueue, ctx->NotifyEvent);
 
   pFocusChangeEventHandler->mTargetElement = ctx->TargetElement;
   pFocusChangeEventHandler->mTargetEvent = ctx->TargetEvent;
@@ -206,7 +206,7 @@ DWORD WINAPI uiaLoop(LPVOID context) {
   }
 
   PropertyChangeEventHandler *pPropertyChangeEventHandler =
-      new PropertyChangeEventHandler();
+      new PropertyChangeEventHandler(ctx->EventQueue, ctx->NotifyEvent);
 
   pPropertyChangeEventHandler->mTargetElement = ctx->TargetElement;
   pPropertyChangeEventHandler->mTargetEvent = ctx->TargetEvent;
@@ -266,7 +266,7 @@ DWORD WINAPI uiaLoop(LPVOID context) {
   }
 
   AutomationEventHandler *pAutomationEventHandler =
-      new AutomationEventHandler();
+      new AutomationEventHandler(ctx->EventQueue, ctx->NotifyEvent);
 
   pAutomationEventHandler->mTargetElement = ctx->TargetElement;
   pAutomationEventHandler->mTargetEvent = ctx->TargetEvent;

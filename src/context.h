@@ -2,7 +2,7 @@
 
 #include <windows.h>
 
-#include "element.h"
+#include "event.h"
 
 struct LogLoopContext {
   HANDLE QuitEvent = nullptr;
@@ -10,16 +10,12 @@ struct LogLoopContext {
 
 struct UIALoopContext {
   HANDLE QuitEvent = nullptr;
-  HANDLE WindowEvent = nullptr;
-  HANDLE TargetEvent = nullptr;
-  ElementSingleton *TargetElement = nullptr;
-  ElementSingleton *WindowElement = nullptr;
+  HANDLE NotifyEvent = nullptr;
+  EventQueue *EventQueue = nullptr;
 };
 
 struct RequestLoopContext {
   HANDLE QuitEvent = nullptr;
-  HANDLE TargetEvent = nullptr;
-  HANDLE WindowEvent = nullptr;
-  ElementSingleton *TargetElement = nullptr;
-  ElementSingleton *WindowElement = nullptr;
+  HANDLE NotifyEvent = nullptr;
+  EventQueue *EventQueue = nullptr;
 };

@@ -12,5 +12,6 @@ template <class T> void SafeRelease(T **ppT) {
 
 void SafeCloseHandle(HANDLE *pHandle);
 bool isEmptyIUIAutomationElement(IUIAutomationElement *pElement);
-HRESULT logIUIAutomationElement(int eventId, IUIAutomationElement *pElement, const wchar_t *longfile);
+HRESULT logIUIAutomationElement(int eventId, IUIAutomationElement *pElement,
+                                const wchar_t *longfile);
 HRESULT printElements(IUIAutomationElementArray *pElements);
