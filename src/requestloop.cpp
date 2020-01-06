@@ -67,7 +67,7 @@ DWORD WINAPI requestLoop(LPVOID context) {
   }
 
   HRESULT hr{};
-  Element *pElement = new Element();
+  Event *pEvent{};
   bool isActive{true};
 
   while (isActive) {
@@ -79,7 +79,7 @@ DWORD WINAPI requestLoop(LPVOID context) {
       continue;
     }
 
-    ctx->EventQueue->Get(pEvent);
+    pEvent = ctx->EventQueue->Get();
 
     if (eventFilter.IsDup(pEvent)) {
       goto NEXT;

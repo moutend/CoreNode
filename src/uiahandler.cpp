@@ -69,17 +69,7 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     return S_OK;
   }
 
-  Element *pElement = new Element();
-
-  HRESULT hr = pElement->CopyFromIUIAutomationElement(pSender);
-
-  if (FAILED(hr)) {
-    delete pElement;
-    pElement = nullptr;
-
-    return E_FAIL;
-  }
-
+  Element *pElement = new Element(pSender);
   Event *pEvent = new Event(UIA_AutomationFocusChangedEventId, pElement);
 
   mEventQueue->Set(pEvent);
@@ -137,17 +127,7 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
     return S_OK;
   }
 
-  Element *pElement = new Element();
-
-  HRESULT hr = pElement->CopyFromIUIAutomationElement(pSender);
-
-  if (FAILED(hr)) {
-    delete pElement;
-    pElement = nullptr;
-
-    return E_FAIL;
-  }
-
+  Element *pElement = new Element(pSender);
   Event *pEvent = new Event(UIA_AutomationPropertyChangedEventId, pElement);
 
   mEventQueue->Set(pEvent);
@@ -202,18 +182,10 @@ AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
     return S_OK;
   }
 
-  Element *pElement = new Element();
-
-  HRESULT hr = pElement->CopyFromIUIAutomationElement(pSender);
-
-  if (FAILED(hr)) {
-    delete pElement;
-    pElement = nullptr;
-
-    return E_FAIL;
-  }
-
+  Element *pElement = new Element(pSender);
   Event *pEvent = new Event(eventId, pElement);
+
+  mEventQueue->Set(pEvent);
 
   if (!SetEvent(mNotifyEvent)) {
     Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
