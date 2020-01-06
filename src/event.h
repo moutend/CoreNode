@@ -24,7 +24,7 @@ public:
   ~EventQueue();
 
   void Set(Event *event);
-  void Get(Event *event);
+  Event *Get();
   void Next();
 
 private:
