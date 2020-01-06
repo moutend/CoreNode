@@ -21,20 +21,20 @@ private:
 class EventQueue {
 public:
   EventQueue(int32_t maxEvents);
-~EventQueue9);
+  ~EventQueue();
 
-void Set(Event *event);
-void Get(Event *event);
-void Next();
+  void Set(Event *event);
+  void Get(Event *event);
+  void Next();
 
 private:
-std::mutex mMutex;
+  std::mutex mMutex;
 
-int32_t mMaxEvents = 0;
-int32_t mReadIndex = 0;
-int32_t mWriteIndex = 0;
+  int32_t mMaxEvents = 0;
+  int32_t mReadIndex = 0;
+  int32_t mWriteIndex = 0;
 
-Event **mEvents = nullptr;
+  Event **mEvents = nullptr;
 };
 
 class EventFilter {
