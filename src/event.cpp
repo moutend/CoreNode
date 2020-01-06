@@ -58,7 +58,7 @@ EventFilter::EventFilter() {}
 EventFilter::~EventFilter() {}
 
 bool EventFilter::IsDup(Event *pEvent) {
-  if (pEvent == nulptr) {
+  if (pEvent == nullptr) {
     return true;
   }
 
