@@ -3,6 +3,10 @@
 #include <cstring>
 #include <windows.h>
 
+#include <strsafe.h>
+
+#include "util.h"
+
 extern Logger::Logger *Log;
 
 void SafeCloseHandle(HANDLE *pHandle) {
