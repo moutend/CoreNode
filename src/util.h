@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstdint>
 #include <UIAutomationClient.h>
+#include <cstdint>
 #include <windows.h>
 
 #include "event.h"

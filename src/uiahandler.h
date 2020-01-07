@@ -9,7 +9,7 @@
 
 class FocusChangeEventHandler : public IUIAutomationFocusChangedEventHandler {
 public:
-  FocusChangeEventHandler(EventHandler *eventHandler, HANDLE notifyEvent);
+  FocusChangeEventHandler(EventHandler *eventHandler);
 
   // IUnknown methods
   ULONG STDMETHODCALLTYPE AddRef();
@@ -29,7 +29,7 @@ private:
 class PropertyChangeEventHandler
     : public IUIAutomationPropertyChangedEventHandler {
 public:
-  PropertyChangeEventHandler(EventHandler *eventHandler, HANDLE notifyEvent);
+  PropertyChangeEventHandler(EventHandler *eventHandler);
 
   // IUnknown methods
   ULONG STDMETHODCALLTYPE AddRef();
@@ -48,7 +48,7 @@ private:
 
 class AutomationEventHandler : public IUIAutomationEventHandler {
 public:
-  AutomationEventHandler(EventHandler *eventHandler, HANDLE notifyEvent);
+  AutomationEventHandler(EventHandler *eventHandler);
 
   // IUnknown methods
   ULONG STDMETHODCALLTYPE AddRef();
