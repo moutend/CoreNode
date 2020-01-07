@@ -10,12 +10,8 @@ struct LogLoopContext {
 
 struct UIALoopContext {
   HANDLE QuitEvent = nullptr;
-  HANDLE NotifyEvent = nullptr;
-  EventQueue *EventQueue = nullptr;
 };
 
 struct RequestLoopContext {
   HANDLE QuitEvent = nullptr;
-  HANDLE NotifyEvent = nullptr;
-  EventQueue *EventQueue = nullptr;
 };

@@ -1,6 +1,11 @@
+#include <cpplogger/cpplogger.h>
 #include <mutex>
 
 #include "event.h"
+#include "http.h"
+#include "util.h"
+
+extern Logger::Logger *Log;
 
 Event::Event(int32_t eventId, Element *pElement)
     : mEventId(eventId), mElement(pElement) {}
@@ -81,4 +86,38 @@ bool EventFilter::IsDup(Event *pEvent) {
   mHeight = pEvent->GetElement()->GetHeight();
 
   return cond;
+}
+
+EventHandler::EventHandler() {}
+
+EventHandler::~EventHandler() {}
+
+void EventHandler::Handle() {
+  std::lock_guard<std::mutex> lock(mMutex);
+
+  logEvent(mEventCount, pEvent);
+
+  switch (pEvent->GetEventId()) {
+  case UIA_AutomationFocusChangedEventId:
+  case UIA_Window_WindowOpenedEventId:
+    try {
+      notifySync(pEvent->GetElement()).wait();
+    } catch (...) {
+      Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
+                __LONGFILE__);
+    }
+    break;
+  default:
+    /*@@@begin
+  try {
+      notifyAsync(pEvent->GetElement()).wait();
+    } catch (...) {
+      Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
+                __LONGFILE__);
+    }
+    @@@end*/
+    break;
+  }
+
+  mEventCount += 1;
 }

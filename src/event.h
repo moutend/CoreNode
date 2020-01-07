@@ -53,3 +53,15 @@ private:
   int32_t mWidth = 0;
   int32_t mHeight = 0;
 };
+
+class EventHandler {
+public:
+  EventHandler();
+  ~EventHandler();
+
+  void Handle(Event *pEvent);
+
+private:
+  std::mutex mMutex;
+  int32_t mEventCount = 0;
+};

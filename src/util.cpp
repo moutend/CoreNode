@@ -61,11 +61,12 @@ bool isEmptyIUIAutomationElement(IUIAutomationElement *pElement) {
   return false;
 }
 
-void logElement(Element *pElement) {
+void logEvent(int32_t eventCount, Event *pEvent) {
   wchar_t *buffer = new wchar_t[256]{};
 
   HRESULT hr =
-      StringCbPrintfW(buffer, 255, L"ElementName=%s", pElement->GetName());
+      StringCbPrintfW(buffer, 255, L"Count=%d,EventId=%d,Name=%s", eventCount,
+                      pEvent->GetEventId(), pEvent->GetElement()->GetName());
 
   if (FAILED(hr)) {
     return;

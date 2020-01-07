@@ -26,10 +26,6 @@ HANDLE logLoopThread{nullptr};
 HANDLE uiaLoopThread{nullptr};
 HANDLE requestLoopThread{nullptr};
 
-HANDLE notifyEvent{nullptr};
-
-EventQueue *eventQueue{nullptr};
-
 void __stdcall Setup(int32_t *code, int32_t logLevel) {
   std::lock_guard<std::mutex> lock(apiMutex);
 
@@ -68,20 +64,7 @@ void __stdcall Setup(int32_t *code, int32_t logLevel) {
     return;
   }
 
-  eventQueue = new EventQueue(1024);
-  notifyEvent =
-      CreateEventEx(nullptr, nullptr, 0, EVENT_MODIFY_STATE | SYNCHRONIZE);
-
-  if (notifyEvent == nullptr) {
-    Log->Fail(L"Failed to create event", GetCurrentThreadId(), __LONGFILE__);
-    *code = -1;
-    return;
-  }
-
   requestLoopCtx = new RequestLoopContext();
-
-  requestLoopCtx->EventQueue = eventQueue;
-  requestLoopCtx->NotifyEvent = notifyEvent;
 
   requestLoopCtx->QuitEvent =
       CreateEventEx(nullptr, nullptr, 0, EVENT_MODIFY_STATE | SYNCHRONIZE);
@@ -104,9 +87,6 @@ void __stdcall Setup(int32_t *code, int32_t logLevel) {
   }
 
   uiaLoopCtx = new UIALoopContext();
-
-  uiaLoopCtx->EventQueue = eventQueue;
-  uiaLoopCtx->NotifyEvent = notifyEvent;
 
   uiaLoopCtx->QuitEvent =
       CreateEventEx(nullptr, nullptr, 0, EVENT_MODIFY_STATE | SYNCHRONIZE);

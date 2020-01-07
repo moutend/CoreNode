@@ -4,6 +4,7 @@
 #include <oaidl.h>
 
 #include "context.h"
+#include "event.h"
 #include "uiahandler.h"
 #include "uialoop.h"
 #include "util.h"
@@ -188,8 +189,9 @@ DWORD WINAPI uiaLoop(LPVOID context) {
     goto CLEANUP;
   }
 
+  EventHandler *pEventHandler = new EventHandler();
   FocusChangeEventHandler *pFocusChangeEventHandler =
-      new FocusChangeEventHandler(ctx->EventQueue, ctx->NotifyEvent);
+      new FocusChangeEventHandler(pEventHandler);
 
   hr = pUIAutomation->AddFocusChangedEventHandler(pBaseCacheRequest,
                                                   pFocusChangeEventHandler);
@@ -201,7 +203,7 @@ DWORD WINAPI uiaLoop(LPVOID context) {
   }
 
   PropertyChangeEventHandler *pPropertyChangeEventHandler =
-      new PropertyChangeEventHandler(ctx->EventQueue, ctx->NotifyEvent);
+      new PropertyChangeEventHandler(pEventHandler);
 
   SAFEARRAYBOUND saBound;
   saBound.lLbound = 0;
@@ -258,7 +260,7 @@ DWORD WINAPI uiaLoop(LPVOID context) {
   }
 
   AutomationEventHandler *pAutomationEventHandler =
-      new AutomationEventHandler(ctx->EventQueue, ctx->NotifyEvent);
+      new AutomationEventHandler(pEventHandler);
 
   const PROPERTYID eventProperties[8] = {
       UIA_LiveRegionChangedEventId,

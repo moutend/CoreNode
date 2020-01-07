@@ -4,13 +4,12 @@
 
 #include "element.h"
 #include "uiahandler.h"
-#include "util.h"
 
 extern Logger::Logger *Log;
 
-FocusChangeEventHandler::FocusChangeEventHandler(EventQueue *eventQueue,
+FocusChangeEventHandler::FocusChangeEventHandler(EventHandler *eventHandler,
                                                  HANDLE notifyEvent)
-    : mEventQueue(eventQueue), mNotifyEvent(notifyEvent) {}
+    : mEventHandler(eventHandler) {}
 
 ULONG FocusChangeEventHandler::AddRef() {
   ULONG ret = InterlockedIncrement(&mRefCount);
@@ -49,25 +48,17 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     return S_OK;
   }
 
-  logIUIAutomationElement(333, pSender, __LONGFILE__);
-
   Element *pElement = new Element(pSender);
   Event *pEvent = new Event(UIA_AutomationFocusChangedEventId, pElement);
 
-  mEventQueue->Set(pEvent);
-
-  if (!SetEvent(mNotifyEvent)) {
-    Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
-
-    return E_FAIL;
-  }
+  mEventHandler->Handle(pEvent);
 
   return S_OK;
 }
 
-PropertyChangeEventHandler::PropertyChangeEventHandler(EventQueue *eventQueue,
-                                                       HANDLE notifyEvent)
-    : mEventQueue(eventQueue), mNotifyEvent(notifyEvent) {}
+PropertyChangeEventHandler::PropertyChangeEventHandler(
+    EventHandler *eventHandler, HANDLE notifyEvent)
+    : mEventHandler(eventHandler) {}
 
 ULONG PropertyChangeEventHandler::AddRef() {
   ULONG ret = InterlockedIncrement(&mRefCount);
@@ -109,25 +100,16 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
     return S_OK;
   }
 
-  logIUIAutomationElement(555, pSender, __LONGFILE__);
-
   Element *pElement = new Element(pSender);
   Event *pEvent = new Event(UIA_AutomationPropertyChangedEventId, pElement);
 
-  mEventQueue->Set(pEvent);
-
-  if (!SetEvent(mNotifyEvent)) {
-    Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
-
-    return E_FAIL;
-  }
+  mEventHandler->Handle(pEvent);
 
   return S_OK;
 }
 
-AutomationEventHandler::AutomationEventHandler(EventQueue *eventQueue,
-                                               HANDLE notifyEvent)
-    : mEventQueue(eventQueue), mNotifyEvent(notifyEvent) {}
+AutomationEventHandler::AutomationEventHandler(EventHandler *eventHandler)
+    : mEventHandler(eventHandler) {}
 
 ULONG AutomationEventHandler::AddRef() {
   ULONG ret = InterlockedIncrement(&mRefCount);
@@ -166,18 +148,10 @@ AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
     return S_OK;
   }
 
-  logIUIAutomationElement(eventId, pSender, __LONGFILE__);
-
   Element *pElement = new Element(pSender);
   Event *pEvent = new Event(eventId, pElement);
 
-  mEventQueue->Set(pEvent);
-
-  if (!SetEvent(mNotifyEvent)) {
-    Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
-
-    return E_FAIL;
-  }
+  mEventHandler->Handle(pEvent);
 
   return S_OK;
 }
