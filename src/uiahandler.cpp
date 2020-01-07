@@ -4,11 +4,11 @@
 
 #include "event.h"
 #include "uiahandler.h"
+#include "util.h"
 
 extern Logger::Logger *Log;
 
-FocusChangeEventHandler::FocusChangeEventHandler(EventHandler *eventHandler,
-                                                 HANDLE notifyEvent)
+FocusChangeEventHandler::FocusChangeEventHandler(EventHandler *eventHandler)
     : mEventHandler(eventHandler) {}
 
 ULONG FocusChangeEventHandler::AddRef() {
@@ -57,7 +57,7 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
 }
 
 PropertyChangeEventHandler::PropertyChangeEventHandler(
-    EventHandler *eventHandler, HANDLE notifyEvent)
+    EventHandler *eventHandler
     : mEventHandler(eventHandler) {}
 
 ULONG PropertyChangeEventHandler::AddRef() {
