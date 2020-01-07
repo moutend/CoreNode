@@ -148,8 +148,6 @@ void __stdcall Teardown(int32_t *code) {
 
   Log->Info(L"Delete request loop thread", GetCurrentThreadId(), __LONGFILE__);
 
-  SafeCloseHandle(&notifyEvent);
-
   delete uiaLoopCtx;
   uiaLoopCtx = nullptr;
 

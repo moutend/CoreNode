@@ -92,7 +92,7 @@ EventHandler::EventHandler() {}
 
 EventHandler::~EventHandler() {}
 
-void EventHandler::Handle() {
+void EventHandler::Handle(Event *pEvent) {
   std::lock_guard<std::mutex> lock(mMutex);
 
   logEvent(mEventCount, pEvent);
