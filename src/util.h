@@ -4,7 +4,7 @@
 #include <UIAutomationClient.h>
 #include <windows.h>
 
-#include "element.h"
+#include "event.h"
 
 template <class T> void SafeRelease(T **ppT) {
   if (*ppT) {
