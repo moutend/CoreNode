@@ -57,7 +57,7 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
 }
 
 PropertyChangeEventHandler::PropertyChangeEventHandler(
-    EventHandler *eventHandler
+    EventHandler *eventHandler)
     : mEventHandler(eventHandler) {}
 
 ULONG PropertyChangeEventHandler::AddRef() {
