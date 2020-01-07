@@ -62,11 +62,20 @@ bool isEmptyIUIAutomationElement(IUIAutomationElement *pElement) {
 }
 
 void logEvent(int32_t eventCount, Event *pEvent) {
-  wchar_t *buffer = new wchar_t[256]{};
+  wchar_t *buffer = new wchar_t[512]{};
 
-  HRESULT hr =
-      StringCbPrintfW(buffer, 255, L"Count=%d,EventId=%d,Name=%s", eventCount,
-                      pEvent->GetEventId(), pEvent->GetElement()->GetName());
+  HRESULT hr = StringCbPrintfW(
+      buffer, 511,
+      L"Count=%d,Name=%s,EventId=%d,ClassName=%s,FrameworkName=%s,"
+      L"ControlTypeId=%d,Role=%d,(x,y,w,h)=(%d,%d,%"
+      L"d,"
+      L"%d)",
+      eventCount, pEvent->GetElement()->GetName(), pEvent->GetEventId(),
+      pEvent->GetElement()->GetClassName(),
+      pEvent->GetElement()->GetFrameworkName(),
+      pEvent->GetElement()->GetControlTypeId(), pEvent->GetElement()->GetRole(),
+      pEvent->GetElement()->GetLeft(), pEvent->GetElement()->GetTop(),
+      pEvent->GetElement()->GetWidth(), pEvent->GetElement()->GetHeight());
 
   if (FAILED(hr)) {
     return;

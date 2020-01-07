@@ -29,6 +29,16 @@ Element::Element(Element *pElement) {
     mName = new wchar_t[nameLength + 1]{};
     std::wmemcpy(mName, pElement->GetName(), nameLength);
   }
+  if (pElement->GetClassName() != nullptr) {
+    size_t classNameLength = std::wcslen(pElement->GetClassName());
+    mClassName = new wchar_t[classNameLength + 1]{};
+    std::wmemcpy(mClassName, pElement->GetClassName(), classNameLength);
+  }
+  if (pElement->GetFrameworkName() != nullptr) {
+    size_t classNameLength = std::wcslen(pElement->GetFrameworkName());
+    mFrameworkName = new wchar_t[classNameLength + 1]{};
+    std::wmemcpy(mFrameworkName, pElement->GetFrameworkName(), classNameLength);
+  }
 }
 
 Element::Element(IUIAutomationElement *pElement) {
@@ -56,6 +66,43 @@ Element::Element(IUIAutomationElement *pElement) {
 
     SysFreeString(name);
     name = nullptr;
+  } else {
+    mName = new wchar_t[10];
+    std::wmemcpy(mName, L"<nullptr>", 9);
+  }
+
+  wchar_t *className{nullptr};
+
+  if (FAILED(pElement->get_CachedClassName(&className))) {
+    className = nullptr;
+  }
+  if (className != nullptr) {
+    size_t classNameLength = std::wcslen(className);
+    mClassName = new wchar_t[classNameLength + 1]{};
+    std::wmemcpy(mClassName, className, classNameLength);
+
+    SysFreeString(className);
+    className = nullptr;
+  } else {
+    mClassName = wchar_t[10]{};
+    std::wmemcpy(mClassName, L"<nullptr>", 9);
+  }
+
+  wchar_t *frameworkName{nullptr};
+
+  if (FAILED(pElement->get_CachedFrameworkId(&frameworkName))) {
+    frameworkName = nullptr;
+  }
+  if (frameworkName != nullptr) {
+    size_t frameworkNameLength = std::wcslen(frameworkName);
+    mFrameworkName = new wchar_t[frameworkNameLength + 1]{};
+    std::wmemcpy(mFrameworkName, frameworkName, frameworkNameLength);
+
+    SysFreeString(frameworkName);
+    frameworkName = nullptr;
+  } else {
+    mFrameworkName = wchar_t[10]{};
+    std::wmemcpy(mFrameworkName, L"<nullptr>", 9);
   }
 
   RECT boundingRectangle{0, 0, 0, 0};
@@ -85,6 +132,8 @@ Element::~Element() {
 }
 
 wchar_t *Element::GetName() { return mName; }
+wchar_t *Element::GetClassName() { return mClassName; }
+wchar_t *Element::GetFrameworkName() { return mFrameworkName; }
 int32_t Element::GetControlTypeId() { return mControlTypeId; }
 int32_t Element::GetRole() { return mRole; }
 int32_t Element::GetLeft() { return mLeft; }

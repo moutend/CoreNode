@@ -15,6 +15,8 @@ public:
   ~Element();
 
   wchar_t *GetName();
+  wchar_t *GetClassName();
+  wchar_t *GetFrameworkName();
   int32_t GetControlTypeId();
   int32_t GetRole();
   int32_t GetLeft();
@@ -26,6 +28,8 @@ public:
 
 private:
   wchar_t *mName = nullptr;
+  wchar_t *mClassName = nullptr;
+  wchar_t *mFrameworkName = nullptr;
   int32_t mControlTypeId = 0;
   int32_t mRole = 0;
   int32_t mLeft = 0;
