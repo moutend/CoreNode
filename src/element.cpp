@@ -84,7 +84,7 @@ Element::Element(IUIAutomationElement *pElement) {
     SysFreeString(className);
     className = nullptr;
   } else {
-    mClassName = wchar_t[10]{};
+    mClassName = new wchar_t[10]{};
     std::wmemcpy(mClassName, L"<nullptr>", 9);
   }
 
@@ -101,7 +101,7 @@ Element::Element(IUIAutomationElement *pElement) {
     SysFreeString(frameworkName);
     frameworkName = nullptr;
   } else {
-    mFrameworkName = wchar_t[10]{};
+    mFrameworkName = new wchar_t[10]{};
     std::wmemcpy(mFrameworkName, L"<nullptr>", 9);
   }
 
