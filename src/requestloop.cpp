@@ -99,23 +99,23 @@ DWORD WINAPI requestLoop(LPVOID context) {
       }
       break;
     default:
-      try {
-        /*@@@begin
-          notifyAsync(pEvent->GetElement()).wait();
-        } catch (...) {
-          Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
-                    __LONGFILE__);
-        }
-        @@@end*/
-        break;
+      /*@@@begin
+    try {
+        notifyAsync(pEvent->GetElement()).wait();
+      } catch (...) {
+        Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
+                  __LONGFILE__);
       }
-
-    NEXT:
-
-      ctx->EventQueue->Next();
+      @@@end*/
+      break;
     }
 
-    Log->Info(L"End request loop", GetCurrentThreadId(), __LONGFILE__);
+  NEXT:
 
-    return S_OK;
+    ctx->EventQueue->Next();
   }
+
+  Log->Info(L"End request loop", GetCurrentThreadId(), __LONGFILE__);
+
+  return S_OK;
+}
