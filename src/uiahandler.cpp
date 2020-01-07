@@ -49,6 +49,8 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     return S_OK;
   }
 
+  logIUIAutomationElement(333, pSender);
+
   Element *pElement = new Element(pSender);
   Event *pEvent = new Event(UIA_AutomationFocusChangedEventId, pElement);
 
@@ -107,6 +109,8 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
     return S_OK;
   }
 
+  logIUIAutomationElement(555, pSender);
+
   Element *pElement = new Element(pSender);
   Event *pEvent = new Event(UIA_AutomationPropertyChangedEventId, pElement);
 
@@ -161,6 +165,8 @@ AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
   if (isEmptyIUIAutomationElement(pSender)) {
     return S_OK;
   }
+
+  logIUIAutomationElement(eventId, pSender);
 
   Element *pElement = new Element(pSender);
   Event *pEvent = new Event(eventId, pElement);

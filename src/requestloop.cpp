@@ -39,7 +39,7 @@ pplx::task<http_response> notifyAsync(Element *pElement) {
 pplx::task<http_response> notifySync(Element *pElement) {
   json::value c0;
   c0[U("type")] = json::value(1);
-  c0[U("value")] = json::value(5);
+  c0[U("value")] = json::value(7);
 
   json::value c1;
   c1[U("type")] = json::value(3);
