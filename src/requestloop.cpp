@@ -88,6 +88,9 @@ DWORD WINAPI requestLoop(LPVOID context) {
     }
     switch (pEvent->GetEventId()) {
     case UIA_AutomationFocusChangedEventId:
+    case UIA_Window_WindowOpenedEventId:
+      logElement(pEvent->GetElement());
+
       try {
         notifySync(pEvent->GetElement()).wait();
       } catch (...) {

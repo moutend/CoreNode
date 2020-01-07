@@ -57,6 +57,22 @@ bool isEmptyIUIAutomationElement(IUIAutomationElement *pElement) {
   return false;
 }
 
+void logElement(Element *pElement) {
+  wchar_t *buffer = new wchar_t[256]{};
+
+  HRESULT hr =
+      StringCbPrintfW(buffer, 255, L"ElementName=%s", pElement->GetName());
+
+  if (FAILED(hr)) {
+    return;
+  }
+
+  Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
+
+  delete[] buffer;
+  buffer = nullptr;
+}
+
 HRESULT logIUIAutomationElement(int eventId, IUIAutomationElement *pElement,
                                 const wchar_t *longfile) {
   if (pElement == nullptr) {
