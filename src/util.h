@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <UIAutomationClient.h>
 #include <windows.h>
 
@@ -14,7 +15,7 @@ template <class T> void SafeRelease(T **ppT) {
 
 void SafeCloseHandle(HANDLE *pHandle);
 bool isEmptyIUIAutomationElement(IUIAutomationElement *pElement);
-void logEvent(Event *pEvent);
+void logEvent(int32_t eventCount, Event *pEvent);
 HRESULT logIUIAutomationElement(int eventId, IUIAutomationElement *pElement,
                                 const wchar_t *longfile);
 HRESULT printElements(IUIAutomationElementArray *pElements);
