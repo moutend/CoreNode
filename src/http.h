@@ -8,5 +8,5 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 
-pplx::task<void> notifySync(Element *pElement);
-pplx::task<void> notifyAsync(Element *pElement);
+pplx::task<http_response> notifySync(Element *pElement);
+pplx::task<http_response> notifyAsync(Element *pElement);

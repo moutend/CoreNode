@@ -1,4 +1,9 @@
+#include <cpprest/http_client.h>
 #include "http.h"
+
+using namespace web;
+using namespace web::http;
+using namespace web::http::client;
 
 pplx::task<http_response> notifyAsync(Element *pElement) {
   json::value c;
