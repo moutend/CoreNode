@@ -42,7 +42,7 @@ public:
   EventFilter();
   ~EventFilter();
 
-  bool IsDup(Event *pEvent);
+  bool IsFocus(Event *pEvent);
 
 private:
   int32_t mEventId = 0;
@@ -64,4 +64,5 @@ public:
 private:
   std::mutex mMutex;
   int32_t mEventCount = 0;
+  EventFilter *mEventFilter = nullptr;
 };

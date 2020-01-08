@@ -62,33 +62,24 @@ EventFilter::EventFilter() {}
 
 EventFilter::~EventFilter() {}
 
-bool EventFilter::IsDup(Event *pEvent) {
+bool EventFilter::IsFocus(Event *pEvent) {
   if (pEvent == nullptr || pEvent->GetElement() == nullptr) {
-    return true;
+    return false;
   }
 
-  bool cond{true};
+  if (pEvent->GetEventId() == 20016 &&
+      pEvent->GetElement()->GetControlTypeId() == 50032) {
+    return false;
+  }
+  if (pEvent->GetEventId() == 20005 &&
+      pEvent->GetElement()->GetControlTypeId() == 50033) {
+    return false;
+  }
 
-  cond &= mEventId == pEvent->GetEventId();
-  cond &= mControlTypeId == pEvent->GetElement()->GetControlTypeId();
-  cond &= mRole == pEvent->GetElement()->GetRole();
-  cond &= mLeft == pEvent->GetElement()->GetLeft();
-  cond &= mTop == pEvent->GetElement()->GetTop();
-  cond &= mWidth == pEvent->GetElement()->GetWidth();
-  cond &= mHeight == pEvent->GetElement()->GetHeight();
-
-  mEventId = pEvent->GetEventId();
-  mControlTypeId = pEvent->GetElement()->GetControlTypeId();
-  mRole = pEvent->GetElement()->GetRole();
-  mLeft = pEvent->GetElement()->GetLeft();
-  mTop = pEvent->GetElement()->GetTop();
-  mWidth = pEvent->GetElement()->GetWidth();
-  mHeight = pEvent->GetElement()->GetHeight();
-
-  return cond;
+  return true;
 }
 
-EventHandler::EventHandler() {}
+EventHandler::EventHandler() { mEventFilter = new EventFilter(); }
 
 EventHandler::~EventHandler() {}
 
@@ -100,6 +91,9 @@ void EventHandler::Handle(Event *pEvent) {
   switch (pEvent->GetEventId()) {
   case UIA_AutomationFocusChangedEventId:
   case UIA_Window_WindowOpenedEventId:
+    if (!mEventFilter->IsFocus(pEvent)) {
+      break;
+    }
     try {
       notifySync(pEvent->GetElement()).wait();
     } catch (...) {
