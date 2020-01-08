@@ -92,7 +92,7 @@ bool EventFilter::IsFocus(Event *pEvent) {
   mWidth = pEvent->GetElement()->GetWidth();
   mHeight = pEvent->GetElement()->GetHeight();
 
-  return cond;
+  return !cond;
 }
 
 EventHandler::EventHandler() { mEventFilter = new EventFilter(); }
