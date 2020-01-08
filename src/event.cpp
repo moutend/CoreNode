@@ -76,7 +76,23 @@ bool EventFilter::IsFocus(Event *pEvent) {
     return false;
   }
 
-  return true;
+  bool cond{true};
+
+  cond &= mEventId == pEvent->GetEventId();
+  cond &= mControlTypeId == pEvent->GetElement()->GetControlTypeId();
+  cond &= mLeft == pEvent->GetElement()->GetLeft();
+  cond &= mTop == pEvent->GetElement()->GetTop();
+  cond &= mWidth == pEvent->GetElement()->GetWidth();
+  cond &= mHeight == pEvent->GetElement()->GetHeight();
+
+  mEventId = pEvent->GetEventId();
+  mControlTypeId = pEvent->GetElement()->GetControlTypeId();
+  mLeft = pEvent->GetElement()->GetLeft();
+  mTop = pEvent->GetElement()->GetTop();
+  mWidth = pEvent->GetElement()->GetWidth();
+  mHeight = pEvent->GetElement()->GetHeight();
+
+  return cond;
 }
 
 EventHandler::EventHandler() { mEventFilter = new EventFilter(); }
@@ -90,6 +106,7 @@ void EventHandler::Handle(Event *pEvent) {
 
   switch (pEvent->GetEventId()) {
   case UIA_AutomationFocusChangedEventId:
+  case UIA_MenuOpenedEventId:
   case UIA_Window_WindowOpenedEventId:
     if (!mEventFilter->IsFocus(pEvent)) {
       break;
