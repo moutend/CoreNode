@@ -92,6 +92,16 @@ bool EventFilter::IsFocus(Event *pEvent) {
   mWidth = pEvent->GetElement()->GetWidth();
   mHeight = pEvent->GetElement()->GetHeight();
 
+  int64_t now = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                    std::chrono::system_clock::now().time_since_epoch())
+                    .count();
+
+  if (now - mNow < 20000000) {
+    return false;
+  }
+
+  mNow = now;
+
   return !cond;
 }
 

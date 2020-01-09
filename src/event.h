@@ -52,6 +52,7 @@ private:
   int32_t mTop = 0;
   int32_t mWidth = 0;
   int32_t mHeight = 0;
+  int64_t mNow = 0;
 };
 
 class EventHandler {
