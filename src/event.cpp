@@ -1,4 +1,5 @@
 #include <cstring>
+#include <cwchar>
 #include <windows.h>
 
 #include "event.h"

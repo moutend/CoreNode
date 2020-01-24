@@ -6,6 +6,7 @@
 #include <windows.h>
 
 #include "event.h"
+#include "types.h"
 
 class FocusChangeEventHandler : public IUIAutomationFocusChangedEventHandler {
 public:
