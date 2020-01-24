@@ -92,14 +92,14 @@ HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
 
   RawElement *pRawElement;
 
-if (FAILED(RawElementFromIUIAutomationElement(pElement, &pRawElement)) {
+  if (FAILED(RawElementFromIUIAutomationElement(pElement, &pRawElement))) {
     return E_FAIL;
-}
+  }
 
-*pRawEvent = new RawEvent;
+  *pRawEvent = new RawEvent;
 
-(*pRawEvent)->RawElement = pRawElement;
-(*pRawEvent)->EventId = eventId;
+  (*pRawEvent)->RawElement = pRawElement;
+  (*pRawEvent)->EventId = eventId;
 
-return S_OK;
+  return S_OK;
 }
