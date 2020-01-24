@@ -52,17 +52,17 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
                                               pSender, &pRawEvent))) {
     return E_FAIL;
   }
-if (mEventHandler(pEvent) != 0 {
+  if (mEventHandler(pRawEvent) != 0) {
     return E_FAIL;
-}
+  }
 
-SafeRelease(&pSender);
+  SafeRelease(&pSender);
 
-delete pRawEvent->Element;
-pRawEvent->Element = nullptr;
+  delete pRawEvent->Element;
+  pRawEvent->Element = nullptr;
 
-delete pRawEvent;
-pRawEvent = nullptr;
+  delete pRawEvent;
+  pRawEvent = nullptr;
 
   return S_OK;
 }
