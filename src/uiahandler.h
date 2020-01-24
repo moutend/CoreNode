@@ -9,7 +9,7 @@
 
 class FocusChangeEventHandler : public IUIAutomationFocusChangedEventHandler {
 public:
-  FocusChangeEventHandler(EventHandler *eventHandler);
+  FocusChangeEventHandler(EventHandler eventHandler);
 
   // IUnknown methods
   ULONG STDMETHODCALLTYPE AddRef();
@@ -22,14 +22,14 @@ public:
 
 private:
   LONG mRefCount;
-  EventHandler *mEventHandler = nullptr;
+  EventHandler mEventHandler = nullptr;
   HANDLE mNotifyEvent = nullptr;
 };
 
 class PropertyChangeEventHandler
     : public IUIAutomationPropertyChangedEventHandler {
 public:
-  PropertyChangeEventHandler(EventHandler *eventHandler);
+  PropertyChangeEventHandler(EventHandler eventHandler);
 
   // IUnknown methods
   ULONG STDMETHODCALLTYPE AddRef();
@@ -42,13 +42,13 @@ public:
 
 private:
   LONG mRefCount;
-  EventHandler *mEventHandler = nullptr;
+  EventHandler mEventHandler = nullptr;
   HANDLE mNotifyEvent = nullptr;
 };
 
 class AutomationEventHandler : public IUIAutomationEventHandler {
 public:
-  AutomationEventHandler(EventHandler *eventHandler);
+  AutomationEventHandler(EventHandler eventHandler);
 
   // IUnknown methods
   ULONG STDMETHODCALLTYPE AddRef();
@@ -61,6 +61,6 @@ public:
 
 private:
   LONG mRefCount;
-  EventHandler *mEventHandler = nullptr;
+  EventHandler mEventHandler = nullptr;
   HANDLE mNotifyEvent = nullptr;
 };

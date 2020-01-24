@@ -1,69 +1,14 @@
 #pragma once
 
+#include <UIAutomationClient.h>
 #include <cstdint>
-#include <mutex>
+#include <windows.h>
 
-#include "element.h"
+#include "types.h"
 
-class Event {
-public:
-  Event(int32_t eventId, Element *pElement);
-  ~Event();
+HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
+                                           RawElement **pRawElement);
 
-  int32_t GetEventId();
-  Element *GetElement();
-
-private:
-  int32_t mEventId = 0;
-  Element *mElement = nullptr;
-};
-
-class EventQueue {
-public:
-  EventQueue(int32_t maxEvents);
-  ~EventQueue();
-
-  void Set(Event *event);
-  Event *Get();
-  void Next();
-
-private:
-  std::mutex mMutex;
-
-  int32_t mMaxEvents = 0;
-  int32_t mReadIndex = 0;
-  int32_t mWriteIndex = 0;
-
-  Event **mEvents = nullptr;
-};
-
-class EventFilter {
-public:
-  EventFilter();
-  ~EventFilter();
-
-  bool IsFocus(Event *pEvent);
-
-private:
-  int32_t mEventId = 0;
-  int32_t mControlTypeId = 0;
-  int32_t mRole = 0;
-  int32_t mLeft = 0;
-  int32_t mTop = 0;
-  int32_t mWidth = 0;
-  int32_t mHeight = 0;
-  int64_t mNow = 0;
-};
-
-class EventHandler {
-public:
-  EventHandler();
-  ~EventHandler();
-
-  void Handle(Event *pEvent);
-
-private:
-  std::mutex mMutex;
-  int32_t mEventCount = 0;
-  EventFilter *mEventFilter = nullptr;
-};
+HRESULT RawEventFromIUIAutomation(int32_t eventId,
+                                  IUIAutomationElement *pElement,
+                                  RawEvent **pRawEvent);

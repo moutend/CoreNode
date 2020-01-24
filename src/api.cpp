@@ -1,6 +1,5 @@
 #include <cpplogger/cpplogger.h>
 #include <cstring>
-#include <fstream>
 #include <mutex>
 #include <windows.h>
 
@@ -9,7 +8,7 @@
 #include "api.h"
 #include "context.h"
 #include "logloop.h"
-#include "requestloop.h"
+#include "types.h"
 #include "uialoop.h"
 #include "util.h"
 
@@ -20,13 +19,12 @@ std::mutex apiMutex;
 
 LogLoopContext *logLoopCtx{nullptr};
 UIALoopContext *uiaLoopCtx{nullptr};
-RequestLoopContext *requestLoopCtx{nullptr};
 
 HANDLE logLoopThread{nullptr};
 HANDLE uiaLoopThread{nullptr};
-HANDLE requestLoopThread{nullptr};
 
-void __stdcall Setup(int32_t *code, int32_t logLevel) {
+void __stdcall Setup(int32_t *code, int32_t logLevel,
+                     EventHandler eventHandler) {
   std::lock_guard<std::mutex> lock(apiMutex);
 
   if (code == nullptr) {
@@ -64,29 +62,9 @@ void __stdcall Setup(int32_t *code, int32_t logLevel) {
     return;
   }
 
-  requestLoopCtx = new RequestLoopContext();
-
-  requestLoopCtx->QuitEvent =
-      CreateEventEx(nullptr, nullptr, 0, EVENT_MODIFY_STATE | SYNCHRONIZE);
-
-  if (requestLoopCtx->QuitEvent == nullptr) {
-    Log->Fail(L"Failed to create event", GetCurrentThreadId(), __LONGFILE__);
-    *code = -1;
-    return;
-  }
-
-  Log->Info(L"Create request loop thread", GetCurrentThreadId(), __LONGFILE__);
-
-  requestLoopThread = CreateThread(
-      nullptr, 0, requestLoop, static_cast<void *>(requestLoopCtx), 0, nullptr);
-
-  if (requestLoopThread == nullptr) {
-    Log->Fail(L"Failed to create thread", GetCurrentThreadId(), __LONGFILE__);
-    *code = -1;
-    return;
-  }
-
   uiaLoopCtx = new UIALoopContext();
+
+  uiaLoopCtx->HandleFunc = eventHandler;
 
   uiaLoopCtx->QuitEvent =
       CreateEventEx(nullptr, nullptr, 0, EVENT_MODIFY_STATE | SYNCHRONIZE);
@@ -135,24 +113,10 @@ void __stdcall Teardown(int32_t *code) {
   WaitForSingleObject(uiaLoopThread, INFINITE);
   SafeCloseHandle(&uiaLoopThread);
 
-  Log->Info(L"Delete uia loop thread", GetCurrentThreadId(), __LONGFILE__);
-
-  if (!SetEvent(requestLoopCtx->QuitEvent)) {
-    Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
-    *code = -1;
-    return;
-  }
-
-  WaitForSingleObject(requestLoopThread, INFINITE);
-  SafeCloseHandle(&requestLoopThread);
-
-  Log->Info(L"Delete request loop thread", GetCurrentThreadId(), __LONGFILE__);
-
   delete uiaLoopCtx;
   uiaLoopCtx = nullptr;
 
-  delete requestLoopCtx;
-  requestLoopCtx = nullptr;
+  Log->Info(L"Delete uia loop thread", GetCurrentThreadId(), __LONGFILE__);
 
   Log->Info(L"Complete teardown CoreNode", GetCurrentThreadId(), __LONGFILE__);
 
@@ -164,6 +128,9 @@ void __stdcall Teardown(int32_t *code) {
 
   WaitForSingleObject(logLoopThread, INFINITE);
   SafeCloseHandle(&logLoopThread);
+
+  delete logLoopCtx;
+  logLoopCtx = nullptr;
 
   isActive = false;
 }

@@ -83,7 +83,8 @@ DWORD WINAPI uiaLoop(LPVOID context) {
   }
 
   hr = CoCreateInstance(__uuidof(CUIAutomation), nullptr, CLSCTX_INPROC_SERVER,
-                        __uuidof(IUIAutomation), (void **)&pUIAutomation);
+                        __uuidof(IUIAutomation),
+                        reinterpret_cast<void **>(&pUIAutomation));
 
   if (FAILED(hr)) {
     Log->Fail(L"Failed to create an instance of IUIAutomation",
@@ -95,8 +96,8 @@ DWORD WINAPI uiaLoop(LPVOID context) {
   vEmpty.vt = VT_I4;
   vEmpty.lVal = 0;
 
-  IUIAutomationCondition *pCondition{nullptr};
-  IUIAutomationCondition *pWindowCondition{nullptr};
+  IUIAutomationCondition *pCondition{};
+  IUIAutomationCondition *pWindowCondition{};
 
   hr = pUIAutomation->CreatePropertyCondition(UIA_NativeWindowHandlePropertyId,
                                               vEmpty, &pCondition);

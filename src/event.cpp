@@ -1,144 +1,101 @@
-#include <cpplogger/cpplogger.h>
-#include <mutex>
-
 #include "event.h"
-#include "http.h"
-#include "util.h"
 
-extern Logger::Logger *Log;
-
-Event::Event(int32_t eventId, Element *pElement)
-    : mEventId(eventId), mElement(pElement) {}
-
-Event::~Event() {
-  delete mElement;
-  mElement = nullptr;
-}
-
-int32_t Event::GetEventId() { return mEventId; }
-Element *Event::GetElement() { return mElement; }
-
-EventQueue::EventQueue(int32_t maxEvents) : mMaxEvents(maxEvents) {
-  mEvents = new Event *[maxEvents] {};
-}
-
-EventQueue::~EventQueue() {
-  for (int32_t i = 0; i < mMaxEvents; i++) {
-    if (mEvents[i] != nullptr) {
-      delete mEvents[i];
-      mEvents[i] = nullptr;
-    }
+HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
+                                           RawElement **pRawElement) {
+  if (pElement == nullptr || pRawElement == nullptr) {
+    return E_FAIL;
   }
 
-  delete[] mEvents;
-  mEvents = nullptr;
+  *pRawElement = new RawElement;
+
+  CONTROLTYPEID controlTypeId{};
+
+  if (FAILED(pElement->get_CachedControlType(&controlTypeId))) {
+    controlTypeId = 0;
+  }
+
+  (*pRawElement)->ControlTypeId = static_cast<int32_t>(controlTypeId);
+
+  wchar_t *name{};
+
+if (FAILED(pElement->get_CurrentName(&name)) {
+    name = nullptr;
+  }
+  if (name != nullptr) {
+    size_t nameLength = std::wcslen(name);
+
+    (*pRawElement)->NameData = new wchar_t[nameLength + 1]{};
+    std::wmemcpy((*pRawElement)->NameData, name, nameLength);
+    (*pRawElement)->NameLength = static_cast<int32_t>(nameLength);
+
+    SysFreeString(name);
+    name = nullptr;
+  }
+
+  wchar_t *className{nullptr};
+
+  if (FAILED(pElement->get_CachedClassName(&className))) {
+    className = nullptr;
+  }
+  if (className != nullptr) {
+    size_t classNameLength = std::wcslen(className);
+
+    (*pRawElement)->ClassNameData = new wchar_t[classNameLength + 1]{};
+    std::wmemcpy((*pRawElement)->ClassNameData, className, classNameLength);
+    (*pRawElement)->ClassNameLength = static_cast<int32_t>(classNameLength);
+
+    SysFreeString(className);
+    className = nullptr;
+  }
+
+  wchar_t *frameworkName{};
+
+  if (FAILED(pElement->get_CachedFrameworkId(&frameworkName))) {
+    frameworkName = nullptr;
+  }
+  if (frameworkName != nullptr) {
+    size_t frameworkNameLength = std::wcslen(frameworkName);
+
+    (*pRawElement)->FrameworkNameData = new wchar_t[frameworkNameLength + 1]{};
+    std::wmemcpy((*pRawElement)->FrameworkNameData, frameworkName,
+                 frameworkNameLength);
+    (*pRawElement)->FrameworkNameLength =
+        static_cast<int32_t>(frameworkNameLength);
+
+    SysFreeString(frameworkName);
+    frameworkName = nullptr;
+  }
+
+  RECT boundingRectangle{0, 0, 0, 0};
+
+  if (FAILED(pElement->get_CurrentBoundingRectangle(&boundingRectangle))) {
+  }
+
+  (*pRawElement)->Left = boundingRectangle.left;
+  (*pRawElement)->Top = boundingRectangle.left;
+  (*pRawElement)->Width = boundingRectangle.right - boundingRectangle.left;
+  (*pRawElement)->Height = boundingRectangle.bottom - boundingRectangle.top;
+
+return S_OK;
 }
 
-void EventQueue::Set(Event *pEvent) {
-  std::lock_guard<std::mutex> lock(mMutex);
-
-  if (mEvents[mWriteIndex] != nullptr) {
-    delete mEvents[mWriteIndex];
-    mEvents[mWriteIndex] = nullptr;
+HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
+                                         IUIAutomationElement *pElement,
+                                         RawEvent **pRawEvent) {
+  if (pElement == nullptr || pRawEvent == nullptr) {
+    return E_FAIL;
   }
 
-  mEvents[mWriteIndex] = pEvent;
-  mWriteIndex = (mWriteIndex > mMaxEvents - 1) ? 0 : mWriteIndex + 1;
+  RawElement *pRawElement;
+
+if (FAILED(RawElementFromIUIAutomationElement(pElement, &pRawElement)) {
+    return E_FAIL;
 }
 
-Event *EventQueue::Get() {
-  std::lock_guard<std::mutex> lock(mMutex);
+*pRawEvent = new RawEvent;
 
-  return mEvents[mReadIndex];
-}
+(*pRawEvent)->RawElement = pRawElement;
+(*pRawEvent)->EventId = eventId;
 
-void EventQueue::Next() {
-  std::lock_guard<std::mutex> lock(mMutex);
-
-  mReadIndex = (mReadIndex > mMaxEvents - 1) ? 0 : mReadIndex + 1;
-}
-
-EventFilter::EventFilter() {}
-
-EventFilter::~EventFilter() {}
-
-bool EventFilter::IsFocus(Event *pEvent) {
-  if (pEvent == nullptr || pEvent->GetElement() == nullptr) {
-    return false;
-  }
-
-  if (pEvent->GetEventId() == 20016 &&
-      pEvent->GetElement()->GetControlTypeId() == 50032) {
-    return false;
-  }
-  if (pEvent->GetEventId() == 20005 &&
-      pEvent->GetElement()->GetControlTypeId() == 50033) {
-    return false;
-  }
-
-  bool cond{true};
-
-  cond &= mEventId == pEvent->GetEventId();
-  cond &= mControlTypeId == pEvent->GetElement()->GetControlTypeId();
-  cond &= mLeft == pEvent->GetElement()->GetLeft();
-  cond &= mTop == pEvent->GetElement()->GetTop();
-  cond &= mWidth == pEvent->GetElement()->GetWidth();
-  cond &= mHeight == pEvent->GetElement()->GetHeight();
-
-  mEventId = pEvent->GetEventId();
-  mControlTypeId = pEvent->GetElement()->GetControlTypeId();
-  mLeft = pEvent->GetElement()->GetLeft();
-  mTop = pEvent->GetElement()->GetTop();
-  mWidth = pEvent->GetElement()->GetWidth();
-  mHeight = pEvent->GetElement()->GetHeight();
-
-  int64_t now = std::chrono::duration_cast<std::chrono::nanoseconds>(
-                    std::chrono::system_clock::now().time_since_epoch())
-                    .count();
-
-  if (now - mNow < 20000000) {
-    return false;
-  }
-
-  mNow = now;
-
-  return !cond;
-}
-
-EventHandler::EventHandler() { mEventFilter = new EventFilter(); }
-
-EventHandler::~EventHandler() {}
-
-void EventHandler::Handle(Event *pEvent) {
-  std::lock_guard<std::mutex> lock(mMutex);
-
-  logEvent(mEventCount, pEvent);
-
-  switch (pEvent->GetEventId()) {
-  case UIA_AutomationFocusChangedEventId:
-  case UIA_MenuOpenedEventId:
-  case UIA_Window_WindowOpenedEventId:
-    if (!mEventFilter->IsFocus(pEvent)) {
-      break;
-    }
-    try {
-      notifySync(pEvent->GetElement()).wait();
-    } catch (...) {
-      Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
-                __LONGFILE__);
-    }
-    break;
-  default:
-    /*@@@begin
-  try {
-      notifyAsync(pEvent->GetElement()).wait();
-    } catch (...) {
-      Log->Warn(L"Failed to send HTTP request", GetCurrentThreadId(),
-                __LONGFILE__);
-    }
-    @@@end*/
-    break;
-  }
-
-  mEventCount += 1;
+return S_OK;
 }

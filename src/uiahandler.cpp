@@ -3,6 +3,7 @@
 #include <cpplogger/cpplogger.h>
 
 #include "event.h"
+#include "types.h"
 #include "uiahandler.h"
 #include "util.h"
 
@@ -44,14 +45,23 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     IUIAutomationElement *pSender) {
   Log->Info(L"Focus change event received", GetCurrentThreadId(), __LONGFILE__);
 
-  if (isEmptyIUIAutomationElement(pSender)) {
-    return S_OK;
+  RawEvent *pRawEvent{};
+
+  if (FAILED(RawEventFromIUIAutomationElement(UIA_AutomationFocusChangedEventId,
+                                              pSender, &pRawEvent))) {
+    return E_FAIL;
   }
+if (mEventHandler(pEvent) != 0 {
+    return E_FAIL;
+}
 
-  Element *pElement = new Element(pSender);
-  Event *pEvent = new Event(UIA_AutomationFocusChangedEventId, pElement);
+SafeRelease(&pSender);
 
-  mEventHandler->Handle(pEvent);
+delete pRawEvent->Element;
+pRawEvent->Element = nullptr;
+
+delete pRawEvent;
+pRawEvent = nullptr;
 
   return S_OK;
 }
@@ -96,14 +106,21 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
   Log->Info(L"Property change event received", GetCurrentThreadId(),
             __LONGFILE__);
 
-  if (isEmptyIUIAutomationElement(pSender)) {
-    return S_OK;
+  RawEvent *pRawEvent{};
+
+  if (FAILED(RawEventFromIUIAutomation(UIA_AutomationPropertyChangedEventId,
+                                       pSender, &pRawEvent))) {
+    return E_FAIL;
+  }
+  if (mEventHandler(pRawEvent) != 0) {
+    return E_FAIL;
   }
 
-  Element *pElement = new Element(pSender);
-  Event *pEvent = new Event(UIA_AutomationPropertyChangedEventId, pElement);
+  delete pRawEvent->Element;
+  pRawEvent->Element = nullptr;
 
-  mEventHandler->Handle(pEvent);
+  delete pRawEvent;
+  pRawEvent = nullptr;
 
   return S_OK;
 }
@@ -144,14 +161,22 @@ AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
                                               EVENTID eventId) {
   Log->Info(L"Automation event received", GetCurrentThreadId(), __LONGFILE__);
 
-  if (isEmptyIUIAutomationElement(pSender)) {
-    return S_OK;
+  RawEvent *pRawEvent{};
+
+  if (FAILED(RawEventFromIUIAutomationElement(eventId, pSender, &pRawEvent))) {
+    return E_FAIL;
+  }
+  if (mEventHandler(pRawEvent)) {
+    return E_FAIL;
   }
 
-  Element *pElement = new Element(pSender);
-  Event *pEvent = new Event(eventId, pElement);
+  delete pRawEvent->Element;
+  pRawEvent->Element = nullptr;
 
-  mEventHandler->Handle(pEvent);
+  delete pRawEvent;
+  pRawEvent = nullptr;
+
+  SafeRelease(&pSender);
 
   return S_OK;
 }
