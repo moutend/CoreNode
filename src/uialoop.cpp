@@ -190,9 +190,8 @@ DWORD WINAPI uiaLoop(LPVOID context) {
     goto CLEANUP;
   }
 
-  EventHandler *pEventHandler = new EventHandler();
   FocusChangeEventHandler *pFocusChangeEventHandler =
-      new FocusChangeEventHandler(pEventHandler);
+      new FocusChangeEventHandler(ctx->HandleFunc);
 
   hr = pUIAutomation->AddFocusChangedEventHandler(pBaseCacheRequest,
                                                   pFocusChangeEventHandler);
@@ -204,7 +203,7 @@ DWORD WINAPI uiaLoop(LPVOID context) {
   }
 
   PropertyChangeEventHandler *pPropertyChangeEventHandler =
-      new PropertyChangeEventHandler(pEventHandler);
+      new PropertyChangeEventHandler(ctx->HandleFunc);
 
   SAFEARRAYBOUND saBound;
   saBound.lLbound = 0;
@@ -261,7 +260,7 @@ DWORD WINAPI uiaLoop(LPVOID context) {
   }
 
   AutomationEventHandler *pAutomationEventHandler =
-      new AutomationEventHandler(pEventHandler);
+      new AutomationEventHandler(ctx->HandleFunc);
 
   const PROPERTYID eventProperties[8] = {
       UIA_LiveRegionChangedEventId,
