@@ -18,7 +18,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *name{};
 
-if (FAILED(pElement->get_CurrentName(&name)) {
+  if (FAILED(pElement->get_CurrentName(&name))) {
     name = nullptr;
   }
   if (name != nullptr) {
@@ -76,7 +76,7 @@ if (FAILED(pElement->get_CurrentName(&name)) {
   (*pRawElement)->Width = boundingRectangle.right - boundingRectangle.left;
   (*pRawElement)->Height = boundingRectangle.bottom - boundingRectangle.top;
 
-return S_OK;
+  return S_OK;
 }
 
 HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
