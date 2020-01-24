@@ -15,7 +15,7 @@ typedef struct {
   wchar_t *NameData;
   wchar_t *ClassNameData;
   wchar_t *FrameworkNameData;
-} rawElement;
+} RawElement;
 
 typedef struct {
   int32_t EventId;
