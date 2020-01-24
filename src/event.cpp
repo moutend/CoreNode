@@ -1,4 +1,5 @@
 #include <cstring>
+#include <windows.h>
 
 #include "event.h"
 

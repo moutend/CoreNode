@@ -9,6 +9,6 @@
 HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
                                            RawElement **pRawElement);
 
-HRESULT RawEventFromIUIAutomation(int32_t eventId,
-                                  IUIAutomationElement *pElement,
-                                  RawEvent **pRawEvent);
+HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
+                                         IUIAutomationElement *pElement,
+                                         RawEvent **pRawEvent);

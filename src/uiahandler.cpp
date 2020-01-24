@@ -108,8 +108,8 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
 
   RawEvent *pRawEvent{};
 
-  if (FAILED(RawEventFromIUIAutomation(UIA_AutomationPropertyChangedEventId,
-                                       pSender, &pRawEvent))) {
+  if (FAILED(RawEventFromIUIAutomationElement(
+          UIA_AutomationPropertyChangedEventId, pSender, &pRawEvent))) {
     return E_FAIL;
   }
   if (mEventHandler(pRawEvent) != 0) {
