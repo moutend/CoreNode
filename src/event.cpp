@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "event.h"
 
 HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
