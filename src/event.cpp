@@ -98,7 +98,7 @@ HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
 
   *pRawEvent = new RawEvent;
 
-  (*pRawEvent)->RawElement = pRawElement;
+  (*pRawEvent)->Element = pRawElement;
   (*pRawEvent)->EventId = eventId;
 
   return S_OK;
