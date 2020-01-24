@@ -9,7 +9,7 @@
 
 extern Logger::Logger *Log;
 
-FocusChangeEventHandler::FocusChangeEventHandler(EventHandler *eventHandler)
+FocusChangeEventHandler::FocusChangeEventHandler(EventHandler eventHandler)
     : mEventHandler(eventHandler) {}
 
 ULONG FocusChangeEventHandler::AddRef() {
@@ -67,7 +67,7 @@ pRawEvent = nullptr;
 }
 
 PropertyChangeEventHandler::PropertyChangeEventHandler(
-    EventHandler *eventHandler)
+    EventHandler eventHandler)
     : mEventHandler(eventHandler) {}
 
 ULONG PropertyChangeEventHandler::AddRef() {
@@ -125,7 +125,7 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
   return S_OK;
 }
 
-AutomationEventHandler::AutomationEventHandler(EventHandler *eventHandler)
+AutomationEventHandler::AutomationEventHandler(EventHandler eventHandler)
     : mEventHandler(eventHandler) {}
 
 ULONG AutomationEventHandler::AddRef() {
