@@ -10,12 +10,12 @@
 
 extern Logger::Logger *Log;
 
-sttatic IUIAutomation *pUIAutomation{nullptr};
-static IUIAutomationTreeWalker *pWindowTreeWalker{nullptr};
-static IUIAutomationTreeWalker *pBaseTreeWalker{nullptr};
-static IUIAutomationCacheRequest *pWindowCacheRequest{nullptr};
-static IUIAutomationCacheRequest *pBaseCacheRequest{nullptr};
-static IUIAutomationElement *pRootElement{nullptr};
+static IUIAutomation *pUIAutomation{};
+static IUIAutomationTreeWalker *pWindowTreeWalker{};
+static IUIAutomationTreeWalker *pBaseTreeWalker{};
+static IUIAutomationCacheRequest *pWindowCacheRequest{};
+static IUIAutomationCacheRequest *pBaseCacheRequest{};
+static IUIAutomationElement *pRootElement{};
 
 static PROPERTYID itemIndexPropertyId{};
 static PROPERTYID itemCountPropertyId{};
