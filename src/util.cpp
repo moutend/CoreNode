@@ -18,6 +18,9 @@ void SafeDelete(RawEvent **pRawEvent) {
     return;
   }
 
+  delete[](*pEvent)->Element->NameData;
+  (*pEvent)->Element->NameData = nullptr;
+
   wchar_t *buffer = new wchar_t[128]{};
 
   HRESULT hr =
