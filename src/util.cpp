@@ -1,6 +1,9 @@
+#include <cpplogger/cpplogger.h>
 #include <windows.h>
 
 #include "util.h"
+
+xtern Logger::Logger;
 
 void SafeCloseHandle(HANDLE *pHandle) {
   if (pHandle != nullptr) {
@@ -14,7 +17,23 @@ void SafeDelete(RawEvent **pRawEvent) {
     return;
   }
 
-  wchar_t *nameData = (*pRawEvent)->Element->NameData;
+  wchar_t *buffer = new wchar_t[128]{};
+
+HRESULT hr = StringCbPrintfW((buffer, 128, L"Name is %d", 
+  (*pRawEvent)->Element->NameData == nullptr);
+
+if (FAILED(hr)) {
+    return;
+}
+
+Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
+
+delete[] buffer;
+buffer = nullptr;
+
+return;
+
+wchar_t *nameData{};
 
   if (nameData != nullptr) {
     delete[] nameData;
