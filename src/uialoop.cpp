@@ -74,6 +74,7 @@ DWORD WINAPI uiaLoop(LPVOID context) {
     return hr;
   }
 
+Sleep(3000);
   UIALoopContext *ctx = static_cast<UIALoopContext *>(context);
 
   if (ctx == nullptr) {
