@@ -19,51 +19,20 @@ void SafeDelete(RawEvent **pRawEvent) {
   }
 
   if ((*pRawEvent)->Element->NameLength > 0) {
-      delete[](*pRawEvent)->Element->NameData;
-      (*pRawEvent)->Element->NameData = nullptr;
-    }
+    delete[](*pRawEvent)->Element->NameData;
+    (*pRawEvent)->Element->NameData = nullptr;
+  }
   if ((*pRawEvent)->Element->ClassNameLength > 0) {
-      delete[](*pRawEvent)->Element->ClassNameData;
-      (*pRawEvent)->Element->ClassNameData = nullptr;
-    }
-  wchar_t *buffer = new wchar_t[128]{};
-
-  HRESULT hr =
-      StringCbPrintfW(buffer, 256, L"Name is %d",
-                      ((*pRawEvent)->Element->NameData == nullptr) ? 1 : 0);
-
-  if (FAILED(hr)) {
-    Log->Fail(L"Failed to build debug message", GetCurrentThreadId(),
-              __LONGFILE__);
-    return;
+    delete[](*pRawEvent)->Element->ClassNameData;
+    (*pRawEvent)->Element->ClassNameData = nullptr;
   }
-
-  Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
-
-  delete[] buffer;
-  buffer = nullptr;
-
-  return;
-
-  wchar_t *classNameData = (*pRawEvent)->Element->ClassNameData;
-
-  if (classNameData != nullptr) {
-    delete[] classNameData;
-    classNameData = nullptr;
+  if ((*pRawEvent)->Element->FrameowrkNameLength > 0) {
+    delete[](*pRawEvent)->Element->FrameowrkNameData;
+    (*pRawEvent)->Element->FrameowrkNameData = nullptr;
   }
-
-  wchar_t *frameworkNameData = (*pRawEvent)->Element->FrameworkNameData;
-
-  if (frameworkNameData != nullptr) {
-    delete[] frameworkNameData;
-    frameworkNameData = nullptr;
-  }
-
-  wchar_t *ariaRoleNameData = (*pRawEvent)->Element->AriaRoleNameData;
-
-  if (ariaRoleNameData != nullptr) {
-    delete[] ariaRoleNameData;
-    ariaRoleNameData = nullptr;
+  if ((*pRawEvent)->Element->ClassNameLength > 0) {
+    delete[](*pRawEvent)->Element->ClassNameData;
+    (*pRawEvent)->Element->ClassNameData = nullptr;
   }
 
   delete (*pRawEvent)->Element;

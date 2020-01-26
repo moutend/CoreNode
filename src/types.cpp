@@ -25,9 +25,9 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   wchar_t *name{};
 
   if (FAILED(pElement->get_CurrentName(&name))) {
-    name = nullptr;
-  }
-  if (name != nullptr) {
+    (*pRawElement)->NameData = nullptr;
+    (*pRawElement)->NameLength = 0;
+  } else {
     size_t nameLength = std::wcslen(name);
 
     (*pRawElement)->NameData = new wchar_t[nameLength + 1]{};
@@ -36,17 +36,14 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
     SysFreeString(name);
     name = nullptr;
-  } else {
-    (*pRawElement)->NameData = nullptr;
-    (*pRawElement)->NameLength = 0;
   }
 
   wchar_t *className{nullptr};
 
   if (FAILED(pElement->get_CachedClassName(&className))) {
-    className = nullptr;
-  }
-  if (className != nullptr) {
+    (*pRawElement)->ClassNameData = nullptr;
+    (*pRawElement)->ClassNameLength = 0;
+  } else {
     size_t classNameLength = std::wcslen(className);
 
     (*pRawElement)->ClassNameData = new wchar_t[classNameLength + 1]{};
@@ -55,17 +52,14 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
     SysFreeString(className);
     className = nullptr;
-  } else {
-    (*pRawElement)->ClassNameData = nullptr;
-    (*pRawElement)->ClassNameLength = 0;
   }
 
   wchar_t *frameworkName{};
 
   if (FAILED(pElement->get_CachedFrameworkId(&frameworkName))) {
-    frameworkName = nullptr;
-  }
-  if (frameworkName != nullptr) {
+    (*pRawElement)->FrameworkNameData = nullptr;
+    (*pRawElement)->FrameworkNameLength = 0;
+  } else {
     size_t frameworkNameLength = std::wcslen(frameworkName);
 
     (*pRawElement)->FrameworkNameData = new wchar_t[frameworkNameLength + 1]{};
@@ -81,9 +75,9 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   wchar_t *ariaRoleName{};
 
   if (FAILED(pElement->get_CachedAriaRole(&ariaRoleName))) {
-    ariaRoleName = nullptr;
-  }
-  if (ariaRoleName != nullptr) {
+    (*pRawElement)->AriaRoleNameData = nullptr;
+    (*pRawElement)->AriaRoleNameLength = 0;
+  } else {
     size_t ariaRoleNameLength = std::wcslen(ariaRoleName);
 
     (*pRawElement)->AriaRoleNameData = new wchar_t[ariaRoleNameLength + 1]{};
