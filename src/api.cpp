@@ -3,25 +3,26 @@
 #include <mutex>
 #include <windows.h>
 
-#include <strsafe.h>
-
 #include "api.h"
 #include "context.h"
 #include "logloop.h"
 #include "types.h"
 #include "uialoop.h"
 #include "util.h"
+#include "wineventloop.h"
 
 extern Logger::Logger *Log;
 
-bool isActive{false};
-std::mutex apiMutex;
+static bool isActive{false};
+static std::mutex apiMutex;
 
-LogLoopContext *logLoopCtx{nullptr};
-UIALoopContext *uiaLoopCtx{nullptr};
+static LogLoopContext *logLoopCtx{};
+static UIALoopContext *uiaLoopCtx{};
+static WinEventLoopContext *winEventLoopCtx{};
 
-HANDLE logLoopThread{nullptr};
-HANDLE uiaLoopThread{nullptr};
+static HANDLE logLoopThread{};
+static HANDLE uiaLoopThread{};
+static HANDLE winEventLoopThread{};
 
 void __stdcall Setup(int32_t *code, int32_t logLevel,
                      EventHandler eventHandler) {
@@ -88,6 +89,34 @@ void __stdcall Setup(int32_t *code, int32_t logLevel,
 
   Log->Info(L"Complete setup CoreNode", GetCurrentThreadId(), __LONGFILE__);
 
+  winEventLoopCtx = new WinEventLoopContext();
+
+  winEventLoopCtx->HandleFunc = eventHandler;
+
+  winEventLoopCtx->QuitEvent =
+      CreateEventEx(nullptr, nullptr, 0, EVENT_MODIFY_STATE | SYNCHRONIZE);
+
+  if (winEventLoopCtx->QuitEvent == nullptr) {
+    Log->Fail(L"Failed to create event", GetCurrentThreadId(), __LONGFILE__);
+    *code = -1;
+    return;
+  }
+
+  Log->Info(L"Create windows event loop thread", GetCurrentThreadId(),
+            __LONGFILE__);
+
+  winEventLoopThread =
+      CreateThread(nullptr, 0, winEventLoop,
+                   static_cast<void *>(winEventLoopCtx), 0, nullptr);
+
+  if (winEventLoopThread == nullptr) {
+    Log->Fail(L"Failed to create thread", GetCurrentThreadId(), __LONGFILE__);
+    *code = -1;
+    return;
+  }
+
+  Log->Info(L"Complete setup CoreNode", GetCurrentThreadId(), __LONGFILE__);
+
   isActive = true;
 }
 
@@ -104,6 +133,9 @@ void __stdcall Teardown(int32_t *code) {
 
   Log->Info(L"Teardown CoreNode", GetCurrentThreadId(), __LONGFILE__);
 
+  if (uiaLoopThread == nullptr) {
+    goto END_UIALOOP_CLEANUP;
+  }
   if (!SetEvent(uiaLoopCtx->QuitEvent)) {
     Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
     *code = -1;
@@ -112,14 +144,38 @@ void __stdcall Teardown(int32_t *code) {
 
   WaitForSingleObject(uiaLoopThread, INFINITE);
   SafeCloseHandle(&uiaLoopThread);
+  SafeCloseHandle(&(uiaLoopCtx->QuitEvent));
 
   delete uiaLoopCtx;
   uiaLoopCtx = nullptr;
 
   Log->Info(L"Delete uia loop thread", GetCurrentThreadId(), __LONGFILE__);
 
+END_UIALOOP_CLEANUP:
+
+  if (winEventLoopThread == nullptr) {
+    goto END_WINEVENTLOOP_CLEANUP;
+  }
+
+  winEventLoopCtx->IsActive = false;
+
+  WaitForSingleObject(winEventLoopThread, INFINITE);
+  SafeCloseHandle(&winEventLoopThread);
+  SafeCloseHandle(&(winEventLoopCtx->QuitEvent));
+
+  delete winEventLoopCtx;
+  winEventLoopCtx = nullptr;
+
+  Log->Info(L"Delete windows event loop thread", GetCurrentThreadId(),
+            __LONGFILE__);
+
+END_WINEVENTLOOP_CLEANUP:
+
   Log->Info(L"Complete teardown CoreNode", GetCurrentThreadId(), __LONGFILE__);
 
+  if (logLoopThread == nullptr) {
+    goto END_LOGLOOP_CLEANUP;
+  }
   if (!SetEvent(logLoopCtx->QuitEvent)) {
     Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
     *code = -1;
@@ -128,9 +184,12 @@ void __stdcall Teardown(int32_t *code) {
 
   WaitForSingleObject(logLoopThread, INFINITE);
   SafeCloseHandle(&logLoopThread);
+  SafeCloseHandle(&(logLoopCtx->QuitEvent));
 
   delete logLoopCtx;
   logLoopCtx = nullptr;
+
+END_LOGLOOP_CLEANUP:
 
   isActive = false;
 }

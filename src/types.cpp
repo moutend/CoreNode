@@ -2,7 +2,9 @@
 #include <cwchar>
 #include <windows.h>
 
-#include "event.h"
+#include <Commctrl.h>
+
+#include "types.h"
 
 HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
                                            RawElement **pRawElement) {
@@ -70,6 +72,24 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
     frameworkName = nullptr;
   }
 
+  wchar_t *ariaRoleName{};
+
+  if (FAILED(pElement->get_CachedFrameworkId(&ariaRoleName))) {
+    ariaRoleName = nullptr;
+  }
+  if (ariaRoleName != nullptr) {
+    size_t ariaRoleNameLength = std::wcslen(ariaRoleName);
+
+    (*pRawElement)->AriaRoleNameData = new wchar_t[ariaRoleNameLength + 1]{};
+    std::wmemcpy((*pRawElement)->AriaRoleNameData, ariaRoleName,
+                 ariaRoleNameLength);
+    (*pRawElement)->AriaRoleNameLength =
+        static_cast<int32_t>(ariaRoleNameLength);
+
+    SysFreeString(ariaRoleName);
+    ariaRoleName = nullptr;
+  }
+
   RECT boundingRectangle{0, 0, 0, 0};
 
   if (FAILED(pElement->get_CurrentBoundingRectangle(&boundingRectangle))) {
@@ -93,6 +113,84 @@ HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
   RawElement *pRawElement;
 
   if (FAILED(RawElementFromIUIAutomationElement(pElement, &pRawElement))) {
+    return E_FAIL;
+  }
+
+  *pRawEvent = new RawEvent;
+
+  (*pRawEvent)->Element = pRawElement;
+  (*pRawEvent)->EventId = eventId;
+
+  return S_OK;
+}
+
+HRESULT RawElementFromIAccessible(IAccessible *pAcc, RawElement **pRawElement) {
+  if (pAcc == nullptr || pRawElement == nullptr) {
+    return E_FAIL;
+  }
+
+  *pRawElement = new RawElement;
+
+  VARIANT varChild;
+  varChild.vt = VT_I4;
+  varChild.lVal = CHILDID_SELF;
+
+  wchar_t *name{};
+
+  if (FAILED(pAcc->get_accName(varChild, &name))) {
+    name = nullptr;
+  }
+  if (name != nullptr) {
+    size_t nameLength = std::wcslen(name);
+
+    (*pRawElement)->NameData = new wchar_t[nameLength + 1]{};
+    std::wmemcpy((*pRawElement)->NameData, name, nameLength);
+    (*pRawElement)->NameLength = static_cast<int32_t>(nameLength);
+
+    SysFreeString(name);
+    name = nullptr;
+  }
+
+  DWORD roleId{};
+  VARIANT varResult;
+
+  if (FAILED(pAcc->get_accRole(varChild, &varResult))) {
+    roleId = 0;
+  } else {
+    roleId = varResult.lVal;
+  }
+
+  (*pRawElement)->ControlTypeId = static_cast<int32_t>(roleId);
+
+  long left{};
+  long top{};
+  long width{};
+  long height{};
+
+  if (FAILED(pAcc->accLocation(&left, &top, &width, &height, varChild))) {
+    left = 0;
+    top = 0;
+    width = 0;
+    height = 0;
+  }
+
+  (*pRawElement)->Left = left;
+  (*pRawElement)->Top = top;
+  (*pRawElement)->Width = width;
+  (*pRawElement)->Height = height;
+
+  return S_OK;
+}
+
+HRESULT RawEventFromIAccessible(int32_t eventId, IAccessible *pAcc,
+                                RawEvent **pRawEvent) {
+  if (pAcc == nullptr || pRawEvent == nullptr) {
+    return E_FAIL;
+  }
+
+  RawElement *pRawElement;
+
+  if (FAILED(RawElementFromIAccessible(pAcc, &pRawElement))) {
     return E_FAIL;
   }
 

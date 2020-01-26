@@ -2,7 +2,6 @@
 #include <UIAutomationCore.h>
 #include <cpplogger/cpplogger.h>
 
-#include "event.h"
 #include "types.h"
 #include "uiahandler.h"
 #include "util.h"
@@ -57,12 +56,7 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
   }
 
   SafeRelease(&pSender);
-
-  delete pRawEvent->Element;
-  pRawEvent->Element = nullptr;
-
-  delete pRawEvent;
-  pRawEvent = nullptr;
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }
@@ -118,11 +112,8 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
     return E_FAIL;
   }
 
-  delete pRawEvent->Element;
-  pRawEvent->Element = nullptr;
-
-  delete pRawEvent;
-  pRawEvent = nullptr;
+  SafeRelease(pSender);
+  SafeRelease(&pRawEvent);
 
   return S_OK;
 }
@@ -173,13 +164,8 @@ AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
     return E_FAIL;
   }
 
-  delete pRawEvent->Element;
-  pRawEvent->Element = nullptr;
-
-  delete pRawEvent;
-  pRawEvent = nullptr;
-
   SafeRelease(&pSender);
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }

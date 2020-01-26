@@ -4,22 +4,21 @@
 #include <oaidl.h>
 
 #include "context.h"
-#include "event.h"
 #include "uiahandler.h"
 #include "uialoop.h"
 #include "util.h"
 
 extern Logger::Logger *Log;
 
-IUIAutomation *pUIAutomation{nullptr};
-IUIAutomationTreeWalker *pWindowTreeWalker{nullptr};
-IUIAutomationTreeWalker *pBaseTreeWalker{nullptr};
-IUIAutomationCacheRequest *pWindowCacheRequest{nullptr};
-IUIAutomationCacheRequest *pBaseCacheRequest{nullptr};
-IUIAutomationElement *pRootElement{nullptr};
+sttatic IUIAutomation *pUIAutomation{nullptr};
+static IUIAutomationTreeWalker *pWindowTreeWalker{nullptr};
+static IUIAutomationTreeWalker *pBaseTreeWalker{nullptr};
+static IUIAutomationCacheRequest *pWindowCacheRequest{nullptr};
+static IUIAutomationCacheRequest *pBaseCacheRequest{nullptr};
+static IUIAutomationElement *pRootElement{nullptr};
 
-PROPERTYID itemIndexPropertyId{};
-PROPERTYID itemCountPropertyId{};
+static PROPERTYID itemIndexPropertyId{};
+static PROPERTYID itemCountPropertyId{};
 
 HRESULT registerPropertyId(const std::wstring &propertyGUID,
                            const std::wstring &propertyName,

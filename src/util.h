@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <windows.h>
 
-#include "event.h"
+#include "types.h"
 
 template <class T> void SafeRelease(T **ppT) {
   if (*ppT) {
@@ -14,3 +14,4 @@ template <class T> void SafeRelease(T **ppT) {
 }
 
 void SafeCloseHandle(HANDLE *pHandle);
+void SafeDelete(RawEvent **pRawEvent);
