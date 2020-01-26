@@ -36,6 +36,9 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
     SysFreeString(name);
     name = nullptr;
+  } else {
+    (*pRawElement)->NameData = nullptr;
+    (*pRawElement)->NameLength = 0;
   }
 
   wchar_t *className{nullptr};
@@ -52,6 +55,9 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
     SysFreeString(className);
     className = nullptr;
+  } else {
+    (*pRawElement)->ClassNameData = nullptr;
+    (*pRawElement)->ClassNameLength = 0;
   }
 
   wchar_t *frameworkName{};
