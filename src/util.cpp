@@ -18,11 +18,14 @@ void SafeDelete(RawEvent **pRawEvent) {
     return;
   }
 
-  delete[](*pRawEvent)->Element->NameData;
-  (*pRawEvent)->Element->NameData = nullptr;
-
-  delete[](*pRawEvent)->Element->ClassNameData;
-  (*pRawEvent)->Element->ClassNameData = nullptr;
+  if (*pRawEvent)->Element->NameLength > 0) {
+      delete[](*pRawEvent)->Element->NameData;
+      (*pRawEvent)->Element->NameData = nullptr;
+    }
+  if (*pRawEvent)->Element->ClassNameLength > 0) {
+      delete[](*pRawEvent)->Element->ClassNameData;
+      (*pRawEvent)->Element->ClassNameData = nullptr;
+    }
   wchar_t *buffer = new wchar_t[128]{};
 
   HRESULT hr =
