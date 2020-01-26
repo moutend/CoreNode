@@ -43,22 +43,21 @@ void eventCallback(HWINEVENTHOOK hHook, DWORD event, HWND hWindow,
 }
 
 DWORD WINAPI winEventLoop(LPVOID context) {
-  Log->Info(L"Start Windows event loop thread", GetCurrentThreadId(), __LINE__,
-            __WFILE__);
+  Log->Info(L"Start Windows event loop thread", GetCurrentThreadId(),
+            __LONGFILE__);
 
   HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
   if (FAILED(hr)) {
-    Log->Fail(L"Failed to call CoInitializeEx", GetCurrentThreadId(), __LINE__,
-              __WFILE__);
+    Log->Fail(L"Failed to call CoInitializeEx", GetCurrentThreadId(),
+              __LONGFILE__);
     return hr;
   }
 
   winEventLoopCtx = static_cast<WinEventLoopContext *>(context);
 
   if (winEventLoopCtx == nullptr) {
-    Log->Fail(L"Failed to obtain context", GetCurrentThreadId(), __LINE__,
-              __WFILE__);
+    Log->Fail(L"Failed to obtain context", GetCurrentThreadId(), __LONGFILE__);
     return E_FAIL;
   }
 
@@ -94,11 +93,11 @@ DWORD WINAPI winEventLoop(LPVOID context) {
 
     if (hookIds[i] == 0) {
       Log->Warn(L"Failed to call SetWinEventHook()", GetCurrentThreadId(),
-                __LINE__, __WFILE__);
+                __LINE__, __LONGFILE__);
     }
   }
 
-  Log->Info(L"Register callbacks", GetCurrentThreadId(), __LINE__, __WFILE__);
+  Log->Info(L"Register callbacks", GetCurrentThreadId(), __LONGFILE__);
 
   MSG msg;
 
@@ -120,8 +119,8 @@ DWORD WINAPI winEventLoop(LPVOID context) {
 
   CoUninitialize();
 
-  Log->Info(L"Finish Windows event loop thread", GetCurrentThreadId(), __LINE__,
-            __WFILE__);
+  Log->Info(L"Finish Windows event loop thread", GetCurrentThreadId(),
+            __LONGFILE__);
 
   return S_OK;
 }
