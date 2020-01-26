@@ -53,7 +53,7 @@ DWORD WINAPI winEventLoop(LPVOID context) {
               __LONGFILE__);
     return hr;
   }
-
+return S_OK;
   winEventLoopCtx = static_cast<WinEventLoopContext *>(context);
 
   if (winEventLoopCtx == nullptr) {
