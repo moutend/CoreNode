@@ -64,7 +64,6 @@ CLEANUP:
 }
 
 DWORD WINAPI uiaLoop(LPVOID context) {
-return 0;
   Log->Info(L"Start UI Automation loop", GetCurrentThreadId(), __LONGFILE__);
 
   HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
