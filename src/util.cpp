@@ -26,9 +26,9 @@ void SafeDelete(RawEvent **pRawEvent) {
     delete[](*pRawEvent)->Element->ClassNameData;
     (*pRawEvent)->Element->ClassNameData = nullptr;
   }
-  if ((*pRawEvent)->Element->FrameowrkNameLength > 0) {
-    delete[](*pRawEvent)->Element->FrameowrkNameData;
-    (*pRawEvent)->Element->FrameowrkNameData = nullptr;
+  if ((*pRawEvent)->Element->FrameworkNameLength > 0) {
+    delete[](*pRawEvent)->Element->FrameworkNameData;
+    (*pRawEvent)->Element->FrameworkNameData = nullptr;
   }
   if ((*pRawEvent)->Element->ClassNameLength > 0) {
     delete[](*pRawEvent)->Element->ClassNameData;
