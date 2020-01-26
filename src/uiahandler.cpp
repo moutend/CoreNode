@@ -112,8 +112,8 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
     return E_FAIL;
   }
 
-  SafeRelease(pSender);
-  SafeRelease(&pRawEvent);
+  SafeRelease(&pSender);
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }
