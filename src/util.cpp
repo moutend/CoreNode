@@ -3,7 +3,7 @@
 
 #include "util.h"
 
-xtern Logger::Logger;
+extern Logger::Logger *Log;
 
 void SafeCloseHandle(HANDLE *pHandle) {
   if (pHandle != nullptr) {
