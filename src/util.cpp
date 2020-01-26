@@ -2,6 +2,7 @@
 #include <windows.h>
 
 #include "util.h"
+#include <strsafe.h>
 
 extern Logger::Logger *Log;
 
@@ -19,21 +20,22 @@ void SafeDelete(RawEvent **pRawEvent) {
 
   wchar_t *buffer = new wchar_t[128]{};
 
-HRESULT hr = StringCbPrintfW((buffer, 128, L"Name is %d", 
-  ((*pRawEvent)->Element->NameData == nullptr) ? 1 : 0);
+  HRESULT hr =
+      StringCbPrintfW(buffer, 128, L"Name is %d",
+                      ((*pRawEvent)->Element->NameData == nullptr) ? 1 : 0);
 
-if (FAILED(hr)) {
+  if (FAILED(hr)) {
     return;
-}
+  }
 
-Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
+  Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
 
-delete[] buffer;
-buffer = nullptr;
+  delete[] buffer;
+  buffer = nullptr;
 
-return;
+  return;
 
-wchar_t *nameData{};
+  wchar_t *nameData{};
 
   if (nameData != nullptr) {
     delete[] nameData;
