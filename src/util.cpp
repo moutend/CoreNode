@@ -20,7 +20,7 @@ void SafeDelete(RawEvent **pRawEvent) {
   wchar_t *buffer = new wchar_t[128]{};
 
 HRESULT hr = StringCbPrintfW((buffer, 128, L"Name is %d", 
-  (*pRawEvent)->Element->NameData == nullptr);
+  ((*pRawEvent)->Element->NameData == nullptr) ? 1 : 0);
 
 if (FAILED(hr)) {
     return;
