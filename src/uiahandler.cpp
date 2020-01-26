@@ -55,8 +55,8 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     return E_FAIL;
   }
 
-  // SafeRelease(&pSender);
-  // SafeDelete(&pRawEvent);
+  SafeRelease(&pSender);
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }
@@ -101,7 +101,6 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
     IUIAutomationElement *pSender, PROPERTYID propertyId, VARIANT newValue) {
   Log->Info(L"Property change event received", GetCurrentThreadId(),
             __LONGFILE__);
-  return S_OK;
 
   RawEvent *pRawEvent{};
 
@@ -113,8 +112,8 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
     return E_FAIL;
   }
 
-  // SafeRelease(&pSender);
-  // SafeDelete(&pRawEvent);
+  SafeRelease(&pSender);
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }
@@ -155,7 +154,6 @@ HRESULT
 AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
                                               EVENTID eventId) {
   Log->Info(L"Automation event received", GetCurrentThreadId(), __LONGFILE__);
-  return S_OK;
 
   RawEvent *pRawEvent{};
 
@@ -166,8 +164,8 @@ AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
     return E_FAIL;
   }
 
-  // SafeRelease(&pSender);
-  // SafeDelete(&pRawEvent);
+  SafeRelease(&pSender);
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }
