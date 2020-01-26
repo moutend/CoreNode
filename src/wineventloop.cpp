@@ -93,7 +93,7 @@ DWORD WINAPI winEventLoop(LPVOID context) {
 
     if (hookIds[i] == 0) {
       Log->Warn(L"Failed to call SetWinEventHook()", GetCurrentThreadId(),
-                __LINE__, __LONGFILE__);
+                __LONGFILE__);
     }
   }
 
