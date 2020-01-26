@@ -56,7 +56,7 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
   }
 
   SafeRelease(&pSender);
-  // SafeDelete(&pRawEvent);
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }
@@ -113,7 +113,7 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
   }
 
   SafeRelease(&pSender);
-  // SafeDelete(&pRawEvent);
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }
@@ -165,7 +165,7 @@ AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
   }
 
   SafeRelease(&pSender);
-  // SafeDelete(&pRawEvent);
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }

@@ -14,17 +14,33 @@ void SafeDelete(RawEvent **pRawEvent) {
     return;
   }
 
-  delete[](*pRawEvent)->Element->NameData;
-  (*pRawEvent)->Element->NameData = nullptr;
+  wchar_t *nameData = (*pRawEvent)->Element->NameData;
 
-  delete[](*pRawEvent)->Element->ClassNameData;
-  (*pRawEvent)->Element->ClassNameData = nullptr;
+  if (nameData != nullptr) {
+    delete[] nameData;
+    nameData = nullptr;
+  }
 
-  delete[](*pRawEvent)->Element->FrameworkNameData;
-  (*pRawEvent)->Element->FrameworkNameData = nullptr;
+  wchar_t *classNameData = (*pRawEvent)->Element->ClassNameData;
 
-  delete[](*pRawEvent)->Element->AriaRoleNameData;
-  (*pRawEvent)->Element->AriaRoleNameData = nullptr;
+  if (classNameData != nullptr) {
+    delete[] classNameData;
+    classNameData = nullptr;
+  }
+
+  wchar_t *frameworkNameData = (*pRawEvent)->Element->FrameworkNameData;
+
+  if (frameworkNameData != nullptr) {
+    delete[] frameworkNameData;
+    frameworkNameData = nullptr;
+  }
+
+  wchar_t *ariaRoleNameData = (*pRawEvent)->Element->AriaRoleNameData;
+
+  if (ariaRoleNameData != nullptr) {
+    delete[] ariaRoleNameData;
+    ariaRoleNameData = nullptr;
+  }
 
   delete (*pRawEvent)->Element;
   (*pRawEvent)->Element = nullptr;
