@@ -43,8 +43,6 @@ void eventCallback(HWINEVENTHOOK hHook, DWORD event, HWND hWindow,
 }
 
 DWORD WINAPI winEventLoop(LPVOID context) {
-  return 0;
-
   Log->Info(L"Start Windows event loop thread", GetCurrentThreadId(),
             __LONGFILE__);
 
