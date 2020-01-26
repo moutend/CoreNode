@@ -74,7 +74,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *ariaRoleName{};
 
-  if (FAILED(pElement->get_CachedFrameworkId(&ariaRoleName))) {
+  if (FAILED(pElement->get_CachedAriaRole(&ariaRoleName))) {
     ariaRoleName = nullptr;
   }
   if (ariaRoleName != nullptr) {
