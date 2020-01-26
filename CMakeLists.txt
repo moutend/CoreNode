@@ -26,4 +26,4 @@ add_compile_options("/ZW")
 
 file(GLOB SOURCES "./src/*")
 add_library(CoreNode SHARED ${SOURCES})
-target_link_libraries(CoreNode cpplogger cpprestsdk::cpprest cpprestsdk::cpprestsdk_zlib_internal cpprestsdk::cpprestsdk_boost_internal cpprestsdk::cpprestsdk_brotli_internal)
+target_link_libraries(CoreNode cpplogger cpprestsdk::cpprest cpprestsdk::cpprestsdk_zlib_internal cpprestsdk::cpprestsdk_boost_internal cpprestsdk::cpprestsdk_brotli_internal Oleacc.lib)
