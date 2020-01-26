@@ -21,10 +21,12 @@ void SafeDelete(RawEvent **pRawEvent) {
   wchar_t *buffer = new wchar_t[128]{};
 
   HRESULT hr =
-      StringCbPrintfW(buffer, 128, L"Name is %d",
+      StringCbPrintfW(buffer, 256, L"Name is %d",
                       ((*pRawEvent)->Element->NameData == nullptr) ? 1 : 0);
 
   if (FAILED(hr)) {
+    Log->Fail(L"Failed to build debug message", GetCurrentThreadId(),
+              __LONGFILE__);
     return;
   }
 
@@ -34,13 +36,6 @@ void SafeDelete(RawEvent **pRawEvent) {
   buffer = nullptr;
 
   return;
-
-  wchar_t *nameData{};
-
-  if (nameData != nullptr) {
-    delete[] nameData;
-    nameData = nullptr;
-  }
 
   wchar_t *classNameData = (*pRawEvent)->Element->ClassNameData;
 
