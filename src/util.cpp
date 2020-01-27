@@ -14,7 +14,6 @@ void SafeCloseHandle(HANDLE *pHandle) {
 }
 
 void SafeDelete(RawEvent **pRawEvent) {
-return;
   if (pRawEvent == nullptr) {
     return;
   }
@@ -26,11 +25,11 @@ return;
     delete[](*pRawEvent)->Element->ClassNameData;
     (*pRawEvent)->Element->ClassNameData = nullptr;
   }
-  if (false && (*pRawEvent)->Element->FrameworkNameLength > 0) {
+  if ((*pRawEvent)->Element->FrameworkNameLength > 0) {
     delete[](*pRawEvent)->Element->FrameworkNameData;
     (*pRawEvent)->Element->FrameworkNameData = nullptr;
   }
-  if (false && (*pRawEvent)->Element->AriaRoleNameLength > 0) {
+  if ((*pRawEvent)->Element->AriaRoleNameLength > 0) {
     delete[](*pRawEvent)->Element->AriaRoleNameData;
     (*pRawEvent)->Element->AriaRoleNameData = nullptr;
   }
