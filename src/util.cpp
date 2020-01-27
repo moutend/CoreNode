@@ -30,9 +30,9 @@ void SafeDelete(RawEvent **pRawEvent) {
     delete[](*pRawEvent)->Element->FrameworkNameData;
     (*pRawEvent)->Element->FrameworkNameData = nullptr;
   }
-  if ((*pRawEvent)->Element->ClassNameLength > 0) {
-    delete[](*pRawEvent)->Element->ClassNameData;
-    (*pRawEvent)->Element->ClassNameData = nullptr;
+  if ((*pRawEvent)->Element->AriaRoleNameLength > 0) {
+    delete[](*pRawEvent)->Element->AriaRoleNameData;
+    (*pRawEvent)->Element->AriaRoleNameData = nullptr;
   }
 
   delete (*pRawEvent)->Element;
