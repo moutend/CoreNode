@@ -16,7 +16,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   CONTROLTYPEID controlTypeId{};
 
-  if (FAILED(pElement->get_CachedControlType(&controlTypeId))) {
+  if (FAILED(pElement->get_CurrentControlType(&controlTypeId))) {
     controlTypeId = 0;
   }
 
@@ -40,7 +40,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *className{nullptr};
 
-  if (FAILED(pElement->get_CachedClassName(&className))) {
+  if (FAILED(pElement->get_CurrentClassName(&className))) {
     (*pRawElement)->ClassNameData = nullptr;
     (*pRawElement)->ClassNameLength = 0;
   } else {
@@ -56,7 +56,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *frameworkName{};
 
-  if (FAILED(pElement->get_CachedFrameworkId(&frameworkName))) {
+  if (FAILED(pElement->get_CurrentFrameworkId(&frameworkName))) {
     (*pRawElement)->FrameworkNameData = nullptr;
     (*pRawElement)->FrameworkNameLength = 0;
   } else {
@@ -74,7 +74,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *ariaRoleName{};
 
-  if (FAILED(pElement->get_CachedAriaRole(&ariaRoleName))) {
+  if (FAILED(pElement->get_CurrentAriaRole(&ariaRoleName))) {
     (*pRawElement)->AriaRoleNameData = nullptr;
     (*pRawElement)->AriaRoleNameLength = 0;
   } else {
