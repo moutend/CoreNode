@@ -40,7 +40,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *className{nullptr};
 
-  if (false && SUCCEEDED(pElement->get_CurrentClassName(&className))) {
+  if (SUCCEEDED(pElement->get_CurrentClassName(&className))) {
     size_t classNameLength = std::wcslen(className);
 
     (*pRawElement)->ClassNameData = new wchar_t[classNameLength + 1]{};
