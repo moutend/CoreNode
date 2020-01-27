@@ -45,7 +45,7 @@ void eventCallback(HWINEVENTHOOK hHook, DWORD eventId, HWND hWindow,
   if (FAILED(RawEventFromIAccessible(eventId, pAcc, &pRawEvent))) {
     return;
   }
-  if (windowEventLoopCtx->EventHandler(pRawEvent) != 0) {
+  if (windowEventLoopCtx->HandleFunc(pRawEvent) != 0) {
     return;
   }
 
