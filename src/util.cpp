@@ -17,6 +17,9 @@ void SafeDelete(RawEvent **pRawEvent) {
   if (pRawEvent == nullptr) {
     return;
   }
+  if (*pRawEvent == nullptr) {
+    return;
+  }
   if ((*pRawEvent)->Element->NameLength > 0) {
     delete[](*pRawEvent)->Element->NameData;
     (*pRawEvent)->Element->NameData = nullptr;

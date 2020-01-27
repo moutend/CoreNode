@@ -7,10 +7,15 @@
 #include "types.h"
 
 template <class T> void SafeRelease(T **ppT) {
-  if (*ppT) {
-    (*ppT)->Release();
-    *ppT = nullptr;
+  if (ppT == nullptr) {
+    return;
   }
+  if (*ppT == nullptr) {
+    return;
+  }
+
+  (*ppT)->Release();
+  *ppT = nullptr;
 }
 
 void SafeCloseHandle(HANDLE *pHandle);
