@@ -51,12 +51,12 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
                                               pSender, &pRawEvent))) {
     return E_FAIL;
   }
-  if (mEventHandler(pRawEvent) != 0) {
+  if (false && mEventHandler(pRawEvent) != 0) {
     return E_FAIL;
   }
 
   SafeRelease(&pSender);
-  // SafeDelete(&pRawEvent);
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }
@@ -108,12 +108,12 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
           UIA_AutomationPropertyChangedEventId, pSender, &pRawEvent))) {
     return E_FAIL;
   }
-  if (mEventHandler(pRawEvent) != 0) {
+  if (false && mEventHandler(pRawEvent) != 0) {
     return E_FAIL;
   }
 
   SafeRelease(&pSender);
-  // SafeDelete(&pRawEvent);
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }
@@ -160,12 +160,12 @@ AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
   if (FAILED(RawEventFromIUIAutomationElement(eventId, pSender, &pRawEvent))) {
     return E_FAIL;
   }
-  if (mEventHandler(pRawEvent)) {
+  if (false && mEventHandler(pRawEvent)) {
     return E_FAIL;
   }
 
   SafeRelease(&pSender);
-  // SafeDelete(&pRawEvent);
+  SafeDelete(&pRawEvent);
 
   return S_OK;
 }
