@@ -40,6 +40,8 @@ void eventCallback(HWINEVENTHOOK hHook, DWORD eventId, HWND hWindow,
     // todo
   }
 
+  Log->Info(L"IAccessible event received", GetCurrentThreadId(), __LONGFILE__);
+
   RawEvent *pRawEvent{};
 
   if (FAILED(RawEventFromIAccessible(eventId, pAcc, &pRawEvent))) {
