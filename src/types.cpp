@@ -16,7 +16,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   CONTROLTYPEID controlTypeId{};
 
-  if (false && SUCCEEDED(pElement->get_CurrentControlType(&controlTypeId))) {
+  if (SUCCEEDED(pElement->get_CurrentControlType(&controlTypeId))) {
     (*pRawElement)->ControlTypeId = static_cast<int32_t>(controlTypeId);
   } else {
     (*pRawElement)->ControlTypeId = 0;
