@@ -92,8 +92,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   RECT boundingRectangle{0, 0, 0, 0};
 
-  if (false &&
-      SUCCEEDED(pElement->get_CurrentBoundingRectangle(&boundingRectangle))) {
+  if (SUCCEEDED(pElement->get_CurrentBoundingRectangle(&boundingRectangle))) {
     (*pRawElement)->Left = boundingRectangle.left;
     (*pRawElement)->Top = boundingRectangle.left;
     (*pRawElement)->Width = boundingRectangle.right - boundingRectangle.left;
