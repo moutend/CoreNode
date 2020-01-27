@@ -24,7 +24,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *name{};
 
-  if (SUCCEEDED(pElement->get_CurrentName(&name))) {
+  if (SUCCEEDED(pElement->get_CachedName(&name))) {
     size_t nameLength = std::wcslen(name);
 
     (*pRawElement)->NameData = new wchar_t[nameLength + 1]{};
