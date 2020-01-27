@@ -5,6 +5,7 @@
 #include <oleacc.h>
 
 #include "context.h"
+#include "types.h"
 #include "util.h"
 #include "wineventloop.h"
 
@@ -12,7 +13,7 @@ extern Logger::Logger *Log;
 
 static WinEventLoopContext *winEventLoopCtx{};
 
-void eventCallback(HWINEVENTHOOK hHook, DWORD event, HWND hWindow,
+void eventCallback(HWINEVENTHOOK hHook, DWORD eventId, HWND hWindow,
                    LONG objectId, LONG childId, DWORD threadId,
                    DWORD eventTime) {
   if (objectId <= OBJID_ALERT) {
@@ -39,7 +40,17 @@ void eventCallback(HWINEVENTHOOK hHook, DWORD event, HWND hWindow,
     // todo
   }
 
+  RawEvent *pRawEvent{};
+
+  if (FAILED(RawEventFromIAccessible(eventId, pAcc, &pRawEvent))) {
+    return;
+  }
+  if (windowEventCtx->EventHandler(pRawEvent) != 0) {
+    return;
+  }
+
   SafeRelease(&pAcc);
+  SafeDelete(&pRawEvent);
 }
 
 DWORD WINAPI winEventLoop(LPVOID context) {
