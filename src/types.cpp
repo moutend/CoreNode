@@ -16,7 +16,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   CONTROLTYPEID controlTypeId{};
 
-  if (SUCCEEDED(pElement->get_CurrentControlType(&controlTypeId))) {
+  if (SUCCEEDED(pElement->get_CachedControlType(&controlTypeId))) {
     (*pRawElement)->ControlTypeId = static_cast<int32_t>(controlTypeId);
   } else {
     (*pRawElement)->ControlTypeId = 0;
@@ -40,7 +40,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *className{nullptr};
 
-  if (SUCCEEDED(pElement->get_CurrentClassName(&className))) {
+  if (SUCCEEDED(pElement->get_CachedClassName(&className))) {
     size_t classNameLength = std::wcslen(className);
 
     (*pRawElement)->ClassNameData = new wchar_t[classNameLength + 1]{};
@@ -56,7 +56,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *frameworkName{};
 
-  if (SUCCEEDED(pElement->get_CurrentFrameworkId(&frameworkName))) {
+  if (SUCCEEDED(pElement->get_CachedFrameworkId(&frameworkName))) {
     size_t frameworkNameLength = std::wcslen(frameworkName);
 
     (*pRawElement)->FrameworkNameData = new wchar_t[frameworkNameLength + 1]{};
@@ -74,7 +74,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *ariaRoleName{};
 
-  if (SUCCEEDED(pElement->get_CurrentAriaRole(&ariaRoleName))) {
+  if (SUCCEEDED(pElement->get_CachedAriaRole(&ariaRoleName))) {
     size_t ariaRoleNameLength = std::wcslen(ariaRoleName);
 
     (*pRawElement)->AriaRoleNameData = new wchar_t[ariaRoleNameLength + 1]{};
@@ -92,7 +92,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   RECT boundingRectangle{0, 0, 0, 0};
 
-  if (SUCCEEDED(pElement->get_CurrentBoundingRectangle(&boundingRectangle))) {
+  if (SUCCEEDED(pElement->get_CachedBoundingRectangle(&boundingRectangle))) {
     (*pRawElement)->Left = boundingRectangle.left;
     (*pRawElement)->Top = boundingRectangle.left;
     (*pRawElement)->Width = boundingRectangle.right - boundingRectangle.left;
