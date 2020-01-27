@@ -74,7 +74,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *ariaRoleName{};
 
-  if (false && SUCCEEDED(pElement->get_CurrentAriaRole(&ariaRoleName))) {
+  if (SUCCEEDED(pElement->get_CurrentAriaRole(&ariaRoleName))) {
     size_t ariaRoleNameLength = std::wcslen(ariaRoleName);
 
     (*pRawElement)->AriaRoleNameData = new wchar_t[ariaRoleNameLength + 1]{};
