@@ -47,7 +47,7 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
 
   RawEvent *pRawEvent{};
 
-  if (FAILED(RawEventFromIUIAutomationElement(UIA_AutomationFocusChangedEventId,
+  if (false && FAILED(RawEventFromIUIAutomationElement(UIA_AutomationFocusChangedEventId,
                                               pSender, &pRawEvent))) {
     return E_FAIL;
   }
@@ -104,7 +104,7 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
 
   RawEvent *pRawEvent{};
 
-  if (FAILED(RawEventFromIUIAutomationElement(
+  if (false && FAILED(RawEventFromIUIAutomationElement(
           UIA_AutomationPropertyChangedEventId, pSender, &pRawEvent))) {
     return E_FAIL;
   }
@@ -157,7 +157,7 @@ AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
 
   RawEvent *pRawEvent{};
 
-  if (FAILED(RawEventFromIUIAutomationElement(eventId, pSender, &pRawEvent))) {
+  if (false && FAILED(RawEventFromIUIAutomationElement(eventId, pSender, &pRawEvent))) {
     return E_FAIL;
   }
   if (false && mEventHandler(pRawEvent)) {
