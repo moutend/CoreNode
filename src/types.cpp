@@ -56,7 +56,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *frameworkName{};
 
-  if (false && SUCCEEDED(pElement->get_CurrentFrameworkId(&frameworkName))) {
+  if (SUCCEEDED(pElement->get_CurrentFrameworkId(&frameworkName))) {
     size_t frameworkNameLength = std::wcslen(frameworkName);
 
     (*pRawElement)->FrameworkNameData = new wchar_t[frameworkNameLength + 1]{};
