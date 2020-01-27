@@ -14,6 +14,7 @@ void SafeCloseHandle(HANDLE *pHandle) {
 }
 
 void SafeDelete(RawEvent **pRawEvent) {
+return;
   if (pRawEvent == nullptr) {
     return;
   }
