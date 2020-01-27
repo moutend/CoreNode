@@ -16,18 +16,15 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   CONTROLTYPEID controlTypeId{};
 
-  if (FAILED(pElement->get_CurrentControlType(&controlTypeId))) {
-    controlTypeId = 0;
+  if (false && SUCCEEDED(pElement->get_CurrentControlType(&controlTypeId))) {
+    (*pRawElement)->ControlTypeId = static_cast<int32_t>(controlTypeId);
+  } else {
+    (*pRawElement)->ControlTypeId = 0;
   }
-
-  (*pRawElement)->ControlTypeId = static_cast<int32_t>(controlTypeId);
 
   wchar_t *name{};
 
-  if (FAILED(pElement->get_CurrentName(&name))) {
-    (*pRawElement)->NameData = nullptr;
-    (*pRawElement)->NameLength = 0;
-  } else {
+  if (false && SUCCEEDED(pElement->get_CurrentName(&name))) {
     size_t nameLength = std::wcslen(name);
 
     (*pRawElement)->NameData = new wchar_t[nameLength + 1]{};
@@ -36,14 +33,14 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
     SysFreeString(name);
     name = nullptr;
+  } else {
+    (*pRawElement)->NameData = nullptr;
+    (*pRawElement)->NameLength = 0;
   }
 
   wchar_t *className{nullptr};
 
-  if (FAILED(pElement->get_CurrentClassName(&className))) {
-    (*pRawElement)->ClassNameData = nullptr;
-    (*pRawElement)->ClassNameLength = 0;
-  } else {
+  if (false && SUCCEEDED(pElement->get_CurrentClassName(&className))) {
     size_t classNameLength = std::wcslen(className);
 
     (*pRawElement)->ClassNameData = new wchar_t[classNameLength + 1]{};
@@ -52,14 +49,14 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
     SysFreeString(className);
     className = nullptr;
+  } else {
+    (*pRawElement)->ClassNameData = nullptr;
+    (*pRawElement)->ClassNameLength = 0;
   }
 
   wchar_t *frameworkName{};
 
-  if (FAILED(pElement->get_CurrentFrameworkId(&frameworkName))) {
-    (*pRawElement)->FrameworkNameData = nullptr;
-    (*pRawElement)->FrameworkNameLength = 0;
-  } else {
+  if (false && SUCCEEDED(pElement->get_CurrentFrameworkId(&frameworkName))) {
     size_t frameworkNameLength = std::wcslen(frameworkName);
 
     (*pRawElement)->FrameworkNameData = new wchar_t[frameworkNameLength + 1]{};
@@ -70,14 +67,14 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
     SysFreeString(frameworkName);
     frameworkName = nullptr;
+  } else {
+    (*pRawElement)->FrameworkNameData = nullptr;
+    (*pRawElement)->FrameworkNameLength = 0;
   }
 
   wchar_t *ariaRoleName{};
 
-  if (FAILED(pElement->get_CurrentAriaRole(&ariaRoleName))) {
-    (*pRawElement)->AriaRoleNameData = nullptr;
-    (*pRawElement)->AriaRoleNameLength = 0;
-  } else {
+  if (false && SUCCEEDED(pElement->get_CurrentAriaRole(&ariaRoleName))) {
     size_t ariaRoleNameLength = std::wcslen(ariaRoleName);
 
     (*pRawElement)->AriaRoleNameData = new wchar_t[ariaRoleNameLength + 1]{};
@@ -88,17 +85,25 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
     SysFreeString(ariaRoleName);
     ariaRoleName = nullptr;
+  } else {
+    (*pRawElement)->AriaRoleNameData = nullptr;
+    (*pRawElement)->AriaRoleNameLength = 0;
   }
 
   RECT boundingRectangle{0, 0, 0, 0};
 
-  if (FAILED(pElement->get_CurrentBoundingRectangle(&boundingRectangle))) {
+  if (false &&
+      SUCCEEDED(pElement->get_CurrentBoundingRectangle(&boundingRectangle))) {
+    (*pRawElement)->Left = boundingRectangle.left;
+    (*pRawElement)->Top = boundingRectangle.left;
+    (*pRawElement)->Width = boundingRectangle.right - boundingRectangle.left;
+    (*pRawElement)->Height = boundingRectangle.bottom - boundingRectangle.top;
+  } else {
+    (*pRawElement)->Left = 0;
+    (*pRawElement)->Top = 0;
+    (*pRawElement)->Width = 0;
+    (*pRawElement)->Height = 0;
   }
-
-  (*pRawElement)->Left = boundingRectangle.left;
-  (*pRawElement)->Top = boundingRectangle.left;
-  (*pRawElement)->Width = boundingRectangle.right - boundingRectangle.left;
-  (*pRawElement)->Height = boundingRectangle.bottom - boundingRectangle.top;
 
   return S_OK;
 }
