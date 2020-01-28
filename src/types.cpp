@@ -236,7 +236,7 @@ HRESULT RawEventFromIAccessible(HWND hWindow, int32_t eventId,
 
   RawElement *pRawElement;
 
-  if (FAILED(hWindow, RawElementFromIAccessible(pAcc, &pRawElement))) {
+  if (FAILED(RawElementFromIAccessible(hWindow, pAcc, &pRawElement))) {
     return E_FAIL;
   }
 
