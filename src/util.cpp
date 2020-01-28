@@ -49,7 +49,7 @@ void SafeDelete(RawEvent **pRawEvent) {
 HRESULT GetProcessName(DWORD processId, wchar_t **processName,
                        size_t *processNameLength) {
   HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-
+  return E_FAIL;
   if (hSnapshot == nullptr) {
     return E_FAIL;
   }
