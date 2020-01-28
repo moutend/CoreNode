@@ -56,9 +56,9 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
 
   PROCESSENTRY32W processEntry{};
 
-  processEntry.cbSize = sizeof(PROCESSENTRY32);
+  processEntry.dwSize = sizeof(PROCESSENTRY32W);
 
-  bool hasProcessEntry = Process32First(hSnapshot, &processEntry);
+  bool hasProcessEntry = Process32FirstW(hSnapshot, &processEntry);
 
   while (hasProcessEntry) {
     if (processEntry.th32ProcessID == processId) {
@@ -69,7 +69,7 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
       break;
     }
 
-    hasProcessEntry = Process32Next(hSnapshot, &processEntry);
+    hasProcessEntry = Process32NextW(hSnapshot, &processEntry);
   }
 
   SafeCloseHandle(&hSnapshot);
