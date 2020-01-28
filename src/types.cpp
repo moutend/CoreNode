@@ -1,7 +1,9 @@
+#include <cpplogger/cpplogger.h>
 #include <cstring>
 #include <cwchar>
 #include <windows.h>
 
+#include <strsafe.h>
 #include <Commctrl.h>
 
 #include "types.h"
