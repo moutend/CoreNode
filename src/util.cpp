@@ -64,7 +64,7 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
   while (hasProcessEntry) {
     if (processEntry.th32ProcessID == processId) {
       wchar_t *buffer = new wchar_t[256]{};
-      StringCbPrintfW(buffer, 511, L"ProcessName is %s", );
+      StringCbPrintfW(buffer, 511, L"ProcessName is %s", processEntry.szExeFile);
       Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
       delete[] buffer;
       buffer = nullptr;
