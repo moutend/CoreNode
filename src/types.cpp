@@ -3,11 +3,13 @@
 #include <cwchar>
 #include <windows.h>
 
-#include <strsafe.h>
 #include <Commctrl.h>
+#include <strsafe.h>
 
 #include "types.h"
 #include "util.h"
+
+extern Logger::Logger *Log;
 
 HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
                                            RawElement **pRawElement) {

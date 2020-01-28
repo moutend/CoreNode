@@ -1,6 +1,8 @@
 #include <cpplogger/cpplogger.h>
 #include <windows.h>
 
+#include <tlhelp32.h>
+
 #include "util.h"
 #include <strsafe.h>
 
