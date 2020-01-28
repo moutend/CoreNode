@@ -21,19 +21,15 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   int processId{};
 
-  if (FAILED(pElement->get_CachedProcessId(&processId))) {
+  if (false && FAILED(pElement->get_CachedProcessId(&processId))) {
     return E_FAIL;
   }
-
-  wchar_t *s = new wchar_t[128]{};
-  StringCbPrintfW(s, 256, L"ProcessId=%d", processId);
-
-  Log->Info(s, GetCurrentThreadId(), __LONGFILE__);
 
   wchar_t *processName{};
   size_t processNameLength{};
 
-  if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
+  if (false &&
+      SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
     (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
     std::wmemcpy((*pRawElement)->ProcessNameData, processName,
                  processNameLength);
@@ -153,12 +149,13 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
 
   DWORD processId{};
 
-  GetWindowThreadProcessId(hWindow, &processId);
+  // GetWindowThreadProcessId(hWindow, &processId);
 
   wchar_t *processName{};
   size_t processNameLength{};
 
-  if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
+  if (false &&
+      SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
     (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
     std::wmemcpy((*pRawElement)->ProcessNameData, processName,
                  processNameLength);
