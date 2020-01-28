@@ -55,7 +55,8 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
   }
 
   PROCESSENTRY32W processEntry{};
-  processEntiry.cbSize = sizeof(PROCESSENTRY32);
+
+  processEntry.cbSize = sizeof(PROCESSENTRY32);
 
   bool hasProcessEntry = Process32First(hSnapshot, &processEntry);
 
