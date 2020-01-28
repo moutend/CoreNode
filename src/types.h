@@ -15,12 +15,10 @@ typedef struct {
   int32_t Role;
   int32_t NameLength;
   int32_t ClassNameLength;
-  int32_t FrameworkNameLength;
   int32_t AriaRoleNameLength;
   int32_t ProcessNameLength;
   wchar_t *NameData;
   wchar_t *ClassNameData;
-  wchar_t *FrameworkNameData;
   wchar_t *AriaRoleNameData;
   wchar_t *ProcessNameData;
 } RawElement;

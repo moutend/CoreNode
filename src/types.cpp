@@ -21,6 +21,11 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
     return E_FAIL;
   }
 
+  wchar_t *s = new wchar_t[128]{};
+  StringCbPrintfW(s, 256, L"ProcessId=%d", processId);
+
+  Log->Info(s, GetCurrentThreadId(), __LONGFILE__);
+
   wchar_t *processName{};
   size_t processNameLength{};
 
@@ -75,24 +80,6 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   } else {
     (*pRawElement)->ClassNameData = nullptr;
     (*pRawElement)->ClassNameLength = 0;
-  }
-
-  wchar_t *frameworkName{};
-
-  if (SUCCEEDED(pElement->get_CachedFrameworkId(&frameworkName))) {
-    size_t frameworkNameLength = std::wcslen(frameworkName);
-
-    (*pRawElement)->FrameworkNameData = new wchar_t[frameworkNameLength + 1]{};
-    std::wmemcpy((*pRawElement)->FrameworkNameData, frameworkName,
-                 frameworkNameLength);
-    (*pRawElement)->FrameworkNameLength =
-        static_cast<int32_t>(frameworkNameLength);
-
-    SysFreeString(frameworkName);
-    frameworkName = nullptr;
-  } else {
-    (*pRawElement)->FrameworkNameData = nullptr;
-    (*pRawElement)->FrameworkNameLength = 0;
   }
 
   wchar_t *ariaRoleName{};
@@ -210,11 +197,9 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
   (*pRawElement)->ControlTypeId = 0;
 
   (*pRawElement)->ClassNameData = nullptr;
-  (*pRawElement)->FrameworkNameData = nullptr;
   (*pRawElement)->AriaRoleNameData = nullptr;
 
   (*pRawElement)->ClassNameLength = 0;
-  (*pRawElement)->FrameworkNameLength = 0;
   (*pRawElement)->AriaRoleNameLength = 0;
 
   long left{};

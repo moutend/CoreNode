@@ -8,22 +8,20 @@ import (
 
 // RawElement is C / C++ language representation.
 type RawElement struct {
-	Top                 int32
-	Left                int32
-	Width               int32
-	Height              int32
-	ControlTypeId       int32
-	Role                int32
-	NameLength          int32
-	ClassNameLength     int32
-	FrameworkNameLength int32
-	AriaRoleNameLength  int32
-	ProcessNameLength   int32
-	NameData            uintptr
-	ClassNameData       uintptr
-	FrameworkNameData   uintptr
-	AriaRoleNameData    uintptr
-	ProcessNameData     uintptr
+	Top                int32
+	Left               int32
+	Width              int32
+	Height             int32
+	ControlTypeId      int32
+	Role               int32
+	NameLength         int32
+	ClassNameLength    int32
+	AriaRoleNameLength int32
+	ProcessNameLength  int32
+	NameData           uintptr
+	ClassNameData      uintptr
+	AriaRoleNameData   uintptr
+	ProcessNameData    uintptr
 }
 
 // Element is Go language representation.
@@ -36,7 +34,6 @@ type Element struct {
 	Role          MSAARole
 	Name          string
 	ClassName     string
-	FrameworkName string
 	AriaRoleName  string
 	ProcessName   string
 }
@@ -88,7 +85,6 @@ func UintptrToElement(rawElementPtr uintptr) Element {
 
 	element.Name = UintptrToString(rawElement.NameData, int(rawElement.NameLength), int(rawElement.NameLength))
 	element.ClassName = UintptrToString(rawElement.ClassNameData, int(rawElement.ClassNameLength), int(rawElement.ClassNameLength))
-	element.FrameworkName = UintptrToString(rawElement.FrameworkNameData, int(rawElement.FrameworkNameLength), int(rawElement.FrameworkNameLength))
 	element.AriaRoleName = UintptrToString(rawElement.AriaRoleNameData, int(rawElement.AriaRoleNameLength), int(rawElement.AriaRoleNameLength))
 	element.ProcessName = UintptrToString(rawElement.ProcessNameData, int(rawElement.AriaRoleNameLength), int(rawElement.ProcessNameLength))
 
