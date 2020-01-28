@@ -2,6 +2,7 @@
 #include <windows.h>
 
 #include <tlhelp32.h>
+#include <strsafe.h>
 
 #include "util.h"
 #include <strsafe.h>
