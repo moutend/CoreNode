@@ -35,7 +35,8 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
     (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
-    std::wmemcpy((*pRawElement)->ProcessName, processName, processNameLength);
+    std::wmemcpy((*pRawElement)->ProcessNameData, processName,
+                 processNameLength);
 
     delete[] processName;
     processName = nullptr;
@@ -152,14 +153,15 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
 
   DWORD processId{};
 
-  GetWindowThreadProcessId(hWnd, &processId);
+  GetWindowThreadProcessId(hWindow, &processId);
 
   wchar_t *processName{};
   size_t processNameLength{};
 
   if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
     (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
-    std::wmemcpy((*pRawElement)->ProcessName, processName, processNameLength);
+    std::wmemcpy((*pRawElement)->ProcessNameData, processName,
+                 processNameLength);
 
     delete[] processName;
     processName = nullptr;
