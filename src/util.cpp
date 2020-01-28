@@ -59,9 +59,9 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
   processEntry.dwSize = sizeof(PROCESSENTRY32W);
 
   bool hasProcessEntry = Process32FirstW(hSnapshot, &processEntry);
-  return E_FAIL;
+
   while (hasProcessEntry) {
-    if (processEntry.th32ProcessID == processId) {
+    if (false && processEntry.th32ProcessID == processId) {
       (*processNameLength) = std::wcslen(processEntry.szExeFile);
       (*processName) = new wchar_t[(*processNameLength) + 1]{};
       std::wmemcpy((*processName), processEntry.szExeFile,
