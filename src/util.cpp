@@ -1,8 +1,8 @@
 #include <cpplogger/cpplogger.h>
 #include <windows.h>
 
-#include <tlhelp32.h>
 #include <strsafe.h>
+#include <tlhelp32.h>
 
 #include "util.h"
 #include <strsafe.h>
@@ -63,13 +63,14 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
 
   while (hasProcessEntry) {
     if (processEntry.th32ProcessID == processId) {
+      (*processNameLength) = std::wcslen(processEntry.szExeFile);
       wchar_t *buffer = new wchar_t[256]{};
-      StringCbPrintfW(buffer, 511, L"ProcessName is %s", processEntry.szExeFile);
+      StringCbPrintfW(buffer, 511, L"ProcessName is %s %d",
+                      processEntry.szExeFile, (*processNameLength));
       Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
       delete[] buffer;
       buffer = nullptr;
       break;
-      (*processNameLength) = MAX_PATH;
       (*processName) = new wchar_t[MAX_PATH + 1]{};
       std::wmemcpy((*processName), processEntry.szExeFile, MAX_PATH);
 
