@@ -1,0 +1,109 @@
+//go:generate stringer -type=MSAAEvent
+//go:generate stringer -type=MSAARole
+package types
+
+// MSAAEvent represents Microsoft Active Accessibility event constants.
+// For more details, see the official document on MSDN.
+//
+// https://docs.microsoft.com/en-us/windows/win32/winauto/event-constants
+type MSAAEvent int
+
+const (
+	EVENT_SYSTEM_ALERT             MSAAEvent = 0x0002
+	EVENT_SYSTEM_FOREGROUND        MSAAEvent = 0x0003
+	EVENT_SYSTEM_MENUSTART         MSAAEvent = 0x0004
+	EVENT_SYSTEM_MENUEND           MSAAEvent = 0x0005
+	EVENT_SYSTEM_MENUPOPUPSTART    MSAAEvent = 0x0006
+	EVENT_SYSTEM_MENUPOPUPEND      MSAAEvent = 0x0007
+	EVENT_SYSTEM_SCROLLINGSTART    MSAAEvent = 0x0012
+	EVENT_SYSTEM_SWITCHEND         MSAAEvent = 0x0015
+	EVENT_SYSTEM_DESKTOPSWITCH     MSAAEvent = 0x0020
+	EVENT_OBJECT_DESTROY           MSAAEvent = 0x8001
+	EVENT_OBJECT_SHOW              MSAAEvent = 0x8002
+	EVENT_OBJECT_HIDE              MSAAEvent = 0x8003
+	EVENT_OBJECT_REORDER           MSAAEvent = 0x8004
+	EVENT_OBJECT_FOCUS             MSAAEvent = 0x8005
+	EVENT_OBJECT_SELECTION         MSAAEvent = 0x8006
+	EVENT_OBJECT_SELECTIONADD      MSAAEvent = 0x8007
+	EVENT_OBJECT_SELECTIONREMOVE   MSAAEvent = 0x8008
+	EVENT_OBJECT_SELECTIONWITHIN   MSAAEvent = 0x8009
+	EVENT_OBJECT_STATECHANGE       MSAAEvent = 0x800A
+	EVENT_OBJECT_LOCATIONCHANGE    MSAAEvent = 0x800B
+	EVENT_OBJECT_NAMECHANGE        MSAAEvent = 0x800C
+	EVENT_OBJECT_DESCRIPTIONCHANGE MSAAEvent = 0x800D
+	EVENT_OBJECT_VALUECHANGE       MSAAEvent = 0x800E
+	EVENT_OBJECT_LIVEREGIONCHANGED MSAAEvent = 0x8019
+)
+
+// MSAARole represents Microsoft Active Accessibility Roles.
+// For more details, see the official document on MSDN.
+//
+// https://docs.microsoft.com/en-us/windows/win32/winauto/object-roles
+type MSAARole int
+
+const (
+	ROLE_SYSTEM_TITLEBAR           MSAARole = 0x1
+	ROLE_SYSTEM_MENUBAR            MSAARole = 0x2
+	ROLE_SYSTEM_SCROLLBAR          MSAARole = 0x3
+	ROLE_SYSTEM_GRIP               MSAARole = 0x4
+	ROLE_SYSTEM_SOUND              MSAARole = 0x5
+	ROLE_SYSTEM_CURSOR             MSAARole = 0x6
+	ROLE_SYSTEM_CARET              MSAARole = 0x7
+	ROLE_SYSTEM_ALERT              MSAARole = 0x8
+	ROLE_SYSTEM_WINDOW             MSAARole = 0x9
+	ROLE_SYSTEM_CLIENT             MSAARole = 0xa
+	ROLE_SYSTEM_MENUPOPUP          MSAARole = 0xb
+	ROLE_SYSTEM_MENUITEM           MSAARole = 0xc
+	ROLE_SYSTEM_TOOLTIP            MSAARole = 0xd
+	ROLE_SYSTEM_APPLICATION        MSAARole = 0xe
+	ROLE_SYSTEM_DOCUMENT           MSAARole = 0xf
+	ROLE_SYSTEM_PANE               MSAARole = 0x10
+	ROLE_SYSTEM_CHART              MSAARole = 0x11
+	ROLE_SYSTEM_DIALOG             MSAARole = 0x12
+	ROLE_SYSTEM_BORDER             MSAARole = 0x13
+	ROLE_SYSTEM_GROUPING           MSAARole = 0x14
+	ROLE_SYSTEM_SEPARATOR          MSAARole = 0x15
+	ROLE_SYSTEM_TOOLBAR            MSAARole = 0x16
+	ROLE_SYSTEM_STATUSBAR          MSAARole = 0x17
+	ROLE_SYSTEM_TABLE              MSAARole = 0x18
+	ROLE_SYSTEM_COLUMNHEADER       MSAARole = 0x19
+	ROLE_SYSTEM_ROWHEADER          MSAARole = 0x1a
+	ROLE_SYSTEM_COLUMN             MSAARole = 0x1b
+	ROLE_SYSTEM_ROW                MSAARole = 0x1c
+	ROLE_SYSTEM_CELL               MSAARole = 0x1d
+	ROLE_SYSTEM_LINK               MSAARole = 0x1e
+	ROLE_SYSTEM_HELPBALLOON        MSAARole = 0x1f
+	ROLE_SYSTEM_CHARACTER          MSAARole = 0x20
+	ROLE_SYSTEM_LIST               MSAARole = 0x21
+	ROLE_SYSTEM_LISTITEM           MSAARole = 0x22
+	ROLE_SYSTEM_OUTLINE            MSAARole = 0x23
+	ROLE_SYSTEM_OUTLINEITEM        MSAARole = 0x24
+	ROLE_SYSTEM_PAGETAB            MSAARole = 0x25
+	ROLE_SYSTEM_PROPERTYPAGE       MSAARole = 0x26
+	ROLE_SYSTEM_INDICATOR          MSAARole = 0x27
+	ROLE_SYSTEM_GRAPHIC            MSAARole = 0x28
+	ROLE_SYSTEM_STATICTEXT         MSAARole = 0x29
+	ROLE_SYSTEM_TEXT               MSAARole = 0x2a
+	ROLE_SYSTEM_PUSHBUTTON         MSAARole = 0x2b
+	ROLE_SYSTEM_CHECKBUTTON        MSAARole = 0x2c
+	ROLE_SYSTEM_RADIOBUTTON        MSAARole = 0x2d
+	ROLE_SYSTEM_COMBOBOX           MSAARole = 0x2e
+	ROLE_SYSTEM_DROPLIST           MSAARole = 0x2f
+	ROLE_SYSTEM_PROGRESSBAR        MSAARole = 0x30
+	ROLE_SYSTEM_DIAL               MSAARole = 0x31
+	ROLE_SYSTEM_HOTKEYFIELD        MSAARole = 0x32
+	ROLE_SYSTEM_SLIDER             MSAARole = 0x33
+	ROLE_SYSTEM_SPINBUTTON         MSAARole = 0x34
+	ROLE_SYSTEM_DIAGRAM            MSAARole = 0x35
+	ROLE_SYSTEM_ANIMATION          MSAARole = 0x36
+	ROLE_SYSTEM_EQUATION           MSAARole = 0x37
+	ROLE_SYSTEM_BUTTONDROPDOWN     MSAARole = 0x38
+	ROLE_SYSTEM_BUTTONMENU         MSAARole = 0x39
+	ROLE_SYSTEM_BUTTONDROPDOWNGRID MSAARole = 0x3a
+	ROLE_SYSTEM_WHITESPACE         MSAARole = 0x3b
+	ROLE_SYSTEM_PAGETABLIST        MSAARole = 0x3c
+	ROLE_SYSTEM_CLOCK              MSAARole = 0x3d
+	ROLE_SYSTEM_SPLITBUTTON        MSAARole = 0x3e
+	ROLE_SYSTEM_IPADDRESS          MSAARole = 0x3f
+	ROLE_SYSTEM_OUTLINEBUTTON      MSAARole = 0x40
+)
