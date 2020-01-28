@@ -43,3 +43,33 @@ void SafeDelete(RawEvent **pRawEvent) {
   delete (*pRawEvent);
   (*pRawEvent) = nullptr;
 }
+
+HRESULT GetProcessName(DWORD processId, wchar_t **processName,
+                       size_t *processNameLength) {
+  HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+
+  if (hSnapshot == nullptr) {
+    return E_FAIL;
+  }
+
+  PROCESSENTRY32W processEntry{};
+  processEntiry.cbSize = sizeof(PROCESSENTRY32);
+
+  bool hasProcessEntry = Process32First(hSnapshot, &processEntry);
+
+  while (hasProcessEntry) {
+    if (processEntry.th32ProcessID == processId) {
+      processNameLength = std::wcslen(processEntry.szExeFile);
+      *processName = new wchar_t[processNameLength + 1]{};
+      std::wmemcpy(processName, processEntry.szExeFile, processNameLength);
+
+      break;
+    }
+
+    hasProcessEntry = Process32Next(hSnapshot, &processEntry);
+  }
+
+  SafeCloseHandle(&hSnapshot);
+
+  return S_OK;
+}

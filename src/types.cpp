@@ -5,6 +5,7 @@
 #include <Commctrl.h>
 
 #include "types.h"
+#include "util.h"
 
 HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
                                            RawElement **pRawElement) {
@@ -14,6 +15,26 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   *pRawElement = new RawElement;
 
+  int processId{};
+
+  if (FAILED(pElement->get_CachedProcessId(&processId))) {
+    return E_FAIL;
+  }
+
+  wchar_t *processName{};
+  size_t processNameLength{};
+
+  if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
+    (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
+    std::wmemcpy((*pRawElement)->ProcessName, processName, processNameLength);
+
+    delete[] processName;
+    processName = nullptr;
+  } else {
+    (*pRawElement)->ProcessNameLength = 0;
+    (*pRawElement)->ProcessNameData = nullptr;
+  }
+
   CONTROLTYPEID controlTypeId{};
 
   if (SUCCEEDED(pElement->get_CachedControlType(&controlTypeId))) {
@@ -21,6 +42,8 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   } else {
     (*pRawElement)->ControlTypeId = 0;
   }
+
+  (*pRawElement)->Role = 0;
 
   wchar_t *name{};
 
@@ -128,12 +151,31 @@ HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
   return S_OK;
 }
 
-HRESULT RawElementFromIAccessible(IAccessible *pAcc, RawElement **pRawElement) {
+HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
+                                  RawElement **pRawElement) {
   if (pAcc == nullptr || pRawElement == nullptr) {
     return E_FAIL;
   }
 
   *pRawElement = new RawElement;
+
+  DWORD processId{};
+
+  GetWindowThreadProcessId(hWnd, &processId);
+
+  wchar_t *processName{};
+  size_t processNameLength{};
+
+  if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
+    (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
+    std::wmemcpy((*pRawElement)->ProcessName, processName, processNameLength);
+
+    delete[] processName;
+    processName = nullptr;
+  } else {
+    (*pRawElement)->ProcessNameLength = 0;
+    (*pRawElement)->ProcessNameData = nullptr;
+  }
 
   VARIANT varChild;
   varChild.vt = VT_I4;
@@ -164,37 +206,46 @@ HRESULT RawElementFromIAccessible(IAccessible *pAcc, RawElement **pRawElement) {
     roleId = varResult.lVal;
   }
 
-  (*pRawElement)->ControlTypeId = static_cast<int32_t>(roleId);
+  (*pRawElement)->Role = static_cast<int32_t>(roleId);
+  (*pRawElement)->ControlTypeId = 0;
+
+  (*pRawElement)->ClassNameData = nullptr;
+  (*pRawElement)->FrameworkNameData = nullptr;
+  (*pRawElement)->AriaRoleNameData = nullptr;
+
+  (*pRawElement)->ClassNameLength = 0;
+  (*pRawElement)->FrameworkNameLength = 0;
+  (*pRawElement)->AriaRoleNameLength = 0;
 
   long left{};
   long top{};
   long width{};
   long height{};
 
-  if (FAILED(pAcc->accLocation(&left, &top, &width, &height, varChild))) {
-    left = 0;
-    top = 0;
-    width = 0;
-    height = 0;
+  if (SUCCEEDED(pAcc->accLocation(&left, &top, &width, &height, varChild))) {
+    (*pRawElement)->Left = left;
+    (*pRawElement)->Top = top;
+    (*pRawElement)->Width = width;
+    (*pRawElement)->Height = height;
+  } else {
+    (*pRawElement)->Left = 0;
+    (*pRawElement)->Top = 0;
+    (*pRawElement)->Width = 0;
+    (*pRawElement)->Height = 0;
   }
-
-  (*pRawElement)->Left = left;
-  (*pRawElement)->Top = top;
-  (*pRawElement)->Width = width;
-  (*pRawElement)->Height = height;
 
   return S_OK;
 }
 
-HRESULT RawEventFromIAccessible(int32_t eventId, IAccessible *pAcc,
-                                RawEvent **pRawEvent) {
+HRESULT RawEventFromIAccessible(HWND hWindow, int32_t eventId,
+                                IAccessible *pAcc, RawEvent **pRawEvent) {
   if (pAcc == nullptr || pRawEvent == nullptr) {
     return E_FAIL;
   }
 
   RawElement *pRawElement;
 
-  if (FAILED(RawElementFromIAccessible(pAcc, &pRawElement))) {
+  if (FAILED(hWindow, RawElementFromIAccessible(pAcc, &pRawElement))) {
     return E_FAIL;
   }
 
