@@ -60,6 +60,9 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     delete[] s;
   }
   return S_OK;
+
+  RawEvent *pRawEvent{};
+
   if (FAILED(RawEventFromIUIAutomationElement(UIA_AutomationFocusChangedEventId,
                                               pSender, &pRawEvent))) {
     return E_FAIL;
