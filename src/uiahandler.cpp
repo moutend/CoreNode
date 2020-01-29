@@ -45,6 +45,10 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     IUIAutomationElement *pSender) {
   Log->Info(L"Focus change event received", GetCurrentThreadId(), __LONGFILE__);
 
+  if (pSender == nullptr) {
+    return S_OK;
+  }
+
   RawEvent *pRawEvent{};
 
   if (FAILED(RawEventFromIUIAutomationElement(UIA_AutomationFocusChangedEventId,
@@ -102,6 +106,10 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
   Log->Info(L"Property change event received", GetCurrentThreadId(),
             __LONGFILE__);
 
+  if (pSender == nullptr) {
+    return S_OK;
+  }
+
   RawEvent *pRawEvent{};
 
   if (FAILED(RawEventFromIUIAutomationElement(
@@ -154,6 +162,10 @@ HRESULT
 AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
                                               EVENTID eventId) {
   Log->Info(L"Automation event received", GetCurrentThreadId(), __LONGFILE__);
+
+  if (pSender == nullptr) {
+    return S_OK;
+  }
 
   RawEvent *pRawEvent{};
 
