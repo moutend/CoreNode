@@ -25,6 +25,11 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
     return E_FAIL;
   }
 
+wchar_t *s = new wchar_t[128]{};
+StringCbPrintfW(s, 255, L"ProcessId=%d", processId);
+Log->Info(s, GetCurrentThreadId(), __LONGFILE__);
+delete[] s;
+s = nullptr;
   wchar_t *processName{};
   size_t processNameLength{};
 
