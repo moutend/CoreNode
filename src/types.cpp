@@ -29,8 +29,8 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   size_t processNameLength{};
 
   if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
-    wchar_t *s = new wchar_t[128]{};
-    StringCbPrintfW(s, 255, L"ProcessId=%d %d", processId, processNameLength);
+    wchar_t *s = new wchar_t[256]{};
+    StringCbPrintfW(s, 511, L"ProcessId=%d %s %d", processId, processName, processNameLength);
     Log->Info(s, GetCurrentThreadId(), __LONGFILE__);
     delete[] s;
     s = nullptr;
