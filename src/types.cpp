@@ -25,15 +25,16 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
     return E_FAIL;
   }
 
-wchar_t *s = new wchar_t[128]{};
-StringCbPrintfW(s, 255, L"ProcessId=%d", processId);
-Log->Info(s, GetCurrentThreadId(), __LONGFILE__);
-delete[] s;
-s = nullptr;
   wchar_t *processName{};
   size_t processNameLength{};
 
   if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
+wchar_t *s = new wchar_t[128]{};
+StringCbPrintfW(s, 255, L"ProcessId=%d %s %s", processId, processName, processNameLength);
+Log->Info(s, GetCurrentThreadId(), __LONGFILE__);
+delete[] s;
+s = nullptr;
+
     (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
     (*pRawElement)->ProcessNameData = new wchar_t[processNameLength + 1]{};
     std::wmemcpy((*pRawElement)->ProcessNameData, processName,
