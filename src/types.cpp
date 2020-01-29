@@ -20,6 +20,19 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   *pRawElement = new RawElement;
 
   HRESULT hr{};
+  RECT boundingRectangle{};
+
+  hr = pElement->get_CachedBoundingRectangle(&boundingRectangle);
+
+  if (SUCCEEDED(hr)) {
+    (*pRawElement)->Left = boundingRectangle.left;
+    (*pRawElement)->Top = boundingRectangle.left;
+    (*pRawElement)->Width = boundingRectangle.right - boundingRectangle.left;
+    (*pRawElement)->Height = boundingRectangle.bottom - boundingRectangle.top;
+  } else {
+    return E_FAIL;
+  }
+
   int processId{};
 
   hr = pElement->get_CachedProcessId(&processId);
@@ -63,11 +76,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   hr = pElement->get_CachedName(&name);
 
   if (FAILED(hr)) {
-    try {
-      hr = pElement->get_CurrentName(&name);
-    } catch (...) {
-      // do nothing
-    }
+    hr = pElement->get_CurrentName(&name);
   }
   if (SUCCEEDED(hr)) {
     size_t nameLength = std::wcslen(name);
@@ -115,20 +124,6 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   } else {
     (*pRawElement)->AriaRoleNameData = nullptr;
     (*pRawElement)->AriaRoleNameLength = 0;
-  }
-
-  RECT boundingRectangle{0, 0, 0, 0};
-
-  if (SUCCEEDED(pElement->get_CachedBoundingRectangle(&boundingRectangle))) {
-    (*pRawElement)->Left = boundingRectangle.left;
-    (*pRawElement)->Top = boundingRectangle.left;
-    (*pRawElement)->Width = boundingRectangle.right - boundingRectangle.left;
-    (*pRawElement)->Height = boundingRectangle.bottom - boundingRectangle.top;
-  } else {
-    (*pRawElement)->Left = 0;
-    (*pRawElement)->Top = 0;
-    (*pRawElement)->Width = 0;
-    (*pRawElement)->Height = 0;
   }
 
   return S_OK;
