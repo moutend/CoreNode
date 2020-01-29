@@ -173,7 +173,10 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
 
   wchar_t *name{};
 
-  if (false && SUCCEEDED(pAcc->get_accName(varChild, &name))) {
+  if (FAILED(pAcc->get_accName(varChild, &name))) {
+    name = nullptr;
+  }
+  if (name != nullptr) {
     size_t nameLength = std::wcslen(name);
 
     (*pRawElement)->NameData = new wchar_t[nameLength + 1]{};
