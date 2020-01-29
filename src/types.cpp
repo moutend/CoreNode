@@ -21,14 +21,14 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   int processId{};
 
-  if (false && FAILED(pElement->get_CachedProcessId(&processId))) {
+  if (FAILED(pElement->get_CachedProcessId(&processId))) {
     return E_FAIL;
   }
 
   wchar_t *processName{};
   size_t processNameLength{};
 
-  if (false && SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
+  if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
     (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
     (*pRawElement)->ProcessNameData = new wchar_t[processNameLength + 1]{};
     std::wmemcpy((*pRawElement)->ProcessNameData, processName,
