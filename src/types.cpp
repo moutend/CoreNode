@@ -35,7 +35,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   int processId{};
 
-  hr = pElement->get_CachedProcessId(&processId);
+  hr = pElement->get_CurrentProcessId(&processId);
 
   if (FAILED(hr)) {
     return E_FAIL;
@@ -61,7 +61,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   CONTROLTYPEID controlTypeId{};
 
-  hr = pElement->get_CachedControlType(&controlTypeId);
+  hr = pElement->get_CurrentControlType(&controlTypeId);
 
   if (SUCCEEDED(hr)) {
     (*pRawElement)->ControlTypeId = static_cast<int32_t>(controlTypeId);
@@ -73,11 +73,8 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *name{};
 
-  hr = pElement->get_CachedName(&name);
+  hr = pElement->get_CurrentName(&name);
 
-  if (FAILED(hr)) {
-    hr = pElement->get_CurrentName(&name);
-  }
   if (SUCCEEDED(hr)) {
     size_t nameLength = std::wcslen(name);
 
@@ -94,7 +91,9 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *className{nullptr};
 
-  if (SUCCEEDED(pElement->get_CachedClassName(&className))) {
+  hr = pElement->get_CurrentClassName(&className);
+
+  if (SUCCEEDED(hr)) {
     size_t classNameLength = std::wcslen(className);
 
     (*pRawElement)->ClassNameData = new wchar_t[classNameLength + 1]{};
@@ -110,7 +109,9 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *ariaRoleName{};
 
-  if (SUCCEEDED(pElement->get_CachedAriaRole(&ariaRoleName))) {
+  hr = pElement->get_CurrentAriaRole(&ariaRoleName);
+
+  if (SUCCEEDED(hr)) {
     size_t ariaRoleNameLength = std::wcslen(ariaRoleName);
 
     (*pRawElement)->AriaRoleNameData = new wchar_t[ariaRoleNameLength + 1]{};
