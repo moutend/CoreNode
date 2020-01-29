@@ -47,6 +47,20 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     IUIAutomationElement *pSender) {
   Log->Info(L"Focus change event received", GetCurrentThreadId(), __LONGFILE__);
 
+  if (pSender == nullptr) {
+    return S_OK;
+  }
+
+  wchar_t *name{};
+
+  if (SUCCEEDED(pSender->get_CurrentName(&name))) {
+    wchar_t *s = new wchar_t[256]{};
+    StringCbPrintfW(s, 511, L"CurrentName is %s", name);
+    Log->Info(s, GetCurrentThreadId(), __LONGFILE__);
+    delete[] s;
+  }
+  return S_OK;
+
   RawEvent *pRawEvent{};
 
   if (FAILED(RawEventFromIUIAutomationElement(UIA_AutomationFocusChangedEventId,
@@ -104,6 +118,10 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
   Log->Info(L"Property change event received", GetCurrentThreadId(),
             __LONGFILE__);
 
+  if (pSender == nullptr) {
+    return S_OK;
+  }
+
   RawEvent *pRawEvent{};
 
   if (FAILED(RawEventFromIUIAutomationElement(
@@ -156,6 +174,10 @@ HRESULT
 AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
                                               EVENTID eventId) {
   Log->Info(L"Automation event received", GetCurrentThreadId(), __LONGFILE__);
+
+  if (pSender == nullptr) {
+    return S_OK;
+  }
 
   RawEvent *pRawEvent{};
 
