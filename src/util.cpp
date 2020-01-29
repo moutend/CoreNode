@@ -64,22 +64,14 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
   while (hasProcessEntry) {
     if (processEntry.th32ProcessID == processId) {
       size_t length = std::wcslen(processEntry.szExeFile);
+
       *processNameLength = length;
       *processName = new wchar_t[length + 1]{};
       std::wmemcpy(*processName, processEntry.szExeFile, length);
-      break;
-      wchar_t *buffer = new wchar_t[256]{};
-      StringCbPrintfW(buffer, 511, L"ProcessName is %s %d %d",
-                      processEntry.szExeFile, length,
-                      ((*processName) == nullptr ? 111 : 222));
-      Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
-      delete[] buffer;
-      buffer = nullptr;
-      wchar_t *name = new wchar_t[length + 1]{};
-      std::wmemcpy(name, processEntry.szExeFile, length);
 
       break;
     }
+
     hasProcessEntry = Process32NextW(hSnapshot, &processEntry);
   }
 

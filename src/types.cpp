@@ -156,6 +156,7 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
 
   if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
     (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
+    (*pRawElement)->ProcessNameData = new wchar_t[processNameLength + 1]{};
     std::wmemcpy((*pRawElement)->ProcessNameData, processName,
                  processNameLength);
 
@@ -172,10 +173,7 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
 
   wchar_t *name{};
 
-  if (FAILED(pAcc->get_accName(varChild, &name))) {
-    name = nullptr;
-  }
-  if (name != nullptr) {
+  if (SUCCEEDED(pAcc->get_accName(varChild, &name))) {
     size_t nameLength = std::wcslen(name);
 
     (*pRawElement)->NameData = new wchar_t[nameLength + 1]{};
@@ -184,6 +182,9 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
 
     SysFreeString(name);
     name = nullptr;
+  } else {
+    (*pRawElement)->NameLength = 0;
+    (*pRawElement)->NameData = nullptr;
   }
 
   DWORD roleId{};
