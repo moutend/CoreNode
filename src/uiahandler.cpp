@@ -53,7 +53,7 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
 
   wchar_t *name{};
 
-  if (SUCCEEDED(pElement->get_CurrentName(&name))) {
+  if (SUCCEEDED(pSender->get_CurrentName(&name))) {
     wchar_t *s = new wchar_t[256]{};
     StringCbPrintfW(s, 511, L"CurrentName is %s", name);
     Log->Info(s, GetCurrentThreadId(), __LONGFILE__);
