@@ -2,6 +2,8 @@
 #include <UIAutomationCore.h>
 #include <cpplogger/cpplogger.h>
 
+#include <strsafe.h>
+
 #include "types.h"
 #include "uiahandler.h"
 #include "util.h"
