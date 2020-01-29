@@ -1,0 +1,44 @@
+C:\Users\koyanagi\github.com\moutend\CoreNode\build\Debug>testtool.exe
+Name:   ClassName:ApplicationManager_ImmersiveShellWindow       FrameworkName:Win32  ControlTypeId:50000     Role:-842150451 EventId:20005   Location:{0,0,0,0}
+Name:検索ボックス       ClassName:RichEditBox   FrameworkName:XAML      ControlTypeId:50004  Role:-842150451 EventId:20005   Location:{48,48,344,40}
+Name:システム クロック, 16:52, ‎2020/‎01/‎25    ClassName:TrayClockWClass            FrameworkName:Win32     ControlTypeId:50000     Role:-842150451 EventId:20004        Location:{1151,1151,76,40}
+Name:   ClassName:TileListViewItem      FrameworkName:XAML      ControlTypeId:50026  Role:-842150451 EventId:20005   Location:{0,0,0,0}
+Name:システム クロック, 16:52, ‎2020/‎01/‎25    ClassName:TrayClockWClass            FrameworkName:Win32     ControlTypeId:50000     Role:-842150451 EventId:20004        Location:{1151,1151,76,40}
+Name:システム クロック, 16:52, ‎2020/‎01/‎25    ClassName:TrayClockWClass            FrameworkName:Win32     ControlTypeId:50000     Role:-842150451 EventId:20004        Location:{1151,1151,76,40}
+Name:スタート   ClassName:Windows.UI.Core.CoreWindow    FrameworkName:XAML           ControlTypeId:50032     Role:-842150451 EventId:20016   Location:{0,0,1280,680}
+Name:Text Area  ClassName:      FrameworkName:  ControlTypeId:50030     Role:-842150451      EventId:20005   Location:{633,633,653,727}
+Name:Developer Command Prompt for VS 2017 - testtool.exe        ClassName:ConsoleWindowClass FrameworkName:Win32     ControlTypeId:50032     Role:-842150451      EventId:20005   Location:{633,633,653,727}
+Name:検索ボックス       ClassName:RichEditBox   FrameworkName:XAML      ControlTypeId:50004  Role:-842150451 EventId:20005   Location:{48,48,344,40}
+Name:システム クロック, 16:52, ‎2020/‎01/‎25    ClassName:TrayClockWClass            FrameworkName:Win32     ControlTypeId:50000     Role:-842150451 EventId:20004        Location:{1151,1151,76,40}
+Name:システム クロック, 16:52, ‎2020/‎01/‎25    ClassName:TrayClockWClass            FrameworkName:Win32     ControlTypeId:50000     Role:-842150451 EventId:20004        Location:{1151,1151,76,40}
+Name:システム クロック, 16:52, ‎2020/‎01/‎25    ClassName:TrayClockWClass            FrameworkName:Win32     ControlTypeId:50000     Role:-842150451 EventId:20004        Location:{1151,1151,76,40}
+Name:システム クロック, 16:52, ‎2020/‎01/‎25    ClassName:TrayClockWClass            FrameworkName:Win32     ControlTypeId:50000     Role:-842150451 EventId:20004        Location:{1151,1151,76,40}
+Name:スタート   ClassName:Windows.UI.Core.CoreWindow    FrameworkName:XAML           ControlTypeId:50032     Role:-842150451 EventId:20016   Location:{0,0,1280,680}
+Name:検索ボックス       ClassName:RichEditBox   FrameworkName:XAML      ControlTypeId:50004  Role:-842150451 EventId:20004   Location:{48,48,344,40}
+Name:検索ボックス       ClassName:RichEditBox   FrameworkName:XAML      ControlTypeId:50004  Role:-842150451 EventId:20004   Location:{48,48,344,40}
+Name:検索ボックス       ClassName:RichEditBox   FrameworkName:XAML      ControlTypeId:50004  Role:-842150451 EventId:20004   Location:{48,48,344,40}
+Name:コマンド プロンプト, アプリ, 右を押してプレビューを切り替える      ClassName:   FrameworkName:MicrosoftEdge     ControlTypeId:50007     Role:-842150451      EventId:20011   Location:{48,48,344,64}
+Name:コマンド プロンプト, アプリ, 右を押してプレビューを切り替える      ClassName:   FrameworkName:MicrosoftEdge     ControlTypeId:50007     Role:-842150451      EventId:20012   Location:{48,48,344,64}
+Name:検索ボックス       ClassName:RichEditBox   FrameworkName:XAML      ControlTypeId:50004  Role:-842150451 EventId:20004   Location:{48,48,344,40}
+Name:検索ボックス       ClassName:RichEditBox   FrameworkName:XAML      ControlTypeId:50004  Role:-842150451 EventId:20004   Location:{48,48,344,40}
+Name:検索ボックス       ClassName:RichEditBox   FrameworkName:XAML      ControlTypeId:50004  Role:-842150451 EventId:20004   Location:{48,48,344,40}
+Name:検索ボックス       ClassName:RichEditBox   FrameworkName:XAML      ControlTypeId:50004  Role:-842150451 EventId:20004   Location:{48,48,344,40}
+Name:コマンド プロンプト, アプリ, 右を押してプレビューを切り替える      ClassName:   FrameworkName:MicrosoftEdge     ControlTypeId:50007     Role:-842150451      EventId:20011   Location:{48,48,344,64}
+Name:コマンド プロンプト, アプリ, 右を押してプレビューを切り替える      ClassName:   FrameworkName:MicrosoftEdge     ControlTypeId:50007     Role:-842150451      EventId:20012   Location:{48,48,344,64}
+Name:   ClassName:ApplicationManager_DesktopShellWindow FrameworkName:Win32
+        ControlTypeId:50033     Role:-842150451 EventId:20005   Location:{0,0,0,0}
+Name:検索ボックス       ClassName:RichEditBox   FrameworkName:XAML      ControlTypeId:50004  Role:-842150451 EventId:20004   Location:{48,48,344,40}
+Name:検索ボックス       ClassName:RichEditBox   FrameworkName:XAML      ControlTypeId:50004  Role:-842150451 EventId:20004   Location:{48,48,344,40}
+Name:Text Area  ClassName:      FrameworkName:  ControlTypeId:50030     Role:-842150451      EventId:20005   Location:{51,51,992,517}
+Name:コマンド プロンプト        ClassName:ConsoleWindowClass    FrameworkName:Win32  ControlTypeId:50032     Role:-842150451 EventId:20005   Location:{51,51,992,517}
+Name:Text Area  ClassName:      FrameworkName:  ControlTypeId:50030     Role:-842150451      EventId:20005   Location:{51,51,992,517}
+Name:コマンド プロンプト        ClassName:ConsoleWindowClass    FrameworkName:Win32  ControlTypeId:50032     Role:-842150451 EventId:20016   Location:{51,51,992,517}
+Name:Text Area  ClassName:      FrameworkName:  ControlTypeId:50030     Role:-842150451      EventId:20005   Location:{51,51,992,517}
+Name:Text Area  ClassName:      FrameworkName:  ControlTypeId:50030     Role:-842150451      EventId:20005   Location:{51,51,992,517}
+Name:Text Area  ClassName:      FrameworkName:  ControlTypeId:50030     Role:-842150451      EventId:20005   Location:{51,51,992,517}
+Name:Text Area  ClassName:      FrameworkName:  ControlTypeId:50030     Role:-842150451      EventId:20005   Location:{51,51,992,517}
+Name:   ClassName:ForegroundStaging     FrameworkName:Win32     ControlTypeId:50033  Role:-842150451 EventId:20005   Location:{0,0,0,0}
+Name:Developer Command Prompt for VS 2017 - testtool.exe        ClassName:
+        FrameworkName:  ControlTypeId:50007     Role:-842150451 EventId:20005        Location:{341,341,181,230}
+Name:Developer Command Prompt for VS 2017 - testtool.exe        ClassName:ConsoleWindowClass FrameworkName:Win32     ControlTypeId:50032     Role:-842150451      EventId:20005   Location:{633,633,653,727}
+Name:Text Area  ClassName:      FrameworkName:  ControlTypeId:50030     Role:-842150451      EventId:20005   Location:{633,633,653,727}
