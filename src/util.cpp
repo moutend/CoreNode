@@ -67,6 +67,7 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
       *processNameLength = length;
       *processName = new wchar_t[length + 1]{};
       std::wmemcpy(*processName, processEntry.szExeFile, length);
+      break;
       wchar_t *buffer = new wchar_t[256]{};
       StringCbPrintfW(buffer, 511, L"ProcessName is %s %d %d",
                       processEntry.szExeFile, length,
@@ -83,7 +84,6 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
   }
 
   SafeCloseHandle(&hSnapshot);
-  return E_FAIL;
 
   return S_OK;
 }
