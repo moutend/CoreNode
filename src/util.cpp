@@ -71,9 +71,8 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
       Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
       delete[] buffer;
       buffer = nullptr;
-      break;
-      *processName = new wchar_t[length + 1]{};
-      std::wmemcpy((*processName), processEntry.szExeFile, length);
+      wchar_t *name = new wchar_t[length + 1]{};
+      std::wmemcpy(name, processEntry.szExeFile, length);
 
       break;
     }
