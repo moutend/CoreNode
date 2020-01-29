@@ -60,6 +60,11 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
     std::wmemcpy((*pRawElement)->NameData, name, nameLength);
     (*pRawElement)->NameLength = static_cast<int32_t>(nameLength);
 
+    wchar_t *s = new wchar_t[256]{};
+    StringCbPrintfW(s, 511, L"CachedName is %s", name);
+    Log->Info(s, GetCurrentThreadId(), __LONGFILE__);
+    delete[] s;
+    s = nullptr;
     SysFreeString(name);
     name = nullptr;
   } else {
