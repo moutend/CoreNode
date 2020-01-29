@@ -28,9 +28,9 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   wchar_t *processName{};
   size_t processNameLength{};
 
-  if (false &&
-      SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
+  if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
     (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
+    (*pRawElement)->ProcessNameData = new wchar_t[processNameLength + 1]{};
     std::wmemcpy((*pRawElement)->ProcessNameData, processName,
                  processNameLength);
 
