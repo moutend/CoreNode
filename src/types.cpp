@@ -68,6 +68,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
     SysFreeString(name);
     name = nullptr;
   } else {
+  Log->Info(L"Failed to get  cached name", GetCurrentThreadId(), __LONGFILE__);
     (*pRawElement)->NameData = nullptr;
     (*pRawElement)->NameLength = 0;
   }
