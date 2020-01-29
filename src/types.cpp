@@ -22,7 +22,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   HRESULT hr{};
   RECT boundingRectangle{};
 
-  hr = pElement->get_CachedBoundingRectangle(&boundingRectangle);
+  hr = pElement->get_CurrentBoundingRectangle(&boundingRectangle);
 
   if (SUCCEEDED(hr)) {
     (*pRawElement)->Left = boundingRectangle.left;
