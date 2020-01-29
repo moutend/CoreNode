@@ -22,3 +22,4 @@ void SafeCloseHandle(HANDLE *pHandle);
 void SafeDelete(RawEvent **pRawEvent);
 HRESULT GetProcessName(DWORD processId, wchar_t **processName,
                        size_t *processNameLength);
+bool isEmptyIUIAutomationElement(IUIAutomationElement *pElement);
