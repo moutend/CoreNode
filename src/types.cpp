@@ -19,16 +19,21 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   *pRawElement = new RawElement;
 
+  HRESULT hr{};
   int processId{};
 
-  if (FAILED(pElement->get_CachedProcessId(&processId))) {
+  hr = pElement->get_CachedProcessId(&processId);
+
+  if (FAILED(hr)) {
     return E_FAIL;
   }
 
   wchar_t *processName{};
   size_t processNameLength{};
 
-  if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
+  hr = GetProcessName(processId, &processName, &processNameLength);
+
+  if (SUCCEEDED(hr)) {
     (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
     (*pRawElement)->ProcessNameData = new wchar_t[processNameLength + 1]{};
     std::wmemcpy((*pRawElement)->ProcessNameData, processName,
@@ -43,7 +48,9 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   CONTROLTYPEID controlTypeId{};
 
-  if (SUCCEEDED(pElement->get_CachedControlType(&controlTypeId))) {
+  hr = pElement->get_CachedControlType(&controlTypeId);
+
+  if (SUCCEEDED(hr)) {
     (*pRawElement)->ControlTypeId = static_cast<int32_t>(controlTypeId);
   } else {
     (*pRawElement)->ControlTypeId = 0;
@@ -53,24 +60,23 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   wchar_t *name{};
 
-  if (SUCCEEDED(pElement->get_CachedName(&name))) {
+  hr = pElement->get_CachedName(&name);
+
+  if (FAILED(hr)) {
+    hr = pElement->get_CurrentName(&name);
+  }
+  if (SUCCEEDED(hr)) {
     size_t nameLength = std::wcslen(name);
 
     (*pRawElement)->NameData = new wchar_t[nameLength + 1]{};
     std::wmemcpy((*pRawElement)->NameData, name, nameLength);
     (*pRawElement)->NameLength = static_cast<int32_t>(nameLength);
 
-    wchar_t *s = new wchar_t[256]{};
-    StringCbPrintfW(s, 511, L"CachedName is %s", name);
-    Log->Info(s, GetCurrentThreadId(), __LONGFILE__);
-    delete[] s;
-    s = nullptr;
     SysFreeString(name);
     name = nullptr;
   } else {
-  Log->Info(L"Failed to get  cached name", GetCurrentThreadId(), __LONGFILE__);
-    (*pRawElement)->NameData = nullptr;
     (*pRawElement)->NameLength = 0;
+    (*pRawElement)->NameData = nullptr;
   }
 
   wchar_t *className{nullptr};
