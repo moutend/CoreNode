@@ -77,7 +77,7 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
 
       break;
     }
-
+return E_FAIL;
     hasProcessEntry = Process32NextW(hSnapshot, &processEntry);
   }
 
