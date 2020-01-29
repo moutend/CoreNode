@@ -66,8 +66,9 @@ HRESULT GetProcessName(DWORD processId, wchar_t **processName,
       size_t length = std::wcslen(processEntry.szExeFile);
       *processNameLength = length;
       wchar_t *buffer = new wchar_t[256]{};
-      StringCbPrintfW(buffer, 511, L"ProcessName is %s %d",
-                      processEntry.szExeFile, length);
+      StringCbPrintfW(buffer, 511, L"ProcessName is %s %d %d",
+                      processEntry.szExeFile, length,
+                      ((*processName) == nullptr ? 111 : 222));
       Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
       delete[] buffer;
       buffer = nullptr;
