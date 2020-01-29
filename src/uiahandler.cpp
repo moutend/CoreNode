@@ -51,16 +51,6 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     return S_OK;
   }
 
-  wchar_t *name{};
-
-  if (SUCCEEDED(pSender->get_CurrentName(&name))) {
-    wchar_t *s = new wchar_t[256]{};
-    StringCbPrintfW(s, 511, L"CurrentName is %s", name);
-    Log->Info(s, GetCurrentThreadId(), __LONGFILE__);
-    delete[] s;
-  }
-  return S_OK;
-
   RawEvent *pRawEvent{};
 
   if (FAILED(RawEventFromIUIAutomationElement(UIA_AutomationFocusChangedEventId,
