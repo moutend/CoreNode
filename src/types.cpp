@@ -63,7 +63,11 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   hr = pElement->get_CachedName(&name);
 
   if (FAILED(hr)) {
-    // hr = pElement->get_CurrentName(&name);
+    try {
+      hr = pElement->get_CurrentName(&name);
+    } catch (...) {
+      // do nothing
+    }
   }
   if (SUCCEEDED(hr)) {
     size_t nameLength = std::wcslen(name);
