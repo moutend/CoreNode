@@ -47,7 +47,7 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     IUIAutomationElement *pSender) {
   Log->Info(L"Focus change event received", GetCurrentThreadId(), __LONGFILE__);
 
-  if (isEmptyIUIAutomationElement(pSender)) {
+  if (false && isEmptyIUIAutomationElement(pSender)) {
     return S_OK;
   }
 

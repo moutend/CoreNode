@@ -13,7 +13,10 @@ extern Logger::Logger *Log;
 
 HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
                                            RawElement **pRawElement) {
-  if (pElement == nullptr || pRawElement == nullptr) {
+  if (pElement == nullptr) {
+    return E_FAIL;
+  }
+  if (pRawElement == nullptr) {
     return E_FAIL;
   }
 
@@ -137,7 +140,10 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
                                          IUIAutomationElement *pElement,
                                          RawEvent **pRawEvent) {
-  if (pElement == nullptr || pRawEvent == nullptr) {
+  if (pElement == nullptr) {
+    return E_FAIL;
+  }
+  if (pRawEvent == nullptr) {
     return E_FAIL;
   }
 
