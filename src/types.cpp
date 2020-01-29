@@ -32,6 +32,10 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   } else {
     return E_FAIL;
   }
+  if (boundingRectangle.left == 0 && boundingRectangle.top == 0 &&
+      boundingRectangle.right == 0 && boundingRectangle.bottom == 0) {
+    return E_FAIL;
+  }
 
   int processId{};
 
