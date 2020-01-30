@@ -34,7 +34,10 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
     (*pRawElement)->Width = boundingRectangle.right - boundingRectangle.left;
     (*pRawElement)->Height = boundingRectangle.bottom - boundingRectangle.top;
   } else {
-    return E_FAIL;
+    (*pRawElement)->Left = 0;
+    (*pRawElement)->Top = 0;
+    (*pRawElement)->Width = 0;
+    (*pRawElement)->Height = 0;
   }
   if (boundingRectangle.left == 0 && boundingRectangle.top == 0 &&
       boundingRectangle.right == 0 && boundingRectangle.bottom == 0) {
@@ -223,11 +226,13 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
 
   hr = pAcc->get_accRole(varChild, &varResult);
 
-  if (FAILED(hr)) {
+  if (SUCCEEDED(hr)) {
     (*pRawElement)->Role = static_cast<int32_t>(varResult.lVal);
   } else {
     (*pRawElement)->Role = 0;
   }
+
+  (*pRawElement)->ControlTypeId = 0;
 
   (*pRawElement)->ClassNameData = nullptr;
   (*pRawElement)->AriaRoleNameData = nullptr;
