@@ -30,9 +30,16 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   if (SUCCEEDED(hr)) {
     (*pRawElement)->Left = boundingRectangle.left;
-    (*pRawElement)->Top = boundingRectangle.left;
+    (*pRawElement)->Top = boundingRectangle.top;
     (*pRawElement)->Width = boundingRectangle.right - boundingRectangle.left;
     (*pRawElement)->Height = boundingRectangle.bottom - boundingRectangle.top;
+
+    if ((*pRawElement)->Width < 0) {
+      (*pRawElement)->Width = 0;
+    }
+    if ((*pRawElement)->Height < 0) {
+      (*pRawElement)->Height = 0;
+    }
   } else {
     (*pRawElement)->Left = 0;
     (*pRawElement)->Top = 0;
