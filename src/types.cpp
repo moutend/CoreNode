@@ -4,6 +4,7 @@
 #include <windows.h>
 
 #include <Commctrl.h>
+#include <oleauto.h>
 #include <strsafe.h>
 
 #include "types.h"
@@ -78,12 +79,12 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   (*pRawElement)->Role = 0;
 
-  wchar_t *name{};
+  BSTR name{};
 
   hr = pElement->get_CurrentName(&name);
 
   if (SUCCEEDED(hr)) {
-    size_t nameLength = std::wcslen(name);
+    size_t nameLength = static_cast<size_t>(SysStringLen(name));
 
     (*pRawElement)->NameData = new wchar_t[nameLength + 1]{};
     std::wmemcpy((*pRawElement)->NameData, name, nameLength);
@@ -96,12 +97,12 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
     (*pRawElement)->NameData = nullptr;
   }
 
-  wchar_t *className{nullptr};
+  BSTR className{};
 
   hr = pElement->get_CurrentClassName(&className);
 
   if (SUCCEEDED(hr)) {
-    size_t classNameLength = std::wcslen(className);
+    size_t classNameLength = static_cast<size_t>(SysStringLen(className));
 
     (*pRawElement)->ClassNameData = new wchar_t[classNameLength + 1]{};
     std::wmemcpy((*pRawElement)->ClassNameData, className, classNameLength);
@@ -114,12 +115,12 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
     (*pRawElement)->ClassNameLength = 0;
   }
 
-  wchar_t *ariaRoleName{};
+  BSTR ariaRoleName{};
 
   hr = pElement->get_CurrentAriaRole(&ariaRoleName);
 
   if (SUCCEEDED(hr)) {
-    size_t ariaRoleNameLength = std::wcslen(ariaRoleName);
+    size_t ariaRoleNameLength = static_cast<size_t>(SysStringLen(ariaRoleName));
 
     (*pRawElement)->AriaRoleNameData = new wchar_t[ariaRoleNameLength + 1]{};
     std::wmemcpy((*pRawElement)->AriaRoleNameData, ariaRoleName,
