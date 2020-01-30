@@ -164,11 +164,16 @@ HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
 
 HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
                                   RawElement **pRawElement) {
-  if (pAcc == nullptr || pRawElement == nullptr) {
+  if (pAcc == nullptr) {
     return E_FAIL;
+  }
+  if (pRawElement == nullptr) {
+    nullptr;
   }
 
   *pRawElement = new RawElement;
+
+  HRESULT hr{};
 
   DWORD processId{};
 
@@ -177,7 +182,9 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
   wchar_t *processName{};
   size_t processNameLength{};
 
-  if (SUCCEEDED(GetProcessName(processId, &processName, &processNameLength))) {
+  hr = GetProcessName(processId, &processName, &processNameLength);
+
+  if (SUCCEEDED(hr)) {
     (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
     (*pRawElement)->ProcessNameData = new wchar_t[processNameLength + 1]{};
     std::wmemcpy((*pRawElement)->ProcessNameData, processName,
@@ -194,13 +201,12 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
   varChild.vt = VT_I4;
   varChild.lVal = CHILDID_SELF;
 
-  wchar_t *name{};
+  BSTR name{};
 
-  if (FAILED(pAcc->get_accName(varChild, &name))) {
-    name = nullptr;
-  }
-  if (name != nullptr) {
-    size_t nameLength = std::wcslen(name);
+  hr = pAcc->get_accName(varChild, &name);
+
+  if (SUCCEEDED(hr)) {
+    size_t nameLength = static_cast<size_t>(SysStringLen(name));
 
     (*pRawElement)->NameData = new wchar_t[nameLength + 1]{};
     std::wmemcpy((*pRawElement)->NameData, name, nameLength);
@@ -213,17 +219,15 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
     (*pRawElement)->NameData = nullptr;
   }
 
-  DWORD roleId{};
   VARIANT varResult;
 
-  if (FAILED(pAcc->get_accRole(varChild, &varResult))) {
-    roleId = 0;
-  } else {
-    roleId = varResult.lVal;
-  }
+  hr = pAcc->get_accRole(varChild, &varResult);
 
-  (*pRawElement)->Role = static_cast<int32_t>(roleId);
-  (*pRawElement)->ControlTypeId = 0;
+  if (FAILED(hr)) {
+    (*pRawElement)->Role = static_cast<int32_t>(varResult.lVal);
+  } else {
+    (*pRawElement)->Role = 0;
+  }
 
   (*pRawElement)->ClassNameData = nullptr;
   (*pRawElement)->AriaRoleNameData = nullptr;
@@ -236,7 +240,9 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
   long width{};
   long height{};
 
-  if (SUCCEEDED(pAcc->accLocation(&left, &top, &width, &height, varChild))) {
+  hr = pAcc->accLocation(&left, &top, &width, &height, varChild);
+
+  if (SUCCEEDED(hr)) {
     (*pRawElement)->Left = left;
     (*pRawElement)->Top = top;
     (*pRawElement)->Width = width;
@@ -253,7 +259,10 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
 
 HRESULT RawEventFromIAccessible(HWND hWindow, int32_t eventId,
                                 IAccessible *pAcc, RawEvent **pRawEvent) {
-  if (pAcc == nullptr || pRawEvent == nullptr) {
+  if (pAcc == nullptr) {
+    return E_FAIL;
+  }
+  if (pRawEvent == nullptr) {
     return E_FAIL;
   }
 
