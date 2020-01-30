@@ -14,10 +14,7 @@ extern Logger::Logger *Log;
 
 HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
                                            RawElement **pRawElement) {
-  if (pElement == nullptr) {
-    return E_FAIL;
-  }
-  if (pRawElement == nullptr) {
+  if (pElement == nullptr || pRawElement == nullptr) {
     return E_FAIL;
   }
 
@@ -151,10 +148,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
                                          IUIAutomationElement *pElement,
                                          RawEvent **pRawEvent) {
-  if (pElement == nullptr) {
-    return E_FAIL;
-  }
-  if (pRawEvent == nullptr) {
+  if (pElement == nullptr || pRawEvent == nullptr) {
     return E_FAIL;
   }
 
@@ -174,10 +168,7 @@ HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
 
 HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
                                   RawElement **pRawElement) {
-  if (pAcc == nullptr) {
-    return E_FAIL;
-  }
-  if (pRawElement == nullptr) {
+  if (pAcc == nullptr || pRawElement == nullptr) {
     nullptr;
   }
 
@@ -271,10 +262,7 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
 
 HRESULT RawEventFromIAccessible(HWND hWindow, int32_t eventId,
                                 IAccessible *pAcc, RawEvent **pRawEvent) {
-  if (pAcc == nullptr) {
-    return E_FAIL;
-  }
-  if (pRawEvent == nullptr) {
+  if (pAcc == nullptr || pRawEvent == nullptr) {
     return E_FAIL;
   }
 
