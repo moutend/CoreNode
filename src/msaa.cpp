@@ -4,6 +4,8 @@
 
 #include "util.h"
 
+extern Logger::Logger *Log;
+
 HRESULT fetchAllElements(std::vector<RawElement *> &v) {
   HWND hWindow = GetForegroundWindow();
 
