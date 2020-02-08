@@ -10,7 +10,6 @@ import (
 	"unsafe"
 
 	"github.com/moutend/CoreNode/pkg/dll"
-	"github.com/moutend/CoreNode/pkg/types"
 )
 
 func GetCore(w http.ResponseWriter, r *http.Request) error {
@@ -42,15 +41,13 @@ func GetCoreBulk(w http.ResponseWriter, r *http.Request) error {
 }
 
 func handleFunc(rawElementsPtr uintptr, rawElementsLen uintptr) int64 {
-	log.Println("Do nothing here")
-	return 0
-
 	length := int32(rawElementsLen)
 
 	for i := 0; i < int(length); i++ {
 		rawElementPtr := unsafe.Pointer(rawElementsPtr + uintptr(i))
-		element := types.UintptrToElement(uintptr(rawElementPtr))
-		log.Printf("@@@ %+v\n", element)
+		log.Printf("@@@ %x %x\n", rawElementsPtr, rawElementPtr)
+		// element := types.UintptrToElement(uintptr(rawElementPtr))
+		// log.Printf("@@@ %+v\n", element)
 	}
 
 	return 0
