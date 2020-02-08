@@ -207,7 +207,7 @@ return;
 
   HRESULT hr = fetchAllElements(v);
 
-  if (fAILED(hr)) {
+  if (FAILED(hr)) {
     *code = -1;
     return;
   }
