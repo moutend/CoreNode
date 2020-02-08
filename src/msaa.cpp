@@ -19,12 +19,12 @@ HRESULT fetchAllElements(std::vector<RawElement *> &v) {
     return hr;
   }
 
-  hr = walkIAccessible(pAcc, 0, 0, v);
+  hr = walkIAccessible(hWindow, pAcc, 0, 0, v);
 
   return hr;
 }
 
-HRESULT walkIAccessible(IAccessible *pAcc, int depth, int index,
+HRESULT walkIAccessible(HWND hWindow, IAccessible *pAcc, int depth, int index,
                         std::vector<RawElement *> &v) {
   if (pAcc == nullptr) {
     return S_OK;
@@ -33,7 +33,7 @@ HRESULT walkIAccessible(IAccessible *pAcc, int depth, int index,
   HRESULT hr{};
   RawElement *rawElement{};
 
-  hr = RawElementFromIAccessible(pAcc, &rawElement);
+  hr = RawElementFromIAccessible(hWindow, pAcc, &rawElement);
 
   if (FAILED(hr)) {
     return hr;
@@ -74,7 +74,7 @@ HRESULT walkIAccessible(IAccessible *pAcc, int depth, int index,
                                reinterpret_cast<void **>(&pChild));
 
     if (SUCCEEDED(hr)) {
-      walkIAccessible(pChild, depth + 1, x, v);
+      walkIAccessible(hWindow, pChild, depth + 1, x, v);
     }
 
     SafeRelease(&pDisp);
