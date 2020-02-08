@@ -23,7 +23,7 @@ HRESULT fetchAllElements(std::vector<RawElement *> &v) {
 }
 
 HRESULT walkIAccessible(IAccessible *pAcc, int depth, int index,
-                        std::vector<RawElement *> v) {
+                        std::vector<RawElement *> &v) {
   if (pAcc == nullptr) {
     return S_OK;
   }

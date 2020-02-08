@@ -199,9 +199,13 @@ END_LOGLOOP_CLEANUP:
 void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
   std::lock_guard<std::mutex> lock(apiMutex);
 
+if (code == nullptr) {
+return;
+}
+
   std::vector<RawElement *> v;
 
-  hr = fetchAllElements(v);
+  HRESULT hr = fetchAllElements(v);
 
   if (fAILED(hr)) {
     *code = -1;
