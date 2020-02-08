@@ -7,11 +7,11 @@
 #include "api.h"
 #include "context.h"
 #include "logloop.h"
+#include "msaa.h"
 #include "types.h"
 #include "uialoop.h"
 #include "util.h"
 #include "wineventloop.h"
-#include "msaa.h"
 
 extern Logger::Logger *Log;
 
@@ -199,9 +199,9 @@ END_LOGLOOP_CLEANUP:
 void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
   std::lock_guard<std::mutex> lock(apiMutex);
 
-if (code == nullptr) {
-return;
-}
+  if (code == nullptr) {
+    return;
+  }
 
   std::vector<RawElement *> v;
 
@@ -215,24 +215,22 @@ return;
   RawElement **rawElements = new RawElement *[v.size()] {};
   int32_t rawElementsLen = v.size();
 
-for
-  _int i = 0;
-i < v.size(); i++) {
-rawElements[i] = v[i];
-}
+  for (int i = 0; i < v.size(); i++) {
+    rawElements[i] = v[i];
+  }
 
-handleFunc(rawElements, rawElementsLen);
+  handleFunc(rawElements, rawElementsLen);
 
-for (int i = 0; i < v.size(); i++) {
-  delete v[i];
-  v[i] = nullptr;
-  rawElements[i] = nullptr;
-}
+  for (int i = 0; i < v.size(); i++) {
+    delete v[i];
+    v[i] = nullptr;
+    rawElements[i] = nullptr;
+  }
 
-delete v;
+  delete v;
 
-delete[] rawElements;
-rawElements = nullptr;
+  delete[] rawElements;
+  rawElements = nullptr;
 
-return;
+  return;
 }
