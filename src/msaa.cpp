@@ -22,6 +22,8 @@ HRESULT fetchAllElements(std::vector<RawElement *> &v) {
                                   reinterpret_cast<void **>(&pAcc));
 
   if (FAILED(hr)) {
+    Log->Warn(L"Failed to get accessible from window", GetCurrentThreadId(),
+              __LONGFILE__);
     return hr;
   }
 
