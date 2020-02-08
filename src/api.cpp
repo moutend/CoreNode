@@ -4,6 +4,8 @@
 #include <vector>
 #include <windows.h>
 
+#include <strsafe.h>
+
 #include "api.h"
 #include "context.h"
 #include "logloop.h"

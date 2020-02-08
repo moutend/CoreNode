@@ -42,6 +42,9 @@ func GetCoreBulk(w http.ResponseWriter, r *http.Request) error {
 }
 
 func handleFunc(rawElementsPtr uintptr, rawElementsLen uintptr) int64 {
+	log.Println("Do nothing here")
+	return 0
+
 	length := int32(rawElementsLen)
 
 	for i := 0; i < int(length); i++ {
