@@ -203,6 +203,8 @@ void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
     return;
   }
 
+  Log->Info(L"Called BulkFetch", GetCurrentThreadId(), __LONGFILE__);
+
   std::vector<RawElement *> v;
 
   HRESULT hr = fetchAllElements(v);

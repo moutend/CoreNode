@@ -1,3 +1,5 @@
+#include <cpplogger/cpplogger.h>
+
 #include "msaa.h"
 
 #include "util.h"
@@ -6,6 +8,8 @@ HRESULT fetchAllElements(std::vector<RawElement *> &v) {
   HWND hWindow = GetForegroundWindow();
 
   if (hWindow == nullptr) {
+    Log->Warn(L"Failed to get foreground window", GetCurrentThreadId(),
+              __LONGFILE__);
     return E_FAIL;
   }
 

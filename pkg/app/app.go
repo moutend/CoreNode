@@ -3,14 +3,38 @@ package app
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"sync"
+	"syscall"
 	"unsafe"
 
 	"github.com/moutend/CoreNode/pkg/api"
 	"github.com/moutend/CoreNode/pkg/dll"
 	"github.com/moutend/CoreNode/pkg/mux"
+	"github.com/moutend/CoreNode/pkg/types"
 )
+
+func handleFunc(rawEventPtr uintptr) int64 {
+	event := types.UintptrToEvent(rawEventPtr)
+
+	log.Printf(
+		"Name:%v\tClassName:%v\tAriaRole:%v\tProcessName:%v\tControlTypeId:%v\tRole:%v\tEventId:%v\tLocation:{%v,%v,%v,%v}\n",
+		event.Element.Name,
+		event.Element.ClassName,
+		event.Element.AriaRoleName,
+		event.Element.ProcessName,
+		event.Element.ControlTypeId,
+		event.Element.Role,
+		event.EventId,
+		event.Element.Left,
+		event.Element.Top,
+		event.Element.Width,
+		event.Element.Height,
+	)
+
+	return 0
+}
 
 type app struct {
 	m         *sync.Mutex
@@ -22,7 +46,7 @@ type app struct {
 func (a *app) setup() error {
 	var code int32
 
-	dll.ProcSetup.Call(uintptr(unsafe.Pointer(&code)))
+	dll.ProcSetup.Call(uintptr(unsafe.Pointer(&code)), 0, syscall.NewCallback(handleFunc))
 
 	if code != 0 {
 		return fmt.Errorf("Failed to call dll.ProcSetup.Call()")
@@ -31,6 +55,7 @@ func (a *app) setup() error {
 	mux := mux.New()
 
 	mux.Get("/v1/core", api.GetCore)
+	mux.Get("/v1/core/bulk", api.GetCoreBulk)
 
 	a.server = &http.Server{
 		Addr:    ":7903",
