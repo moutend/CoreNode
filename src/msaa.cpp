@@ -11,7 +11,7 @@ HRESULT fetchAllElements(std::vector<RawElement *> &v) {
   IAccessible *pAcc{};
 
   hr = AccessibleObjectFromWindow(hWindow, OBJID_NATIVEOM, IID_IAccessible,
-                                  &pAcc);
+                                  reinterpret_cast<void **>(&pAcc));
 
   if (FAILED(hr)) {
     return hr;

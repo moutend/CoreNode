@@ -227,8 +227,6 @@ void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
     rawElements[i] = nullptr;
   }
 
-  delete v;
-
   delete[] rawElements;
   rawElements = nullptr;
 
