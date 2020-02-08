@@ -239,10 +239,10 @@ void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
     wchar_t *b = new wchar_t[256]{};
 
     StringCbPrintfW(b, 511, L"Name=%s\tLocation={%d,%d,%d,%d}",
-                    rawElements[i]->Name, rawElements[i]->Left,
+                    rawElements[i]->NameData, rawElements[i]->Left,
                     rawElements[i]->Top, rawElements[i]->Width,
                     rawElements[i]->Height);
-    Log->INfo(b, GetCurrentThreadId(), __LONGFILE__);
+    Log->Info(b, GetCurrentThreadId(), __LONGFILE__);
     delete[] b;
     b = nullptr;
   }
