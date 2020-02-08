@@ -214,6 +214,20 @@ void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
     return;
   }
 
+  wchar_t *buffer = new wchar_t[256]{};
+
+  hr = StringCbPrintfW(buffer, 511, L"Found %d items", v.size());
+
+  if (FAILED(hr)) {
+    *code = -1;
+    return;
+  }
+
+  Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
+
+  delete[] buffer;
+  buffer = nullptr;
+
   RawElement **rawElements = new RawElement *[v.size()] {};
   int32_t rawElementsLen = v.size();
 
