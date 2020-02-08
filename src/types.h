@@ -30,6 +30,9 @@ typedef struct {
 
 typedef int64_t(__stdcall *EventHandler)(RawEvent *e);
 
+typedef int64_t(__stdcall *BulkFetchHandler)(RawElement **rawElements,
+                                             int32_t rawElementsLength);
+
 HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
                                            RawElement **pRawElement);
 

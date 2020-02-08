@@ -1,6 +1,7 @@
 #include <cpplogger/cpplogger.h>
 #include <cstring>
 #include <mutex>
+#include <vector>
 #include <windows.h>
 
 #include "api.h"
@@ -192,4 +193,41 @@ END_WINEVENTLOOP_CLEANUP:
 END_LOGLOOP_CLEANUP:
 
   isActive = false;
+}
+
+void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
+  std::lock_guard<std::mutex> lock(apiMutex);
+
+  std::vector<RawElement *> v;
+
+  hr = fetchAllElements(v);
+
+  if (fAILED(hr)) {
+    *code = -1;
+    return;
+  }
+
+  RawElement **rawElements = new RawElement *[v.size()] {};
+  int32_t rawElementsLen = v.size();
+
+for
+  _int i = 0;
+i < v.size(); i++) {
+rawElements[i] = v[i];
+}
+
+handleFunc(rawElements, rawElementsLen);
+
+for (int i = 0; i < v.size(); i++) {
+  delete v[i];
+  v[i] = nullptr;
+  rawElements[i] = nullptr;
+}
+
+delete v;
+
+delete[] rawElements;
+rawElements = nullptr;
+
+return;
 }
