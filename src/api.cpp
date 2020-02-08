@@ -236,7 +236,7 @@ void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
   for (int i = 0; i < v.size(); i++) {
     rawElements[i] = v[i];
 
-    wchar_t b = new wchar_t[256]{};
+    wchar_t *b = new wchar_t[256]{};
 
     StringCbPrintfW(b, 511, L"Name=%s\tLocation={%d,%d,%d,%d}",
                     rawElements[i]->Name, rawElements[i]->Left,
