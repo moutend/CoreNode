@@ -11,4 +11,4 @@
 HRESULT fetchAllElements(std::vector<RawElement *> &v);
 
 HRESULT walkIAccessible(HWND hWindow, IAccessible *pAcc, int depth, int index,
-                        std::vector<RawElement *> v);
+                        std::vector<RawElement *> &v);
