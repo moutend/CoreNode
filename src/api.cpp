@@ -11,6 +11,7 @@
 #include "uialoop.h"
 #include "util.h"
 #include "wineventloop.h"
+#include "msaa.h"
 
 extern Logger::Logger *Log;
 
