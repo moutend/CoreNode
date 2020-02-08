@@ -1,5 +1,7 @@
 #include "msaa.h"
 
+#include "util.h"
+
 HRESULT fetchAllElements(std::vector<RawElement *> &v) {
   HWND hWindow = GetForegroundWindow();
 
@@ -17,7 +19,7 @@ HRESULT fetchAllElements(std::vector<RawElement *> &v) {
     return hr;
   }
 
-  hr = walkIAccessible(pAcc, v);
+  hr = walkIAccessible(pAcc, 0, 0, v);
 
   return hr;
 }
@@ -31,10 +33,10 @@ HRESULT walkIAccessible(IAccessible *pAcc, int depth, int index,
   HRESULT hr{};
   RawElement *rawElement{};
 
-  hr = RawElementFromIUIAutomationElement(pAcc, &rawElement);
+  hr = RawElementFromIAccessible(pAcc, &rawElement);
 
   if (FAILED(hr)) {
-    return hr
+    return hr;
   }
 
   v.push_back(rawElement);
@@ -72,7 +74,7 @@ HRESULT walkIAccessible(IAccessible *pAcc, int depth, int index,
                                reinterpret_cast<void **>(&pChild));
 
     if (SUCCEEDED(hr)) {
-      walkIAccessible(pChild, depth + 1, x);
+      walkIAccessible(pChild, depth + 1, x, v);
     }
 
     SafeRelease(&pDisp);
