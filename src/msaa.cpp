@@ -42,6 +42,7 @@ HRESULT walkIAccessible(HWND hWindow, IAccessible *pAcc, int depth, int index,
   hr = RawElementFromIAccessible(hWindow, pAcc, &rawElement);
 
   if (FAILED(hr)) {
+    Log->Fail(L"Failed to convert element", GetCurrentThreadId(), __LONGFILE__);
     return hr;
   }
 
@@ -52,6 +53,8 @@ HRESULT walkIAccessible(HWND hWindow, IAccessible *pAcc, int depth, int index,
   hr = pAcc->get_accChildCount(&childCount);
 
   if (FAILED(hr)) {
+    Log->Fail(L"Failed to get accessible children count", GetCurrentThreadId(),
+              __LONGFILE__);
     return hr;
   }
   if (childCount == 0) {
@@ -64,6 +67,8 @@ HRESULT walkIAccessible(HWND hWindow, IAccessible *pAcc, int depth, int index,
   hr = AccessibleChildren(pAcc, 0, childCount, pArray, &returnCount);
 
   if (FAILED(hr)) {
+    Log->Fail(L"Failed to get accessible children", GetCurrentThreadId(),
+              __LONGFILE__);
     return hr;
   }
   for (int x = 0; x < returnCount; x++) {
