@@ -21,7 +21,7 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
   *pRawElement = new RawElement;
 
   (*pRawElement)->Index = 0;
-  (*pRawElement) = 0;
+  (*pRawElement)->Depth = 0;
 
   HRESULT hr{};
   RECT boundingRectangle{};
