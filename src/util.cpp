@@ -47,40 +47,20 @@ void SafeDelete(RawEvent **pRawEvent) {
   (*pRawEvent) = nullptr;
 }
 
-HRESULT GetProcessInfo(HWND hWindow, RawProcessInfo **processInfo) {
-  DWORD processId{};
-
-  GetWindowThreadProcessId(hWindow, &processId);
-
-  HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-
-  if (hSnapshot == nullptr) {
-    return E_FAIL;
+void SafeDelete(RawProcessInfo **pRawProcessInfo) {
+  if (pRawProcessInfo == nullptr) {
+    return;
+  }
+  if (*pRawProcessInfo == nullptr) {
+    return;
+  }
+  if ((*pRawProcessInfo)->ProcessNameLength > 0) {
+    delete[](*pRawProcessInfo)->ProcessNameData;
+    (*pRawProcessInfo)->ProcessNameData = nullptr;
   }
 
-  PROCESSENTRY32W processEntry{};
-
-  processEntry.dwSize = sizeof(PROCESSENTRY32W);
-
-  bool hasProcessEntry = Process32FirstW(hSnapshot, &processEntry);
-
-  while (hasProcessEntry) {
-    if (processEntry.th32ProcessID == processId) {
-      size_t length = std::wcslen(processEntry.szExeFile);
-
-      *processNameLength = length;
-      *processName = new wchar_t[length + 1]{};
-      std::wmemcpy(*processName, processEntry.szExeFile, length);
-
-      break;
-    }
-
-    hasProcessEntry = Process32NextW(hSnapshot, &processEntry);
-  }
-
-  SafeCloseHandle(&hSnapshot);
-
-  return S_OK;
+  delete (*pRawProcessInfo);
+  (*pRawProcessInfo) = nullptr;
 }
 
 bool isEmptyIUIAutomationElement(IUIAutomationElement *pElement) {
@@ -126,4 +106,49 @@ bool isEmptyIUIAutomationElement(IUIAutomationElement *pElement) {
   }
 
   return false;
+}
+
+HRESULT GetProcessInfo(HWND hWindow, RawProcessInfo **rawProcessInfo) {
+  DWORD processId{};
+
+  GetWindowThreadProcessId(hWindow, &processId);
+
+  return GetProcessInfo(processId, rawProcessInfo);
+}
+
+HRESULT GetProcessInfo(DWORD processId, RawProcessInfo **rawProcessInfo) {
+  if (rawProcessInfo == nullptr) {
+    return E_FAIL;
+  }
+  (*rawProcessInfo) = new RawProcessInfo;
+  HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+
+  if (hSnapshot == nullptr) {
+    return E_FAIL;
+  }
+
+  PROCESSENTRY32W processEntry{};
+
+  processEntry.dwSize = sizeof(PROCESSENTRY32W);
+
+  bool hasProcessEntry = Process32FirstW(hSnapshot, &processEntry);
+
+  while (hasProcessEntry) {
+    if (processEntry.th32ProcessID == processId) {
+      size_t length = std::wcslen(processEntry.szExeFile);
+
+      (*rawProcessInfo)->ProcessNameLength = length;
+      (*rawProcessInfo)->ProcessNameData = new wchar_t[length + 1]{};
+      std::wmemcpy((*rawProcessInfo)->ProcessNameData, processEntry.szExeFile,
+                   length);
+
+      break;
+    }
+
+    hasProcessEntry = Process32NextW(hSnapshot, &processEntry);
+  }
+
+  SafeCloseHandle(&hSnapshot);
+
+  return S_OK;
 }

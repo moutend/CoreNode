@@ -1,17 +1,19 @@
 #include <cpplogger/cpplogger.h>
 
 #include "msaa.h"
-
+#include "types.h"
 #include "util.h"
 
 extern Logger::Logger *Log;
 
-HRESULT fetchAllElements(std::vector<RawElement *> &v) {
+HRESULT fetchAllElements(std::vector<RawElement *> &v,
+                         RawProcessInfo **pRawProcessInfo) {
   HWND hWindow = GetForegroundWindow();
 
   if (hWindow == nullptr) {
-    Log->Warn(L"Failed to get foreground window", GetCurrentThreadId(),
-              __LONGFILE__);
+    return E_FAIL;
+  }
+  if (FAILED(GetProcessInfo(hWindow, pRawProcessInfo))) {
     return E_FAIL;
   }
 

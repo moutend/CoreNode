@@ -29,13 +29,16 @@ typedef struct {
 } RawEvent;
 
 typedef struct {
-  int32_t ProcessNameLen;
+  int32_t ProcessNameLength;
   wchar_t *ProcessNameData;
-} ProcessInfo;
-typedef int64_t(__stdcall *EventHandler)(RawEvent *e);
+} RawProcessInfo;
+
+typedef int64_t(__stdcall *EventHandler)(RawEvent *rawEvent,
+                                         RawProcessInfo *rawProcessInfo);
 
 typedef int64_t(__stdcall *BulkFetchHandler)(RawElement **rawElements,
-                                             int32_t rawElementsLength);
+                                             int32_t rawElementsLength,
+                                             RawProcessInfo *rawProcessInfo);
 
 HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
                                            RawElement **pRawElement);

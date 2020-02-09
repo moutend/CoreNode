@@ -47,18 +47,27 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
     IUIAutomationElement *pSender) {
   Log->Info(L"Focus change event received", GetCurrentThreadId(), __LONGFILE__);
 
+  int processId{};
+  RawProcessInfo *pRawProcessInfo{};
   RawEvent *pRawEvent{};
 
+if (FAILED(pSender->get_CurrentProcessId(&processId)) {
+    return E_FAIL;
+}
+if (FAILED(GetProcessInfo(static_cast<DWORD>(processId), &pRawProcessInfo)) {
+    return E_FAIL;
+}
   if (FAILED(RawEventFromIUIAutomationElement(UIA_AutomationFocusChangedEventId,
                                               pSender, &pRawEvent))) {
     return E_FAIL;
   }
-  if (mEventHandler(pRawEvent) != 0) {
+  if (mEventHandler(pRawEvent, pRawProcessInfo ) != 0) {
     return E_FAIL;
   }
 
   SafeRelease(&pSender);
   SafeDelete(&pRawEvent);
+  SafeDelete(&pRawProcessInfo);
 
   return S_OK;
 }
@@ -104,18 +113,27 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
   Log->Info(L"Property change event received", GetCurrentThreadId(),
             __LONGFILE__);
 
+  int processId{};
+  RawProcessInfo *pRawProcessInfo{};
   RawEvent *pRawEvent{};
 
+  if (pSender->get_CurrentProcessId(&processId)) {
+    return E_FAIL;
+  }
+if (FAILED(GetProcessInfo(static_cast<DWORD>(processId), &pRawProcessInfo)) {
+    return E_FAIL;
+}
   if (FAILED(RawEventFromIUIAutomationElement(
           UIA_AutomationPropertyChangedEventId, pSender, &pRawEvent))) {
     return E_FAIL;
   }
-  if (mEventHandler(pRawEvent) != 0) {
+  if (mEventHandler(pRawEvent, pRawProcessInfo) != 0) {
     return E_FAIL;
   }
 
   SafeRelease(&pSender);
   SafeDelete(&pRawEvent);
+  SafeDelete(&pRawProcessInfo);
 
   return S_OK;
 }
@@ -157,17 +175,26 @@ AutomationEventHandler::HandleAutomationEvent(IUIAutomationElement *pSender,
                                               EVENTID eventId) {
   Log->Info(L"Automation event received", GetCurrentThreadId(), __LONGFILE__);
 
+  int processId{};
+  RawProcessInfo *pRawProcessInfo{};
   RawEvent *pRawEvent{};
 
+  if (FAILED(pSender->get_CurrentProcessId(&processId))) {
+    return E_FAIL;
+  }
+  if (FAILED(GetProcessInfo(static_cast<DWORD>(processId), &pRawProcessInfo))) {
+    return E_FAIL;
+  }
   if (FAILED(RawEventFromIUIAutomationElement(eventId, pSender, &pRawEvent))) {
     return E_FAIL;
   }
-  if (mEventHandler(pRawEvent)) {
+  if (mEventHandler(pRawEvent, pRawProcessInfo) != 0) {
     return E_FAIL;
   }
 
   SafeRelease(&pSender);
   SafeDelete(&pRawEvent);
+  SafeDelete(&pRawProcessInfo);
 
   return S_OK;
 }

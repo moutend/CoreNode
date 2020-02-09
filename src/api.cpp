@@ -208,46 +208,23 @@ void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
   Log->Info(L"Called BulkFetch", GetCurrentThreadId(), __LONGFILE__);
 
   std::vector<RawElement *> v;
+  RawProcessInfo *pRawProcessInfo{};
 
-  HRESULT hr = fetchAllElements(v);
-
-  if (FAILED(hr)) {
-    *code = -1;
-    return;
-  }
-
-  wchar_t *buffer = new wchar_t[256]{};
-
-  hr = StringCbPrintfW(buffer, 511, L"Found %d items", v.size());
+  HRESULT hr = fetchAllElements(v, &pRawProcessInfo);
 
   if (FAILED(hr)) {
     *code = -1;
     return;
   }
 
-  Log->Info(buffer, GetCurrentThreadId(), __LONGFILE__);
-
-  delete[] buffer;
-  buffer = nullptr;
-
-  RawElement **rawElements = new RawElement *[v.size()] {};
+  RawElement **pRawElements = new RawElement *[v.size()] {};
   int32_t rawElementsLen = v.size();
 
   for (int i = 0; i < v.size(); i++) {
-    rawElements[i] = v[i];
-
-    wchar_t *b = new wchar_t[256]{};
-
-    StringCbPrintfW(b, 511, L"Name=%s Location={%d,%d,%d,%d} Address=%p",
-                    rawElements[i]->NameData, rawElements[i]->Left,
-                    rawElements[i]->Top, rawElements[i]->Width,
-                    rawElements[i]->Height, rawElements[i]);
-    Log->Info(b, GetCurrentThreadId(), __LONGFILE__);
-    delete[] b;
-    b = nullptr;
+    pRawElements[i] = v[i];
   }
 
-  handleFunc(rawElements, rawElementsLen);
+  handleFunc(pRawElements, rawElementsLen, pRawProcessInfo);
 
   for (int i = 0; i < v.size(); i++) {
     delete v[i];

@@ -20,6 +20,7 @@ template <class T> void SafeRelease(T **ppT) {
 
 void SafeCloseHandle(HANDLE *pHandle);
 void SafeDelete(RawEvent **pRawEvent);
-HRESULT GetProcessName(DWORD processId, wchar_t **processName,
-                       size_t *processNameLength);
+void SafeDelete(RawProcessInfo **pRawProcessInfo);
 bool isEmptyIUIAutomationElement(IUIAutomationElement *pElement);
+HRESULT GetProcessInfo(DWORD processId, RawProcessInfo **rawProcessInfo);
+HRESULT GetProcessInfo(HWND hWindow, RawProcessInfo **rawProcessInfo);
