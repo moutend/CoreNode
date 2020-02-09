@@ -12,16 +12,16 @@ type RawElement struct {
 	Left               int32
 	Width              int32
 	Height             int32
+	Index              int32
+	Depth              int32
 	ControlTypeId      int32
 	Role               int32
 	NameLength         int32
 	ClassNameLength    int32
 	AriaRoleNameLength int32
-	ProcessNameLength  int32
 	NameData           uintptr
 	ClassNameData      uintptr
 	AriaRoleNameData   uintptr
-	ProcessNameData    uintptr
 }
 
 // Element is Go language representation.
@@ -30,12 +30,13 @@ type Element struct {
 	Left          int
 	Width         int
 	Height        int
+	Index         int
+	Depth         int
 	ControlTypeId UIAControlType
 	Role          MSAARole
 	Name          string
 	ClassName     string
 	AriaRoleName  string
-	ProcessName   string
 }
 
 // RawEvent is C / C++ language representation.
@@ -48,6 +49,17 @@ type RawEvent struct {
 type Event struct {
 	EventId int
 	Element Element
+}
+
+// RawProcessInfo is C / C++ representation.
+type RawProcessInfo struct {
+	ProcessNameLen  int32
+	ProcessNameData uintptr
+}
+
+// ProcessInfo is Go representation.
+type ProcessInfo struct {
+	ProcessName string
 }
 
 // UintptrToString converts NULL terminated wide char string (`wchar_t *` type) to `string`.
@@ -79,6 +91,8 @@ func UintptrToElement(rawElementPtr uintptr) Element {
 	element.Top = int(rawElement.Top)
 	element.Width = int(rawElement.Width)
 	element.Height = int(rawElement.Height)
+	element.Index = int(rawElement.Index)
+	element.Depth = int(rawElement.Depth)
 
 	element.ControlTypeId = UIAControlType(rawElement.ControlTypeId)
 	element.Role = MSAARole(rawElement.Role)
@@ -86,7 +100,6 @@ func UintptrToElement(rawElementPtr uintptr) Element {
 	element.Name = UintptrToString(rawElement.NameData, int(rawElement.NameLength), int(rawElement.NameLength))
 	element.ClassName = UintptrToString(rawElement.ClassNameData, int(rawElement.ClassNameLength), int(rawElement.ClassNameLength))
 	element.AriaRoleName = UintptrToString(rawElement.AriaRoleNameData, int(rawElement.AriaRoleNameLength), int(rawElement.AriaRoleNameLength))
-	element.ProcessName = UintptrToString(rawElement.ProcessNameData, int(rawElement.ProcessNameLength), int(rawElement.ProcessNameLength))
 
 	return element
 }

@@ -11,16 +11,16 @@ typedef struct {
   int32_t Left;
   int32_t Width;
   int32_t Height;
+  int32_t Index;
+  int32_t Depth;
   int32_t ControlTypeId;
   int32_t Role;
   int32_t NameLength;
   int32_t ClassNameLength;
   int32_t AriaRoleNameLength;
-  int32_t ProcessNameLength;
   wchar_t *NameData;
   wchar_t *ClassNameData;
   wchar_t *AriaRoleNameData;
-  wchar_t *ProcessNameData;
 } RawElement;
 
 typedef struct {
@@ -28,6 +28,10 @@ typedef struct {
   RawElement *Element;
 } RawEvent;
 
+typedef struct {
+  int32_t ProcessNameLen;
+  wchar_t *ProcessNameData;
+} ProcessInfo;
 typedef int64_t(__stdcall *EventHandler)(RawEvent *e);
 
 typedef int64_t(__stdcall *BulkFetchHandler)(RawElement **rawElements,

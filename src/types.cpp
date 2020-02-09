@@ -20,6 +20,9 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
 
   *pRawElement = new RawElement;
 
+  (*pRawElement)->Index = 0;
+  (*pRawElement) = 0;
+
   HRESULT hr{};
   RECT boundingRectangle{};
 
@@ -42,36 +45,6 @@ HRESULT RawElementFromIUIAutomationElement(IUIAutomationElement *pElement,
     (*pRawElement)->Top = 0;
     (*pRawElement)->Width = 0;
     (*pRawElement)->Height = 0;
-  }
-  if (boundingRectangle.left == 0 && boundingRectangle.top == 0 &&
-      boundingRectangle.right == 0 && boundingRectangle.bottom == 0) {
-    return E_FAIL;
-  }
-
-  int processId{};
-
-  hr = pElement->get_CurrentProcessId(&processId);
-
-  if (FAILED(hr)) {
-    return E_FAIL;
-  }
-
-  wchar_t *processName{};
-  size_t processNameLength{};
-
-  hr = GetProcessName(processId, &processName, &processNameLength);
-
-  if (SUCCEEDED(hr)) {
-    (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
-    (*pRawElement)->ProcessNameData = new wchar_t[processNameLength + 1]{};
-    std::wmemcpy((*pRawElement)->ProcessNameData, processName,
-                 processNameLength);
-
-    delete[] processName;
-    processName = nullptr;
-  } else {
-    (*pRawElement)->ProcessNameLength = 0;
-    (*pRawElement)->ProcessNameData = nullptr;
   }
 
   CONTROLTYPEID controlTypeId{};
@@ -166,39 +139,18 @@ HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
   return S_OK;
 }
 
-HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
-                                  RawElement **pRawElement) {
+HRESULT RawElementFromIAccessible(IAccessible *pAcc, RawElement **pRawElement) {
   if (pAcc == nullptr || pRawElement == nullptr) {
-    nullptr;
+    return E_FAIL;
   }
 
   *pRawElement = new RawElement;
 
+  (*pRawElement)->Index = 0;
+  (*pRawElement)->Depth = 0;
+
   HRESULT hr{};
-
-  DWORD processId{};
-
-  GetWindowThreadProcessId(hWindow, &processId);
-
-  wchar_t *processName{};
-  size_t processNameLength{};
-
-  hr = GetProcessName(processId, &processName, &processNameLength);
-
-  if (SUCCEEDED(hr)) {
-    (*pRawElement)->ProcessNameLength = static_cast<int32_t>(processNameLength);
-    (*pRawElement)->ProcessNameData = new wchar_t[processNameLength + 1]{};
-    std::wmemcpy((*pRawElement)->ProcessNameData, processName,
-                 processNameLength);
-
-    delete[] processName;
-    processName = nullptr;
-  } else {
-    (*pRawElement)->ProcessNameLength = 0;
-    (*pRawElement)->ProcessNameData = nullptr;
-  }
-
-  VARIANT varChild;
+  VARIANT varChild{};
   varChild.vt = VT_I4;
   varChild.lVal = CHILDID_SELF;
 
@@ -260,15 +212,15 @@ HRESULT RawElementFromIAccessible(HWND hWindow, IAccessible *pAcc,
   return S_OK;
 }
 
-HRESULT RawEventFromIAccessible(HWND hWindow, int32_t eventId,
-                                IAccessible *pAcc, RawEvent **pRawEvent) {
+HRESULT RawEventFromIAccessible(int32_t eventId, IAccessible *pAcc,
+                                RawEvent **pRawEvent) {
   if (pAcc == nullptr || pRawEvent == nullptr) {
     return E_FAIL;
   }
 
   RawElement *pRawElement;
 
-  if (FAILED(RawElementFromIAccessible(hWindow, pAcc, &pRawElement))) {
+  if (FAILED(RawElementFromIAccessible(pAcc, &pRawElement))) {
     return E_FAIL;
   }
 

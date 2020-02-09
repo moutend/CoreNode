@@ -47,8 +47,11 @@ void SafeDelete(RawEvent **pRawEvent) {
   (*pRawEvent) = nullptr;
 }
 
-HRESULT GetProcessName(DWORD processId, wchar_t **processName,
-                       size_t *processNameLength) {
+HRESULT GetProcessInfo(HWND hWindow, RawProcessInfo **processInfo) {
+  DWORD processId{};
+
+  GetWindowThreadProcessId(hWindow, &processId);
+
   HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
   if (hSnapshot == nullptr) {
