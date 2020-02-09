@@ -229,11 +229,11 @@ void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
   for (int i = 0; i < v.size(); i++) {
     delete v[i];
     v[i] = nullptr;
-    rawElements[i] = nullptr;
+    pRawElements[i] = nullptr;
   }
 
-  delete[] rawElements;
-  rawElements = nullptr;
+  delete[] pRawElements;
+  pRawElements = nullptr;
 
   return;
 }

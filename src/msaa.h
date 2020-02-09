@@ -8,7 +8,8 @@
 
 #include "types.h"
 
-HRESULT fetchAllElements(std::vector<RawElement *> &v);
+HRESULT fetchAllElements(std::vector<RawElement *> &v,
+                         RawProcessInfo **pRawProcessInfo);
 
-HRESULT walkIAccessible(HWND hWindow, IAccessible *pAcc, int depth, int index,
+HRESULT walkIAccessible(IAccessible *pAcc, int depth, int index,
                         std::vector<RawElement *> &v);

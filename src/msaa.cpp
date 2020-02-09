@@ -50,6 +50,8 @@ HRESULT walkIAccessible(IAccessible *pAcc, int depth, int index,
     return hr;
   }
 
+  rawElement->Index = index;
+  rawElement->Depth = depth;
   v.push_back(rawElement);
 
   long childCount{};
