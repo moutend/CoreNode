@@ -41,13 +41,26 @@ func GetCoreBulk(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func handleFunc(rawElementsPtr uintptr, rawElementsLen uintptr) int64 {
+func handleFunc(rawElementsPtr uintptr, rawElementsLen uintptr, rawProcessInfoPtr uintptr) int64 {
 	length := int32(rawElementsLen)
 
 	for i := 0; i < int(length); i++ {
 		rawElementPtr := *(*uintptr)(unsafe.Pointer(rawElementsPtr + uintptr(8*i)))
 		element := types.UintptrToElement(uintptr(rawElementPtr))
-		log.Printf("@@@ %+v\n", element)
+		log.Printf(
+			"Name:%v\tClassName:%v\tAriaRole:%v\tControlTypeId:%v\tRole:%v\tIndex:%v\tDepth:%v\tLocation:{%v,%v,%v,%v}\n",
+			element.Name,
+			element.ClassName,
+			element.AriaRoleName,
+			element.ControlTypeId,
+			element.Role,
+			element.Index,
+			element.Depth,
+			element.Left,
+			element.Top,
+			element.Width,
+			element.Height,
+		)
 	}
 
 	return 0

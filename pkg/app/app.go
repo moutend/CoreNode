@@ -15,18 +15,19 @@ import (
 	"github.com/moutend/CoreNode/pkg/types"
 )
 
-func handleFunc(rawEventPtr uintptr) int64 {
+func handleFunc(rawEventPtr uintptr, rawProcessInfoPtr uintptr) int64 {
 	event := types.UintptrToEvent(rawEventPtr)
 
 	log.Printf(
-		"Name:%v\tClassName:%v\tAriaRole:%v\tProcessName:%v\tControlTypeId:%v\tRole:%v\tEventId:%v\tLocation:{%v,%v,%v,%v}\n",
+		"Name:%v\tClassName:%v\tAriaRole:%v\tControlTypeId:%v\tRole:%v\tEventId:%v\tIndex:%v\tDepth:%v\tLocation:{%v,%v,%v,%v}\n",
 		event.Element.Name,
 		event.Element.ClassName,
 		event.Element.AriaRoleName,
-		event.Element.ProcessName,
 		event.Element.ControlTypeId,
 		event.Element.Role,
 		event.EventId,
+		event.Element.Index,
+		event.Element.Depth,
 		event.Element.Left,
 		event.Element.Top,
 		event.Element.Width,
