@@ -35,10 +35,6 @@ void SafeDelete(RawEvent **pRawEvent) {
     delete[](*pRawEvent)->Element->AriaRoleNameData;
     (*pRawEvent)->Element->AriaRoleNameData = nullptr;
   }
-  if ((*pRawEvent)->Element->ProcessNameLength > 0) {
-    delete[](*pRawEvent)->Element->ProcessNameData;
-    (*pRawEvent)->Element->ProcessNameData = nullptr;
-  }
 
   delete (*pRawEvent)->Element;
   (*pRawEvent)->Element = nullptr;
