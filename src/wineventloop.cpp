@@ -117,8 +117,8 @@ DWORD WINAPI winEventLoop(LPVOID context) {
 
   Log->Info(L"Register callbacks", GetCurrentThreadId(), __LONGFILE__);
 
-  HANDLE waitArray[1] = {winEventLoopCtx->QuitEvent};
-  DWORD waitResult = WaitForMultipleObjects(1, waitArray, FALSE, INFINITE);
+  // HANDLE waitArray[1] = {winEventLoopCtx->QuitEvent};
+  // DWORD waitResult = WaitForMultipleObjects(1, waitArray, FALSE, INFINITE);
 
   UINT_PTR timerId = SetTimer(nullptr, 0, 3000, nullptr);
   MSG msg;
