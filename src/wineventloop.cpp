@@ -124,7 +124,10 @@ DWORD WINAPI winEventLoop(LPVOID context) {
     DispatchMessage(&msg);
 
     if (winEventLoopCtx->IsActive) {
+      Log->Info(L"IsActive=true", GetCurrentThreadId(), __LONGFILE__);
       break;
+    } else {
+      Log->Info(L"IsActive=false", GetCurrentThreadId(), __LONGFILE__);
     }
   }
   for (int i = 0; i < 24; i++) {
