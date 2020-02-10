@@ -117,18 +117,12 @@ DWORD WINAPI winEventLoop(LPVOID context) {
 
   Log->Info(L"Register callbacks", GetCurrentThreadId(), __LONGFILE__);
 
-  MSG msg;
+  HANDLE waitArray[1] = {winEventLoopCtx->QuitEvent};
+  DWORD waitResult = WaitForMultipleObjects(1, waitArray, FALSE, INFINITE);
 
-  while (GetMessage(&msg, nullptr, 0, 0)) {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
-
-    if (winEventLoopCtx->IsActive) {
-      Log->Info(L"IsActive=true", GetCurrentThreadId(), __LONGFILE__);
-      break;
-    } else {
-      Log->Info(L"IsActive=false", GetCurrentThreadId(), __LONGFILE__);
-    }
+  switch (waitResult) {
+  case WAIT_OBJECT_0 + 0: // ctx->QuitEvent
+    break;
   }
   for (int i = 0; i < 24; i++) {
     if (hookIds[i] == 0) {
