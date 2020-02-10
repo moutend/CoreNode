@@ -43,11 +43,15 @@ void eventCallback(HWINEVENTHOOK hHook, DWORD eventId, HWND hWindow,
   Log->Info(L"IAccessible event received", GetCurrentThreadId(), __LONGFILE__);
 
   RawEvent *pRawEvent{};
+  RawProcessInfo *pRawProcessInfo{};
 
   if (FAILED(RawEventFromIAccessible(hWindow, eventId, pAcc, &pRawEvent))) {
     return;
   }
-  if (winEventLoopCtx->HandleFunc(pRawEvent) != 0) {
+  if (FAILED(GetProcessInfo(hWindow, &pRawProcessInfo))) {
+    return;
+  }
+  if (winEventLoopCtx->HandleFunc(pRawEvent, pRawProcessInfo) != 0) {
     return;
   }
 
