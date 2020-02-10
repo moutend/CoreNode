@@ -45,7 +45,7 @@ void eventCallback(HWINEVENTHOOK hHook, DWORD eventId, HWND hWindow,
   RawEvent *pRawEvent{};
   RawProcessInfo *pRawProcessInfo{};
 
-  if (FAILED(RawEventFromIAccessible(hWindow, eventId, pAcc, &pRawEvent))) {
+  if (FAILED(RawEventFromIAccessible(eventId, pAcc, &pRawEvent))) {
     return;
   }
   if (FAILED(GetProcessInfo(hWindow, &pRawProcessInfo))) {

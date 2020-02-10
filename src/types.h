@@ -49,5 +49,5 @@ HRESULT RawEventFromIUIAutomationElement(int32_t eventId,
 
 HRESULT RawElementFromIAccessible(IAccessible *pAcc, RawElement **pRawElement);
 
-HRESULT RawEventFromIAccessible(HWND hWindow, int32_t eventId,
+HRESULT RawEventFromIAccessible(int32_t eventId,
                                 IAccessible *pAcc, RawEvent **pRawEvent);
