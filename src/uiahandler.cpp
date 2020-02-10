@@ -51,17 +51,17 @@ FocusChangeEventHandler::HandleFocusChangedEvent(
   RawProcessInfo *pRawProcessInfo{};
   RawEvent *pRawEvent{};
 
-if (FAILED(pSender->get_CurrentProcessId(&processId)) {
+  if (FAILED(pSender->get_CurrentProcessId(&processId))) {
     return E_FAIL;
-}
-if (FAILED(GetProcessInfo(static_cast<DWORD>(processId), &pRawProcessInfo)) {
+  }
+  if (FAILED(GetProcessInfo(static_cast<DWORD>(processId), &pRawProcessInfo))) {
     return E_FAIL;
-}
+  }
   if (FAILED(RawEventFromIUIAutomationElement(UIA_AutomationFocusChangedEventId,
                                               pSender, &pRawEvent))) {
     return E_FAIL;
   }
-  if (mEventHandler(pRawEvent, pRawProcessInfo ) != 0) {
+  if (mEventHandler(pRawEvent, pRawProcessInfo) != 0) {
     return E_FAIL;
   }
 
@@ -120,9 +120,9 @@ PropertyChangeEventHandler::HandlePropertyChangedEvent(
   if (pSender->get_CurrentProcessId(&processId)) {
     return E_FAIL;
   }
-if (FAILED(GetProcessInfo(static_cast<DWORD>(processId), &pRawProcessInfo)) {
+  if (FAILED(GetProcessInfo(static_cast<DWORD>(processId), &pRawProcessInfo))) {
     return E_FAIL;
-}
+  }
   if (FAILED(RawEventFromIUIAutomationElement(
           UIA_AutomationPropertyChangedEventId, pSender, &pRawEvent))) {
     return E_FAIL;
