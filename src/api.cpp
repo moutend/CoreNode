@@ -210,6 +210,8 @@ void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
   std::vector<RawElement *> v;
   RawProcessInfo *pRawProcessInfo{};
 
+  v.reserve(1024);
+
   HRESULT hr = fetchAllElements(v, &pRawProcessInfo);
 
   if (FAILED(hr)) {
