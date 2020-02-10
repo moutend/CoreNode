@@ -57,6 +57,7 @@ void eventCallback(HWINEVENTHOOK hHook, DWORD eventId, HWND hWindow,
 
   SafeRelease(&pAcc);
   SafeDelete(&pRawEvent);
+  SafeDelete(&pRawProcessInfo);
 }
 
 DWORD WINAPI winEventLoop(LPVOID context) {

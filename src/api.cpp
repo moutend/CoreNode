@@ -235,5 +235,7 @@ void __stdcall BulkFetch(int32_t *code, BulkFetchHandler handleFunc) {
   delete[] pRawElements;
   pRawElements = nullptr;
 
+  SafeDelete(&pRawProcessInfo);
+
   return;
 }
