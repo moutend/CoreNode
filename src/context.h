@@ -16,4 +16,5 @@ struct UIALoopContext {
 struct WinEventLoopContext {
   HANDLE QuitEvent = nullptr;
   EventHandler HandleFunc = nullptr;
+  bool IsActive = true;
 };

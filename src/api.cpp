@@ -160,11 +160,15 @@ END_UIALOOP_CLEANUP:
   if (winEventLoopThread == nullptr) {
     goto END_WINEVENTLOOP_CLEANUP;
   }
+
+  winEventLoopCtx->IsActive = false;
+  /*
   if (!SetEvent(winEventLoopCtx->QuitEvent)) {
     Log->Fail(L"Failed to send event", GetCurrentThreadId(), __LONGFILE__);
     *code = -1;
     return;
   }
+  */
 
   WaitForSingleObject(winEventLoopThread, INFINITE);
   SafeCloseHandle(&winEventLoopThread);

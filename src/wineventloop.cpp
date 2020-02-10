@@ -120,10 +120,28 @@ DWORD WINAPI winEventLoop(LPVOID context) {
   HANDLE waitArray[1] = {winEventLoopCtx->QuitEvent};
   DWORD waitResult = WaitForMultipleObjects(1, waitArray, FALSE, INFINITE);
 
-  switch (waitResult) {
-  case WAIT_OBJECT_0 + 0: // ctx->QuitEvent
-    break;
+  UINT_PTR timerId = SetTimer(nullptr, nullptr, 3000, nullptr);
+  MSG msg;
+
+  while (GetMessage(&msg, nullptr, 0, 0)) {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
+
+    if (!winEventLoopCtx->IsActive) {
+      Log->Info(L"Win events no longer used", GetCurrentThreadId(),
+                __LONGFILE__);
+      break;
+    }
   }
+
+  KillTimer(nullptr, timerId);
+
+  /*
+    switch (waitResult) {
+    case WAIT_OBJECT_0 + 0: // ctx->QuitEvent
+      break;
+    }
+    */
   for (int i = 0; i < 24; i++) {
     if (hookIds[i] == 0) {
       continue;
