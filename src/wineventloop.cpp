@@ -120,7 +120,7 @@ DWORD WINAPI winEventLoop(LPVOID context) {
   HANDLE waitArray[1] = {winEventLoopCtx->QuitEvent};
   DWORD waitResult = WaitForMultipleObjects(1, waitArray, FALSE, INFINITE);
 
-  UINT_PTR timerId = SetTimer(nullptr, nullptr, 3000, nullptr);
+  UINT_PTR timerId = SetTimer(nullptr, 0, 3000, nullptr);
   MSG msg;
 
   while (GetMessage(&msg, nullptr, 0, 0)) {
