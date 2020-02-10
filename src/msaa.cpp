@@ -43,15 +43,15 @@ HRESULT walkIAccessible(IAccessible *pAcc, int depth, int index,
   HRESULT hr{};
   RawElement *rawElement{};
 
-  hr = RawElementFromIAccessible(pAcc, &rawElement);
+  // hr = RawElementFromIAccessible(pAcc, &rawElement);
 
   if (FAILED(hr)) {
     Log->Fail(L"Failed to convert element", GetCurrentThreadId(), __LONGFILE__);
     return hr;
   }
 
-  rawElement->Index = index;
-  rawElement->Depth = depth;
+  // rawElement->Index = index;
+  // rawElement->Depth = depth;
   // v.push_back(rawElement);
 
   long childCount{};
